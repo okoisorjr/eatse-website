@@ -1,0 +1,34 @@
+<div class="my-5">
+  <p class="text-center font-bold text-[#684191] my-3">services</p>
+  <div class="flex flex-col items-center my-4">
+    <h1
+      class="text-center text-white text-xl font-bold sm:text-2xl md:text-3xl lg:text-5xl lg:font-normal"
+    >
+      What do we offer our customers?
+    </h1>
+    <p class="text-center text-white text-xs my-4">
+      Eatse offers a wide variety of services to suit our customers needs.
+    </p>
+  </div>
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-2 gap-3"
+  >
+    <div
+      *ngFor="let service of services"
+      class="p-6 w-72 bg-[#111014] lg:w-64 md:w-72 sm:w-48 mx-auto lg:bg-[#111014] rounded-xl flex items-center justify-center"
+    >
+      <div class="flex flex-col items-center justify-center">
+        <img
+          src="{{ service.image }}"
+          class="w-18 sm:w-18 md:w-12 lg:w-20 my-3"
+        />
+        <h5
+          class="text-[#FFF] text-xs font-bold text-center md:text-[#FFF] lg:text-sm"
+        >
+          {{ service.service }}
+        </h5>
+        <p class="text-white lg:text-black text-center p-2"></p>
+      </div>
+    </div>
+  </div>
+</div>

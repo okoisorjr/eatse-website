@@ -1,0 +1,22 @@
+<div class="">
+  <p class="text-center text-[#f8cc15] font-bold my-3">Eatse</p>
+  <div>
+    <h1 class="text-center text-white text-xl font-bold sm:text-2xl md:text-3xl lg:text-5xl lg:font-normal">Book a service in 4 easy steps</h1>
+    <p class="text-center text-white text-xs my-4 lg:text-sm">
+      Booking has never been this easy, book our service anytime and anywhere.
+    </p>
+  </div>
+  <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 md:grid-cols-2 my-5 gap-4">
+    <div *ngFor="let step of steps">
+      <div class="d-flex flex-column align-items-center my-4">
+        <img
+          src="{{ step.icon }}"
+          style="width: 40px; height: 40px"
+          class="mb-2"
+        />
+        <p class="my-2 text-sm text-white fw-bold text-center">{{ step.step }}</p>
+        <p class="text-center text-xs sm:text-sm md:text-lg lg:text-lg">{{ step.description }}</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="w-full py-2">
+  <div class="w-full flex flex-row items-center">
+    <div class="flex-3 lg:flex-1 md:flex-1">
+      <a routerLink="/eatse">
+        <img src="assets/logo.png" class="" />
+      </a>
+    </div>
+    <div class="hidden lg:block xl:block flex-1">
+      <div class="flex flex-row gap-3">
+        <a routerLink="booking" class="text-white">Booking</a>
+        <a routerLink="about" class="text-white">About us</a>
+      </div>
+    </div>
+    <div class="hidden lg:block xl:block flex-2">
+      <div class="flex flex-row gap-3 items-center">
+        <a routerLink="/auth/sign-up" style="cursor: pointer" class="text-white"
+          >Sign up</a
+        >
+        <button
+          (click)="gotoLogin()"
+          class="btn bg-[#111014] text-white hover:bg-[#111014] rounded-xl border-[#EAEAEA]-100"
+        >
+          Customer Login
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
