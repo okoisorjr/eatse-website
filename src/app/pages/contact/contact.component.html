@@ -1,0 +1,76 @@
+<app-top-nav></app-top-nav>
+<div
+  class="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 bg-cover"
+  style="background-image: url('assets/wave2.png')"
+>
+  <div
+    class="w-100 flex self-end place-self-end col-span-1 px-5"
+  >
+    <form
+      #contactForm="ngForm"
+      (ngSubmit)="submitForm(contactForm)"
+      class="w-72 flex flex-col justify-center"
+    >
+      <p class="text-center text-white text-xl my-2 lg:text-2xl">Contact Us</p>
+
+      <div class="py-2">
+        <input
+          type="text"
+          name="fullname"
+          class="p-2 w-full bg-[#111014] rounded-md text-[#FFF]"
+          placeholder="Full name"
+          [(ngModel)]="fullname"
+          ngModel
+        />
+      </div>
+
+      <div class="py-2">
+        <input
+          type="email"
+          name="email"
+          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          placeholder="Email"
+          [(ngModel)]="email"
+          ngModel
+        />
+      </div>
+
+      <div class="py-2">
+        <input
+          type="text"
+          name="phone"
+          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          placeholder="Phone number"
+          [(ngModel)]="phone"
+          ngModel
+        />
+      </div>
+
+      <div class="py-2">
+        <textarea class="w-100 text-[#FFF] bg-[#111014] p-2 rounded-lg" placeholder="Write message....." rows="10"></textarea>
+      </div>
+
+      <div class="py-2">
+        <button
+          class="w-100 bg-[#008000] hover:bg-[#008000]-700 text-white font-normal py-2 px-4 rounded"
+        >
+          Send Message
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="w-100 my-auto col-span-1 order-1 lg:order-2">
+    <div class="flex items-center justify-start place-self-start self-start">
+      <div class="">
+        <p class="w-86 text-2xl lg:text-3xl text-center lg:text-left text-[#FFF] font-bold">
+          Reach out to us today, we are always happy to attend to our customers.
+        </p>
+        <p class="text-[#FFF] text-center text-sm">
+          You can message us for any inquiry and booking. We always love to hear
+          from you.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

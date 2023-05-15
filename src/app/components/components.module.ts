@@ -10,7 +10,7 @@ import { FooterComponent } from './footer/footer.component';
 import { TestimonialsComponent } from './testimonials/testimonials.component';
 
 import { ComponentsRoutingModule } from './components-routing.module';
-
+import { MobileMenuComponent } from './mobile-menu/mobile-menu.component';
 
 @NgModule({
   declarations: [
@@ -20,13 +20,18 @@ import { ComponentsRoutingModule } from './components-routing.module';
     EatseServicesComponent,
     FeaturesComponent,
     FooterComponent,
-    TestimonialsComponent
+    TestimonialsComponent,
+    MobileMenuComponent,
   ],
-  imports: [
-    CommonModule,
-    ComponentsRoutingModule,
-    NgbModule,
+  imports: [CommonModule, ComponentsRoutingModule, NgbModule],
+  exports: [
+    TopNavComponent,
+    HeroComponent,
+    BookingProcessComponent,
+    EatseServicesComponent,
+    FeaturesComponent,
+    TestimonialsComponent,
+    FooterComponent,
   ],
-  exports: [TopNavComponent, HeroComponent, BookingProcessComponent, EatseServicesComponent, FeaturesComponent, TestimonialsComponent]
 })
 export class ComponentsModule {}

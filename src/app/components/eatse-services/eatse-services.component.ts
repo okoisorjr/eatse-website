@@ -1,9 +1,17 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 
 interface Services {
   image: string;
   service: string;
   description: string;
+}
+
+interface Service {
+  service: string;
+  description: string;
+  cost: string;
 }
 
 @Component({
@@ -13,8 +21,9 @@ interface Services {
 })
 export class EatseServicesComponent implements OnInit {
   services!: Services[];
+  eatseServices!: Service[];
 
-  constructor() {}
+  constructor(private globalServices: GlobalResourceService) {}
 
   ngOnInit(): void {
     this.services = [
@@ -62,5 +71,15 @@ export class EatseServicesComponent implements OnInit {
         description: '',
       },
     ];
+
+    this.globalServices.fetchServices().subscribe(
+      (value) => {
+        this.eatseServices = value;
+        console.log(this.eatseServices);
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    );
   }
 }

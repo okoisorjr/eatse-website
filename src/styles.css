@@ -1,7 +1,30 @@
+@import "~angular-notifier/styles";
+
 /* You can add global styles to this file, and also import other style files */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Works on Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #000 #000;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #111014;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: blue;
+  border-radius: 20px;
+  border: 3px solid #111014;
+}
 
 .ui-green-btn{
   cursor: pointer;
@@ -11,4 +34,20 @@
   border-radius: 6px;
   color: #fff;
   background-color: #008000;
+}
+
+body{
+  position: relative;
+  background-image: url('assets/waves.png');
+}
+
+.mobileMenu{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  bottom: 0;
+  background-color: #000;
+  overflow-y: hidden;
 }

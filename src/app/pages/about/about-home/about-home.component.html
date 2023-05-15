@@ -1,1 +1,85 @@
-<p>about-home works!</p>
+<app-top-nav></app-top-nav>
+<div
+  class="container grid grid-cols-1 lg:grid-cols-3 my-4 gap-4 bg-contain bg-[url('/assets/wave2.png')]"
+  style="background-image: url('assets/wave2.png')"
+>
+  <img src="assets/about-img.png" class="col-span-1 mx-auto" />
+  <div
+    class="flex flex-col bg-[url('/assets/wave2.png')] col-span-2"
+    style="background-image: url('assets/wave2.png')"
+  >
+    <div class="flex flex-col">
+      <p class="text-lg font-bold text-[#FFF]">About Eatse</p>
+      <p class="text-sm text-[#FFF]">
+        Eatse is an online service providing company that connects people and
+        top rated professionals. The concept was born out of the inefficiencies
+        that exist in this space. These inefficiencies include hiring
+        individuals with criminal tendencies, unprofessional staff and the high
+        cost of hiring professionals. With also Service Providers in mind,
+        inefficiencies can be found in how much they earn and how well they are
+        treated.
+      </p>
+    </div>
+
+    <div class="flex flex-col">
+      <p class="my-1 text-lg font-bold text-[#FFF] uppercase">Mission</p>
+      <p class="text-sm text-[#FFF]">
+        At EATSE, our mission is to build relationships as we empower and
+        connect service providers with service receivers. Our drive is to bring
+        Eatse and high quality to each service receiver and their homes by
+        making sure they receive superior services. We strive to exceed all
+        expectations by delivering personalized and flexible services that meet
+        their unique needs. We are dedicated to building lasting relationships
+        with our clients through transparent communication, trust, and
+        reliability.
+      </p>
+    </div>
+
+    <div class="flex flex-col">
+      <p class="my-1 text-lg text-[#FFF] font-bold uppercase">Vision</p>
+      <p class="text-sm text-[#FFF]">
+        Our vision at EATSE is to be the most trusted and sought-after service
+        provider in our community. We aim to achieve this by putting our clients
+        first, listening to their needs, and providing exceptional services that
+        consistently exceed their expectations. We are committed to delivering
+        value and satisfaction to our clients through innovation,
+        professionalism, and quality. We aspire to create a culture of
+        excellence that fosters a sense of ownership, pride, and loyalty among
+        our clients and team members alike.
+      </p>
+    </div>
+  </div>
+</div>
+<div
+  class="lg:container bg-[url('/assets/wave2.png')] mb-5"
+  style="background-image: url('assets/wave2.png')"
+>
+  <div
+    class="p-6 w-100 mx-auto bg-[#111014] lg:rounded-xl shadow-lg flex flex-col lg:flex-row items-center space-x-4"
+  >
+    <div class="flex flex-col gap-3 px-5 lg:px-20">
+      <p
+        class="text-[#FFF] text-2xl text-center md:text-2xl lg:text-left lg:text-3xl"
+      >
+        Don't have time to do your chores?
+      </p>
+      <p
+        class="w-100 text-lg text-center text-gray-500 md:text-left lg:text-left"
+      >
+        The future of cleaning, housekeeping and errands technology is here.
+        Contact us today lets take care of them for you.
+      </p>
+    </div>
+
+    <div
+      class="flex flex-col my-4 sm:flex-col md:flex-row lg:flex-col md:gap-5 px-20 justify-center items-center"
+    >
+      <button (click)="gotoContact()" class="ui-green-btn my-1">
+        Contact us
+      </button>
+      <p class="text-center text-[#FFF] text-lg">or</p>
+      <p class="text-lg text-gray-500">07047636360</p>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

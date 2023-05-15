@@ -1,1 +1,57 @@
 <app-top-nav></app-top-nav>
+<div class="container grid grid-cols-1 lg:grid-cols md:grid-cols-2 lg:grid-cols-2">
+  <div class="w-96 sm:w-100 md:w-100 flex self-center place-self-center md:place-self-center sm:place-self-center col-span-1 p-5">
+    <form
+      #loginForm="ngForm"
+      (ngSubmit)="login(loginForm)"
+      class="flex flex-col justify-center"
+    >
+      <p class="text-center text-white text-xl my-4 lg:text-2xl">
+        Hey there, welcome back
+      </p>
+
+      <div class="py-2">
+        <input
+          type="email"
+          name="email"
+          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          placeholder="Email address"
+          [(ngModel)]="email"
+          ngModel
+        />
+      </div>
+
+      <div class="py-2">
+        <input
+          type="password"
+          name="password"
+          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          placeholder="Password"
+          [(ngModel)]="password"
+          ngModel
+        />
+      </div>
+      <a routerLink="/auth/reset-password" class="text-[#008000] hover:text-[#008000] text-right text-sm">Forgot password?</a>
+
+      <div class="">
+        <button
+          class="w-100 bg-[#008000] hover:bg-[#008000]-700 text-white font-normal py-2 my-3 px-4 rounded"
+        >
+          Login
+        </button>
+        <p class="text-center text-[#FFF]">
+          Don't have an account?
+          <span class="text-[#008000]"
+            ><a routerLink="/auth/sign-up" class="hover:text-[#008000]"
+              >Sign up</a
+            ></span
+          >
+        </p>
+      </div>
+    </form>
+  </div>
+  <div class="col-span-1 hidden md:block lg:block">
+    <img src="assets/hero-img-sign-up.png" class="w-full" />
+  </div>
+</div>
+<app-footer></app-footer>
