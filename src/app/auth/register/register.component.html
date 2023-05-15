@@ -1,45 +1,106 @@
 <app-top-nav></app-top-nav>
-<div class="grid grid-cols-1 lg:grid-cols md:grid-cols-2 lg:grid-cols-2">
-  <div class="col-span-1 p-5">
-    <form #registrationForm="ngForm" (submit)="register(registrationForm)" class="flex flex-col justify-center">
-      <p class="text-center text-white text-2xl my-4">Get started today</p>
-      
+<div class="container grid grid-cols-1 lg:grid-cols md:grid-cols-2 lg:grid-cols-2">
+  <div class="w-100 flex self-center place-self-center col-span-1 p-5">
+    <form
+      #registrationForm="ngForm"
+      (ngSubmit)="register(registrationForm)"
+      class="flex flex-col justify-center"
+    >
+      <p class="text-center text-white text-xl my-4 lg:text-2xl">
+        Get started today
+      </p>
+
       <div class="py-2">
-        <input class="p-2 w-100 bg-[#111014] rounded-md" placeholder="First name" />
+        <input
+          name="firstname"
+          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          placeholder="First name"
+          [(ngModel)]="firstname"
+          ngModel
+        />
       </div>
 
       <div class="py-2">
-        <input class="p-2 w-100 bg-[#111014] rounded-md" placeholder="Last name"/>
+        <input
+          name="lastname"
+          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          placeholder="Last name"
+          [(ngModel)]="lastname"
+          ngModel
+        />
       </div>
 
       <div class="py-2">
-        <input class="p-2 w-100 bg-[#111014] rounded-md" placeholder="Email address"/>
+        <input
+          name="email"
+          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          placeholder="Email address"
+          [(ngModel)]="email"
+          ngModel
+        />
       </div>
 
       <div class="py-2">
-        <input class="p-2 w-100 bg-[#111014] rounded-md" placeholder="First name"/>
+        <input
+          name="phone"
+          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          placeholder="Phone"
+          [(ngModel)]="phone"
+          ngModel
+        />
       </div>
 
       <div class="py-2">
-        <input class="p-2 w-100 bg-[#111014] rounded-md" placeholder="Create password"/>
+        <input
+          type="password"
+          name="password"
+          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          placeholder="Create password"
+          [(ngModel)]="password"
+          ngModel
+        />
       </div>
 
       <div class="py-2">
-        <input class="p-2 w-100 bg-[#111014] rounded-md" placeholder="Confirm password"/>
+        <input
+          type="password"
+          name="passwordConfirm"
+          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          placeholder="Confirm password"
+          [(ngModel)]="confirmPassword"
+          ngModel
+        />
       </div>
 
-      <div class="py-2">
-        <input type="checkbox" class="bg-[#008000]">
-        I have agreed to the <span>terms and condition & privacy policy</span>
+      <div class="flex flex-row gap-2 py-2 justify-center">
+        <input type="checkbox" class="mt-1 self-start accent-[#008000]" />
+        <p class="text-[#FFF] text-xs lg:text-sm">
+          I have agreed to the
+          <span class="text-[#008000]"
+            >terms and condition & privacy policy</span
+          >
+        </p>
       </div>
 
-      <div>
-        <button>Create account</button>
-        <p>Already have an account? <span>Login</span></p>
+      <div class="">
+        <button
+          class="w-100 bg-[#008000] hover:bg-[#008000]-700 text-white font-normal py-2 my-3 px-4 rounded"
+        >
+          Create account
+        </button>
+        <p class="text-center text-[#FFF]">
+          Already have an account?
+          <span class="text-[#008000]"
+            ><a routerLink="/auth/sign-in" class="hover:text-[#008000]"
+              >Login</a
+            ></span
+          >
+        </p>
       </div>
     </form>
   </div>
-  <div class="col-span-1 hidden lg:block">
+  <div class="col-span-1 hidden md:block lg:block">
     <img src="assets/hero-img-sign-up.png" class="w-full" />
   </div>
 </div>
+<app-footer></app-footer>
