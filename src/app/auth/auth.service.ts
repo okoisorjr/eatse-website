@@ -10,13 +10,13 @@ import { NewUser } from './models/new-user.model';
   providedIn: 'root',
 })
 export class AuthService {
-  serverIP: string = '';
+  serverIP: string = 'http://192.168.0.180';
 
   constructor(private http: HttpClient) {}
 
   registerAccount(newUser: NewUser): Observable<ResourceCreated> {
     return this.http.post<ResourceCreated>(
-      `https://${this.serverIP}/`,
+      `https://${this.serverIP}/account/create-account`,
       newUser
     );
   }
@@ -29,7 +29,7 @@ export class AuthService {
     );
 
     return this.http.post<UserAccount>(
-      `http://172.20.10.2/account/login`,
+      `${this.serverIP}/account/login`,
       userInfo
     );
   }

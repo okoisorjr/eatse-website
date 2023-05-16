@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 
 interface Services {
@@ -23,51 +24,51 @@ export class EatseServicesComponent implements OnInit {
   services!: Services[];
   eatseServices!: Service[];
 
-  constructor(private globalServices: GlobalResourceService) {}
+  constructor(private globalServices: GlobalResourceService, private router: Router) {}
 
   ngOnInit(): void {
     this.services = [
       {
         image: 'assets/housekeeping-img.png',
-        service: 'Housekeeping',
+        service: 'house-keeping',
         description:
           'Our lovely housekeepers will help clean and organize your house.',
       },
       {
         image: 'assets/deep-cleaning-img.png',
-        service: 'Deep cleaning',
+        service: 'deep-cleaning',
         description: '',
       },
       {
         image: 'assets/move-in-out-img.png',
-        service: 'Move-in-out cleaning',
+        service: 'move-in-out-cleaning',
         description: '',
       },
       {
         image: 'assets/post-construction-img.png',
-        service: 'Post construction cleaning',
+        service: 'post-construction-cleaning',
         description:
           'This service offers a thorough clean up of the building after construction.',
       },
       {
         image: 'assets/office-cleaning-img.png',
-        service: 'Office cleaning ',
+        service: 'office-cleaning ',
         description:
           'Lets help you clean and organize your office while you focus on your work.',
       },
       {
         image: 'assets/laundry-img.png',
-        service: 'Laundry',
+        service: 'laundry',
         description: '',
       },
       {
         image: 'assets/errand-img.png',
-        service: 'Errands',
+        service: 'errands',
         description: '',
       },
       {
         image: 'assets/fumigation-img.png',
-        service: 'Fumigation',
+        service: 'fumigation',
         description: '',
       },
     ];
@@ -81,5 +82,9 @@ export class EatseServicesComponent implements OnInit {
         console.log(error);
       }
     );
+  }
+
+  routeToService(service: string){
+    this.router.navigate(['/eatse/services/' + service]);
   }
 }
