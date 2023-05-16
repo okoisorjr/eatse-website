@@ -28,4 +28,30 @@
       </g>
     </svg>
   </div>
+  <div class="flex flex-col gap-4">
+    <a
+      routerLink="/eatse/booking"
+      (click)="hideMenu()"
+      class="hover:text-[#008000] text-[#FFF] text-sm"
+      >Booking</a
+    >
+    <a
+      routerLink="/eatse/about"
+      (click)="hideMenu()"
+      class="hover:text-[#008000] text-[#FFF] text-sm"
+      >About us</a
+    >
+    <button
+      (click)="gotoSignUp()"
+      class="btn bg-[#111014] text-white hover:bg-[#111014] rounded-sm border-[#EAEAEA]-100"
+    >
+      Sign up
+    </button>
+    <button
+      (click)="gotoLogin()"
+      class="btn bg-[#111014] text-white hover:bg-[#111014] rounded-sm border-[#EAEAEA]-100"
+    >
+      Customer Login
+    </button>
+  </div>
 </div>
