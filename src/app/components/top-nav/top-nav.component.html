@@ -53,4 +53,4 @@
     </div>
   </div>
 </div>
-<app-mobile-menu *ngIf="mobileMenu"></app-mobile-menu>
+<app-mobile-menu *ngIf="mobileMenu" [menuState]="mobileMenu" (updateMenuState)="hideMenu($event)"></app-mobile-menu>

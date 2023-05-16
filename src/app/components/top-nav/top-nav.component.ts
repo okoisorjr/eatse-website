@@ -8,24 +8,24 @@ import { GlobalResourceService } from 'src/app/global-resource/global-resource.s
   styleUrls: ['./top-nav.component.css'],
 })
 export class TopNavComponent implements OnInit {
-  mobileMenu!: boolean;
+  mobileMenu: boolean = false;
 
   constructor(
     private router: Router,
     private globalService: GlobalResourceService
   ) {}
 
-  ngOnInit(): void {
-    this.mobileMenu = this.globalService.getMobileMenuState();
-    console.log(this.mobileMenu);
-  }
+  ngOnInit(): void {}
 
   gotoLogin() {
     this.router.navigate(['auth', 'sign-in']);
   }
 
   showMenu() {
-    this.globalService.setMobileMenuState(true);
-    this.mobileMenu = this.globalService.getMobileMenuState();
+    this.mobileMenu = !this.mobileMenu;
+  }
+
+  hideMenu($event: any) {
+    this.mobileMenu = $event;
   }
 }

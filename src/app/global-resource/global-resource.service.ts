@@ -35,7 +35,7 @@ export class GlobalResourceService {
   }
 
   fetchServices(): Observable<Services[]> {
-    return this.http.get<Services[]>(`http://172.20.10.2:11000/services`, {
+    return this.http.get<Services[]>(`http://192.168.0.180:11000/services`, {
       withCredentials: false,
     });
   }

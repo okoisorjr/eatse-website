@@ -19,6 +19,13 @@ const routes: Routes = [
       import('./about/about.module').then((m) => m.AboutModule),
   },
   {
+    path: 'services',
+    loadChildren: () =>
+      import('./eatse-services/eatse-services.module').then(
+        (m) => m.EatseServicesModule
+      ),
+  },
+  {
     path: 'contact',
     component: ContactComponent,
   },

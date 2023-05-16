@@ -11,11 +11,12 @@
     </p>
   </div>
   <div
-    class="lg:grid md:grid sm:grid flex overflow-x-scroll flex-nowrap sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-2 gap-3"
+    class="grid lg:grid md:grid sm:grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-2 gap-y-3 gap-3"
   >
     <div
       *ngFor="let service of services"
-      class="p-6 w-82 bg-[#111014] lg:w-64 md:w-72 sm:w-48 mx-auto lg:bg-[#111014] rounded-xl flex items-center justify-center"
+      (click)="routeToService(service.service)"
+      class="p-6 w-72 bg-[#111014] lg:w-64 md:w-72 sm:w-48 mx-auto lg:bg-[#111014] rounded-xl flex items-center justify-center"
     >
       <div class="flex flex-col items-center justify-center">
         <img

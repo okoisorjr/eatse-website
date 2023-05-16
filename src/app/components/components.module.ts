@@ -11,6 +11,8 @@ import { TestimonialsComponent } from './testimonials/testimonials.component';
 
 import { ComponentsRoutingModule } from './components-routing.module';
 import { MobileMenuComponent } from './mobile-menu/mobile-menu.component';
+import { BannerComponent } from './banner/banner.component';
+import { PageConstructionComponent } from './page-construction/page-construction.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { MobileMenuComponent } from './mobile-menu/mobile-menu.component';
     FooterComponent,
     TestimonialsComponent,
     MobileMenuComponent,
+    BannerComponent,
+    PageConstructionComponent,
   ],
   imports: [CommonModule, ComponentsRoutingModule, NgbModule],
   exports: [
@@ -31,6 +35,8 @@ import { MobileMenuComponent } from './mobile-menu/mobile-menu.component';
     EatseServicesComponent,
     FeaturesComponent,
     TestimonialsComponent,
+    BannerComponent,
+    PageConstructionComponent,
     FooterComponent,
   ],
 })
