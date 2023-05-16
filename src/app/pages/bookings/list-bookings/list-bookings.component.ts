@@ -9,12 +9,14 @@ import { GlobalResourceService } from 'src/app/global-resource/global-resource.s
   styleUrls: ['./list-bookings.component.css'],
 })
 export class ListBookingsComponent implements OnInit {
-  currentUser!: UserAccount;
+  //currentUser!: UserAccount;
+  currentUser!: boolean;
 
   constructor(private user: GlobalResourceService, private router: Router) {}
 
   ngOnInit(): void {
-    this.currentUser = this.user.getCurrentUser();
+    //this.currentUser = this.user.getCurrentUser();
+    this.currentUser = true;
   }
 
   gotoBooking() {

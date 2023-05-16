@@ -1,0 +1,11 @@
+<div class="container my-5 grid grid-cols-3">
+  <div class="col-span-1">
+    <ng-container class="" *ngFor="let frequency of frequencies">
+      <div class="flex flex-row p-6 my-3 gap-4 items-center w-72 bg-[#111014] lg:w-64 md:w-72 sm:w-48 mx-auto lg:bg-[#111014] rounded-xl">
+        <input type="radio" value="" name="frequency"/><label class="text-[#FFF] font-bold text-xl" (click)="selectFrequency(frequency)">{{ frequency }}</label>
+      </div>
+    </ng-container>
+  </div>
+  <div class="col-span-1"></div>
+  <div class="col-span-2"></div>
+</div>

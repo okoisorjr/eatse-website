@@ -13,6 +13,8 @@ import { ComponentsRoutingModule } from './components-routing.module';
 import { MobileMenuComponent } from './mobile-menu/mobile-menu.component';
 import { BannerComponent } from './banner/banner.component';
 import { PageConstructionComponent } from './page-construction/page-construction.component';
+import { ServiceBookingComponent } from './service-booking/service-booking.component';
+import { OneTimeComponent } from './one-time/one-time.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { PageConstructionComponent } from './page-construction/page-construction
     MobileMenuComponent,
     BannerComponent,
     PageConstructionComponent,
+    ServiceBookingComponent,
+    OneTimeComponent,
   ],
   imports: [CommonModule, ComponentsRoutingModule, NgbModule],
   exports: [
@@ -38,6 +42,8 @@ import { PageConstructionComponent } from './page-construction/page-construction
     BannerComponent,
     PageConstructionComponent,
     FooterComponent,
+    ServiceBookingComponent,
+    OneTimeComponent
   ],
 })
 export class ComponentsModule {}
