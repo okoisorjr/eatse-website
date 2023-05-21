@@ -10,9 +10,15 @@ import { FooterComponent } from './footer/footer.component';
 import { TestimonialsComponent } from './testimonials/testimonials.component';
 
 import { ComponentsRoutingModule } from './components-routing.module';
+import { Angular4PaystackModule } from 'angular4-paystack';
 import { MobileMenuComponent } from './mobile-menu/mobile-menu.component';
 import { BannerComponent } from './banner/banner.component';
 import { PageConstructionComponent } from './page-construction/page-construction.component';
+import { ServiceBookingComponent } from './service-booking/service-booking.component';
+import { OneTimeComponent } from './one-time/one-time.component';
+import { DatePickerComponent } from './date-picker/date-picker.component';
+import { FormsModule } from '@angular/forms';
+import { HouseInfoComponent } from './house-info/house-info.component';
 
 @NgModule({
   declarations: [
@@ -26,8 +32,12 @@ import { PageConstructionComponent } from './page-construction/page-construction
     MobileMenuComponent,
     BannerComponent,
     PageConstructionComponent,
+    ServiceBookingComponent,
+    OneTimeComponent,
+    DatePickerComponent,
+    HouseInfoComponent,
   ],
-  imports: [CommonModule, ComponentsRoutingModule, NgbModule],
+  imports: [CommonModule, ComponentsRoutingModule, NgbModule, FormsModule, Angular4PaystackModule],
   exports: [
     TopNavComponent,
     HeroComponent,
@@ -38,6 +48,9 @@ import { PageConstructionComponent } from './page-construction/page-construction
     BannerComponent,
     PageConstructionComponent,
     FooterComponent,
+    ServiceBookingComponent,
+    OneTimeComponent,
+    HouseInfoComponent
   ],
 })
 export class ComponentsModule {}

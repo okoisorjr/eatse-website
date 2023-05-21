@@ -4,6 +4,7 @@ import { PagesModule } from './pages/pages.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
+import { Angular4PaystackModule } from 'angular4-paystack'; 
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -58,8 +59,9 @@ const customNotifierOptions: NotifierOptions = {
     NgbModule,
     HttpClientModule,
     NotifierModule.withConfig(customNotifierOptions),
+    Angular4PaystackModule.forRoot('pk_test_ed7c900a4a1c3b6c290265bf971f6b8099ca44a3'),
   ],
-  providers: [],
+  providers: [Angular4PaystackModule],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

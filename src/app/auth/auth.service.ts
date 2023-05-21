@@ -10,13 +10,13 @@ import { NewUser } from './models/new-user.model';
   providedIn: 'root',
 })
 export class AuthService {
-  serverIP: string = 'http://192.168.0.180';
+  serverIP: string = 'http://localhost:11000/api/v1';
 
   constructor(private http: HttpClient) {}
 
   registerAccount(newUser: NewUser): Observable<ResourceCreated> {
     return this.http.post<ResourceCreated>(
-      `https://${this.serverIP}/account/create-account`,
+      `${this.serverIP}/account/create-account`,
       newUser
     );
   }

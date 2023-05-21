@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserAccount } from 'src/app/auth/models/user-account.model';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
+import { NewBooking } from '../model/new-booking';
 
 @Component({
   selector: 'app-list-bookings',
@@ -9,12 +10,17 @@ import { GlobalResourceService } from 'src/app/global-resource/global-resource.s
   styleUrls: ['./list-bookings.component.css'],
 })
 export class ListBookingsComponent implements OnInit {
-  currentUser!: UserAccount;
+  //currentUser!: UserAccount;
+  newBooking: NewBooking = new NewBooking();
+  currentUser!: boolean;
+  step: number = 1;
+  frequency: string = 'one-time';
 
   constructor(private user: GlobalResourceService, private router: Router) {}
 
   ngOnInit(): void {
-    this.currentUser = this.user.getCurrentUser();
+    //this.currentUser = this.user.getCurrentUser();
+    this.currentUser = true;
   }
 
   gotoBooking() {
@@ -23,5 +29,25 @@ export class ListBookingsComponent implements OnInit {
 
   gotoLogin() {
     this.router.navigate(['/auth/sign-in']);
+  }
+
+  setBooking(booking: any){
+    this.newBooking = booking;
+  }
+
+  setFrequency($event: any){
+    this.frequency = $event;
+  }
+
+  updateStep(){
+    this.step++;
+    console.log(this.step);
+    console.log(this.newBooking);
+  }
+
+  proceedToPayment(booking: any){  
+    this.newBooking = booking;
+    console.log(booking);
+    console.log(this.newBooking);
   }
 }

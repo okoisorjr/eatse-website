@@ -32,18 +32,22 @@ export class RegisterComponent implements OnInit {
     if (form.invalid) {
       return this.notifier.notify('error', 'Please, all fields are required!');
     }
+    /* if(form.controls['confirmPassword'].value !== form.controls['password'].value){
+      return this.notifier.notify('error', 'Oops!....password mismatch!');
+    } */
 
     this.authService.registerAccount(this.newUser).subscribe(
       (value) => {
         if (value) {
-          this.router.navigate(['/register-success']);
+          console.log(value);
+          this.router.navigate(['/auth/registration-success']);
         }
       },
       (error: HttpErrorResponse) => {
         console.log(error);
         this.notifier.notify(
           'error',
-          'oops!....your account could not be created!'
+          `${error.error.msg}`
         );
       }
     );

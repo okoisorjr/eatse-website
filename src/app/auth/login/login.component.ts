@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(user_credentials).subscribe((value) => {
       if(value){
         this.globalService.currentUser = value;
+        console.log(value);
       }
     }, (error: HttpErrorResponse) => {
       console.log(error);
