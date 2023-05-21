@@ -13,8 +13,72 @@
     <button (click)="gotoLogin()" class="ui-green-btn my-3">Book now</button>
   </div>
 </div>
-<div *ngIf="currentUser" class="my-3">
-  <app-service-booking></app-service-booking>>
+
+<div class="border-y-2 border-gray-600 w-full">
+  <div class="flex flex-row justify-center items-center gap-5 p-4">
+    <div class="flex flex-col items-center justify-center cursor-pointer">
+      <i class="material-icons text-[#FFF]">event</i>
+      <p class="text-[#FFF]">Active bookings</p>
+    </div>
+    <div class="flex flex-col items-center justify-center cursor-pointer">
+      <i class="material-icons text-[#FFF]">history</i>
+      <p class="text-[#FFF]">Booking history</p>
+    </div>
+  </div>
 </div>
-<app-one-time></app-one-time>
+<!-- <div *ngIf="currentUser" class="my-3">
+  <app-service-booking></app-service-booking>
+</div> -->
+<div *ngIf="frequency === 'one-time'">
+  <app-one-time
+    [step]="step"
+    [frequency]="frequency"
+    [newBooking]="newBooking"
+    *ngIf="step === 1"
+    (newBooking)="setBooking($event)"
+    (setFrequency)="setFrequency($event)"
+    (changeStep)="updateStep()"
+  ></app-one-time>
+  <app-house-info
+    [step]="step"
+    *ngIf="step === 2"
+    [newBooking]="newBooking"
+    (setNewBooking)="setBooking($event)"
+    (payFee)="proceedToPayment($event)"
+  ></app-house-info>
+</div>
+
+<div *ngIf="frequency === 'monthly'">
+  <app-one-time
+    [step]="step"
+    [frequency]="frequency"
+    [newBooking]="newBooking"
+    *ngIf="step === 1"
+    (newBooking)="setBooking($event)"
+    (setFrequency)="setFrequency($event)"
+    (changeStep)="updateStep()"
+  ></app-one-time>
+  <app-house-info
+    [step]="step"
+    [newBooking]="newBooking"
+    (payFee)="proceedToPayment($event)"
+  ></app-house-info>
+</div>
+
+<div *ngIf="frequency === 'custom'">
+  <app-one-time
+    [step]="step"
+    [frequency]="frequency"
+    [newBooking]="newBooking"
+    *ngIf="step === 1"
+    (newBooking)="setBooking($event)"
+    (setFrequency)="setFrequency($event)"
+    (changeStep)="updateStep()"
+  ></app-one-time>
+  <app-house-info
+    [step]="step"
+    [newBooking]="newBooking"
+    (payFee)="proceedToPayment($event)"
+  ></app-house-info>
+</div>
 <app-footer></app-footer>

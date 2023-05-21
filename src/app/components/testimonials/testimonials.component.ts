@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
 
 interface Testimonials {
   name: string;

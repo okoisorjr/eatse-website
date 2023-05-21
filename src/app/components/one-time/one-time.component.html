@@ -1,11 +1,54 @@
-<div class="container my-5 grid grid-cols-3">
-  <div class="col-span-1">
-    <ng-container class="" *ngFor="let frequency of frequencies">
-      <div class="flex flex-row p-6 my-3 gap-4 items-center w-72 bg-[#111014] lg:w-64 md:w-72 sm:w-48 mx-auto lg:bg-[#111014] rounded-xl">
-        <input type="radio" value="" name="frequency"/><label class="text-[#FFF] font-bold text-xl" (click)="selectFrequency(frequency)">{{ frequency }}</label>
+<div
+  class="container grid gap-2 grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-5 sm:gap-2 md:gap-5 bg-[url('/assets/wave2.png')]"
+>
+  <div class="col-span-1 sm:col-span-1 md:col-span-1">
+    <div>
+      <p class="text-[#FFF] font-bold text-lg">Frequency</p>
+      <div
+        (click)="selectFrequency(frequency)"
+        *ngFor="let frequency of frequencies"
+        class="flex flex-row p-3 my-2 gap-4 items-center w-72 lg:w-64 md:w-full sm:w-56 rounded-lg"
+        [ngClass]="{
+          'bg-[#008000]': selectedFrequency === frequency,
+          'bg-[#111014]': selectedFrequency !== frequency
+        }"
+      >
+        <input
+          class="self-center"
+          type="radio"
+          value="{{ newBooking.frequency }}"
+          name="frequency"
+          [checked]="selectedFrequency === frequency"
+        /><label class="text-[#FFF] font-bold text-xl accent-[#eee]">{{
+          frequency
+        }}</label>
       </div>
-    </ng-container>
+    </div>
   </div>
-  <div class="col-span-1"></div>
-  <div class="col-span-2"></div>
+  <div class="col-span-1 sm:col-span-1 md:col-span-1">
+    <app-date-picker (setDates)="setDate($event)"></app-date-picker>
+  </div>
+  <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-1">
+    <p class="text-[#FFF] font-bold text-lg">Pick arrival time</p>
+    <div class="flex flex-wrap gap-2">
+      <div
+        *ngFor="let time of times"
+        (click)="setArrivalTime(time)"
+        class="p-3 my-1 w-24 rounded-lg bg-[#111014] cursor-pointer"
+        [ngClass]="{
+          'bg-[#008000]':
+            newBooking.arrivalTime === time.time &&
+            newBooking.period === time.period,
+          'bg-[#111014]':
+            newBooking.arrivalTime !== time.time ||
+            newBooking.period !== time.period
+        }"
+      >
+        <p class="text-[#FFF] text-center">{{ time.time }}{{ time.period }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="flex items-center justify-center my-4">
+  <button class="ui-green-btn" (click)="nextPhase()">Next</button>
 </div>
