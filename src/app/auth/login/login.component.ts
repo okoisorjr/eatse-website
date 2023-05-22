@@ -28,8 +28,9 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(user_credentials).subscribe((value) => {
       if(value){
-        this.globalService.currentUser = value;
-        console.log(value);
+        this.globalService.setCurrentUser(value);
+        console.log(this.globalService.currentUser);
+        localStorage.setItem('authorization', value.token)
       }
     }, (error: HttpErrorResponse) => {
       console.log(error);

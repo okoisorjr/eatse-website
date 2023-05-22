@@ -91,14 +91,7 @@
     <div>
       <button
         class="w-full bg-[#008000] text-[#FFF] my-3 p-2 rounded-md"
-        mat-raised-button
-        color="primary"
-        angular4-paystack
-        [paystackOptions]="options"
-        [channels]="['bank', 'ussd', 'transfer']"
-        (paymentInit)="paymentCancel()"
-        (close)="paymentCancel()"
-        (callback)="paymentDone($event)"
+        (click)="makePayment()"
       >
         Proceed to payment
       </button>
