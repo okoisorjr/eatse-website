@@ -8,9 +8,9 @@ import { EatseServicesComponent } from './eatse-services/eatse-services.componen
 import { FeaturesComponent } from './features/features.component';
 import { FooterComponent } from './footer/footer.component';
 import { TestimonialsComponent } from './testimonials/testimonials.component';
+import { FlutterwaveModule } from 'flutterwave-angular-v3';
 
 import { ComponentsRoutingModule } from './components-routing.module';
-import { Angular4PaystackModule } from 'angular4-paystack';
 import { MobileMenuComponent } from './mobile-menu/mobile-menu.component';
 import { BannerComponent } from './banner/banner.component';
 import { PageConstructionComponent } from './page-construction/page-construction.component';
@@ -37,7 +37,7 @@ import { HouseInfoComponent } from './house-info/house-info.component';
     DatePickerComponent,
     HouseInfoComponent,
   ],
-  imports: [CommonModule, ComponentsRoutingModule, NgbModule, FormsModule, Angular4PaystackModule],
+  imports: [CommonModule, ComponentsRoutingModule, NgbModule, FormsModule, FlutterwaveModule],
   exports: [
     TopNavComponent,
     HeroComponent,

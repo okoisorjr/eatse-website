@@ -33,6 +33,11 @@ export class ListBookingsComponent implements OnInit {
 
   setBooking(booking: any){
     this.newBooking = booking;
+    this.updateStep()
+  }
+
+  finalBooking(booking: any){
+    this.newBooking = booking;
   }
 
   setFrequency($event: any){
@@ -40,14 +45,7 @@ export class ListBookingsComponent implements OnInit {
   }
 
   updateStep(){
+    console.log(this.newBooking);
     this.step++;
-    console.log(this.step);
-    console.log(this.newBooking);
-  }
-
-  proceedToPayment(booking: any){  
-    this.newBooking = booking;
-    console.log(booking);
-    console.log(this.newBooking);
   }
 }

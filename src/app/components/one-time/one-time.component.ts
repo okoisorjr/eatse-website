@@ -17,7 +17,7 @@ export class OneTimeComponent implements OnInit {
   @Input() step!: number;
   @Input() frequency!: string;
   @Input() newBooking!: NewBooking;
-  @Output() setBooking = new EventEmitter();
+  @Output() updateBooking = new EventEmitter();
   @Output() setFrequency = new EventEmitter();
   @Output() changeStep = new EventEmitter();
 
@@ -73,8 +73,8 @@ export class OneTimeComponent implements OnInit {
       return this.notifier.notify('error', 'Please, select all the fields!')
     }
     else{
-      this.setBooking.emit(this.newBooking);
-      this.changeStep.emit();
+      this.updateBooking.emit(this.newBooking);
+      //this.changeStep.emit();
     }    
   }
 }
