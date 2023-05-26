@@ -8,5 +8,12 @@ export class NewBooking {
   dates!: string[];
   address!: string;
   cost: string = '0';
-  rooms: Room = new Room();
+  rooms: Room[] = [];
+  buildingType?: string;
+  extraInformation?: string;
+  percentageDiscount!: string;
+  discountedPrice!: string;
+  officeLocation?: string;
+  officeEmail?: string;
+  officeContact?: string;
 }

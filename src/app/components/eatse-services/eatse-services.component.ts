@@ -80,16 +80,6 @@ export class EatseServicesComponent implements OnInit {
           'We offer different fumigation and pest control service frequencies according to your needs and preferences',
       },
     ];
-
-    this.globalServices.fetchServices().subscribe(
-      (value) => {
-        this.eatseServices = value;
-        console.log(this.eatseServices);
-      },
-      (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    );
   }
 
   routeToService(service: string) {

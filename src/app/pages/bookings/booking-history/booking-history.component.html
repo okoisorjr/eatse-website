@@ -1,0 +1,35 @@
+<app-top-nav></app-top-nav>
+
+<div class="border-y-2 border-gray-600 w-full">
+  <div class="flex flex-row justify-center items-center gap-5 p-4">
+    <a routerLink="/booking/active"
+      ><div class="flex flex-col items-center justify-center cursor-pointer">
+        <i class="material-icons text-[#FFF]">event</i>
+        <p class="text-[#FFF]">Active bookings</p>
+      </div></a
+    >
+    <a routerLink="/booking/history"
+      ><div class="flex flex-col items-center justify-center cursor-pointer">
+        <i class="material-icons text-[#FFF]">history</i>
+        <p class="text-[#FFF]">Booking history</p>
+      </div></a
+    >
+  </div>
+</div>
+
+<div class="container">
+  <div class="flex flex-col justify-center items-center my-25">
+    <div class="py-10">
+      <img
+        src="assets/booking-calendar.png"
+        style="width: 100px; height: 100px"
+      />
+    </div>
+    <p class="text-[#FFF] text-center text-sm">
+      No booking yet. Click the button below to book a service.
+    </p>
+    <button (click)="gotoBooking()" class="ui-green-btn my-3">Book now</button>
+  </div>
+</div>
+
+<app-footer></app-footer>

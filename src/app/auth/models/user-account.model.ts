@@ -4,5 +4,4 @@ export class UserAccount {
   lastname!: string;
   email!: string;
   phone!: string;
-  token!: string;
 }

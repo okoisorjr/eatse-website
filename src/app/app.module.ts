@@ -8,6 +8,13 @@ import { FlutterwaveModule } from "flutterwave-angular-v3"
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { environment } from '../environments/environment';
+import { provideAnalytics,getAnalytics,ScreenTrackingService,UserTrackingService } from '@angular/fire/analytics';
+import { provideAuth,getAuth } from '@angular/fire/auth';
+import { provideFirestore,getFirestore } from '@angular/fire/firestore';
+import { providePerformance,getPerformance } from '@angular/fire/performance';
+import { provideStorage,getStorage } from '@angular/fire/storage';
 
 const customNotifierOptions: NotifierOptions = {
   position: {
@@ -59,9 +66,17 @@ const customNotifierOptions: NotifierOptions = {
     NgbModule,
     HttpClientModule,
     NotifierModule.withConfig(customNotifierOptions),
-    FlutterwaveModule
+    FlutterwaveModule,
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideAnalytics(() => getAnalytics()),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
+    providePerformance(() => getPerformance()),
+    provideStorage(() => getStorage())
   ],
-  providers: [],
+  providers: [
+    ScreenTrackingService,UserTrackingService
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
