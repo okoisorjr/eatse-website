@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { UserAccount } from 'src/app/auth/models/user-account.model';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 import { NewBooking } from '../model/new-booking';
+import { CurrentUser } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-list-bookings',
@@ -12,39 +13,63 @@ import { NewBooking } from '../model/new-booking';
 export class ListBookingsComponent implements OnInit {
   //currentUser!: UserAccount;
   newBooking: NewBooking = new NewBooking();
-  currentUser!: boolean;
-  step: number = 1;
+  currentPage: string = 'booking';
+  selectedService!: string;
+  currentUser!: CurrentUser;
+  step: number = 0;
   frequency: string = 'one-time';
 
   constructor(private user: GlobalResourceService, private router: Router) {}
 
   ngOnInit(): void {
-    //this.currentUser = this.user.getCurrentUser();
-    this.currentUser = true;
+    this.currentUser = this.user.getCurrentUser();
   }
 
   gotoBooking() {
     this.router.navigate(['/eatse/book-service']);
   }
 
+  gotoServiceBooking(service: any) {
+    if (!this.currentUser) {
+      this.router.navigate(['/auth/sign-in']);
+    } else {
+      if (service === 'housekeeping') {
+        this.selectedService = service;
+        this.step++;
+      } else if (service === 'deep cleaning') {
+        this.selectedService = service;
+        this.step++;
+      } else if (service === 'post construction cleaning') {
+        this.selectedService = service;
+        this.step++;
+      } else if (service === 'errands') {
+        this.selectedService = service;
+        this.step++;
+      } else if (service === 'laundry') {
+        this.selectedService = service;
+        this.step++;
+      }
+    }
+  }
+
   gotoLogin() {
     this.router.navigate(['/auth/sign-in']);
   }
 
-  setBooking(booking: any){
+  setBooking(booking: any) {
     this.newBooking = booking;
-    this.updateStep()
+    this.updateStep();
   }
 
-  finalBooking(booking: any){
+  finalBooking(booking: any) {
     this.newBooking = booking;
   }
 
-  setFrequency($event: any){
+  setFrequency($event: any) {
     this.frequency = $event;
   }
 
-  updateStep(){
+  updateStep() {
     console.log(this.newBooking);
     this.step++;
   }

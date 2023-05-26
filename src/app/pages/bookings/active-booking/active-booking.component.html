@@ -1,0 +1,68 @@
+<app-top-nav></app-top-nav>
+
+<div class="border-y-2 border-gray-600 w-full">
+  <div class="flex flex-row justify-center items-center gap-5 p-4">
+    <a routerLink="/booking/active"
+      ><div class="flex flex-col items-center justify-center cursor-pointer">
+        <i class="material-icons text-[#FFF]">event</i>
+        <p class="text-[#FFF]">Active bookings</p>
+      </div></a
+    >
+    <a routerLink="/booking/history"
+      ><div class="flex flex-col items-center justify-center cursor-pointer">
+        <i class="material-icons text-[#FFF]">history</i>
+        <p class="text-[#FFF]">Booking history</p>
+      </div></a
+    >
+  </div>
+</div>
+
+<div class="container">
+  <table class="table-auto my-5" [cellPadding]="12">
+    <thead>
+      <tr>
+        <th class="text-[#fff] font-bold">Service</th>
+        <th class="text-[#fff] font-bold">Address</th>
+        <th class="text-[#fff] font-bold">Date</th>
+        <th class="text-[#fff] font-bold">Time</th>
+        <th class="text-[#fff] font-bold">Cost</th>
+        <th class="text-[#fff] font-bold">Frequency</th>
+        <th class="text-[#fff] font-bold">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Housekeeping</td>
+        <td>Post service army housing estate, ssgt Imoke close, kururdu Abuja.</td>
+        <td>25/05/2023</td>
+        <td>06:00pm</td>
+        <td>100000.00</td>
+        <td>weekly</td>
+        <td>
+          <div class="flex flex-row gap-2">
+            <i class="material-icons text-[#FFF] cursor-pointer">person</i>
+            <i class="material-icons text-[#FFF] cursor-pointer">edit</i>
+            <i class="material-icons text-red-800 cursor-pointer">cancel</i>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Fumigation</td>
+        <td>Post service army housing estate, ssgt Imoke close, kururdu Abuja.</td>
+        <td>25/05/2023</td>
+        <td>01:00pm</td>
+        <td>20000.00</td>
+        <td>weekly</td>
+        <td>
+          <div class="flex flex-row gap-2">
+            <i class="material-icons text-[#FFF] cursor-pointer">person</i>
+            <i class="material-icons text-[#FFF] cursor-pointer">edit</i>
+            <i class="material-icons text-red-800 cursor-pointer">cancel</i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>  
+</div>
+
+<app-footer></app-footer>

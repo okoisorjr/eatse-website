@@ -1,0 +1,10 @@
+<!-- <app-one-time
+  [step]="step"
+  [frequency]="frequency"
+  [newBooking]="newBooking"
+  *ngIf="step === 1"
+  (updateBooking)="setBooking($event)"
+  (setFrequency)="setFrequency($event)"
+  (changeStep)="updateStep()"
+></app-one-time> -->
+<app-book-details *ngIf="step === 1" [service]="service"></app-book-details>

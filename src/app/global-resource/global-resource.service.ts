@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { UserAccount } from '../auth/models/user-account.model';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { CurrentUser } from '../auth/auth.service';
 
 interface Services {
   service: string;
@@ -13,16 +14,17 @@ interface Services {
   providedIn: 'root',
 })
 export class GlobalResourceService {
-  currentUser!: UserAccount;
+  currentUser!: CurrentUser;
   mobileMenu: boolean = false;
+  userInfoId: string = '';
 
   constructor(private http: HttpClient) {}
 
-  setCurrentUser(user: UserAccount) {
+  setCurrentUser(user: CurrentUser) {
     this.currentUser = user;
   }
 
-  getCurrentUser() {
+  getCurrentUser(): CurrentUser {
     return this.currentUser;
   }
 

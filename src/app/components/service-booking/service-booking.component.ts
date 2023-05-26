@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
-interface Service{
+interface Service {
   image: string;
   service: string;
   description: string;
@@ -10,24 +10,27 @@ interface Service{
 @Component({
   selector: 'app-service-booking',
   templateUrl: './service-booking.component.html',
-  styleUrls: ['./service-booking.component.css']
+  styleUrls: ['./service-booking.component.css'],
 })
 export class ServiceBookingComponent implements OnInit {
+  @Input() incoming!: string;
+  @Output() sendClick = new EventEmitter();
 
   services: Service[] = [];
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
+    console.log(this.incoming)
     this.services = [
       {
         image: 'assets/housekeeping-img.png',
-        service: 'house-keeping',
+        service: 'housekeeping',
         description:
           'Our lovely housekeepers will help clean and organize your house.',
       },
       {
         image: 'assets/deep-cleaning-img.png',
-        service: 'deep-cleaning',
+        service: 'deep cleaning',
         description: '',
       },
       {
@@ -37,7 +40,7 @@ export class ServiceBookingComponent implements OnInit {
       },
       {
         image: 'assets/post-construction-img.png',
-        service: 'post-construction-cleaning',
+        service: 'post construction cleaning',
         description:
           'This service offers a thorough clean up of the building after construction.',
       },
@@ -65,8 +68,9 @@ export class ServiceBookingComponent implements OnInit {
     ];
   }
 
-  routeToService(service: string){
-    this.router.navigate(['/eatse/services/' + service]);
+  routeToService(service: string) {
+    if (this.incoming === 'booking') {
+      this.sendClick.emit(service);
+    }
   }
-
 }

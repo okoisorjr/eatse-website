@@ -8,6 +8,7 @@ import {
 } from 'flutterwave-angular-v3';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 import { UserAccount } from 'src/app/auth/models/user-account.model';
+import { CurrentUser } from 'src/app/auth/auth.service';
 
 interface Room {
   price: string;
@@ -29,7 +30,7 @@ export class HouseInfoComponent implements OnInit {
   rooms!: Room[];
   totalCost!: string;
   paymentStatus!: string;
-  currentUser!: UserAccount;
+  currentUser!: CurrentUser;
 
   publicKey = 'FLWPUBK_TEST-b54f62bb20ff93d14f9e0b14163e1bd6-X';
 

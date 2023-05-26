@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CurrentUser } from 'src/app/auth/auth.service';
+import { UserAccount } from 'src/app/auth/models/user-account.model';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 
 @Component({
@@ -9,11 +11,13 @@ import { GlobalResourceService } from 'src/app/global-resource/global-resource.s
 })
 export class TopNavComponent implements OnInit {
   isMobileDevice!: boolean;
+  displayDropdown: boolean = false;
   mobileMenuActive: boolean = false;
+  currentUser!: CurrentUser;
 
   constructor(
     private router: Router,
-    private globalService: GlobalResourceService
+    private globalService: GlobalResourceService,
   ) {}
 
   ngOnInit(): void {
@@ -28,6 +32,7 @@ export class TopNavComponent implements OnInit {
         console.log(this.isMobileDevice);
       }
     });
+    this.currentUser  = this.globalService.getCurrentUser();
   }
 
   gotoLogin() {
@@ -44,5 +49,10 @@ export class TopNavComponent implements OnInit {
 
   hideComponentMenu() {
     this.mobileMenuActive = false;
+  }
+
+  toggleDropdown(){
+    this.displayDropdown = !this.displayDropdown;
+    console.log(this.displayDropdown);
   }
 }

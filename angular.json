@@ -103,6 +103,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "eatse-web:build:production",
+            "firebaseProject": "eatse-4dbd3",
+            "firebaseHostingSite": "eatse-4dbd3"
+          }
         }
       }
     }

@@ -14,7 +14,7 @@ export class HeroComponent implements OnInit {
   }
 
   gotoBooking(){
-    this.router.navigate(['/eatse/booking']);
+    this.router.navigate(['/booking']);
   }
 
 }

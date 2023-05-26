@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "eatse-4dbd3": {
+      "hosting": {
+        "eatse-web": [
+          "eatse-4dbd3"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "eatse-4dbd3"
+  }
+}

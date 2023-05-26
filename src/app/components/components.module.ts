@@ -19,6 +19,10 @@ import { OneTimeComponent } from './one-time/one-time.component';
 import { DatePickerComponent } from './date-picker/date-picker.component';
 import { FormsModule } from '@angular/forms';
 import { HouseInfoComponent } from './house-info/house-info.component';
+import { ErrandBookingComponent } from './errand-booking/errand-booking.component';
+import { PostConstructionComponent } from './post-construction/post-construction.component';
+import { BookDetailsComponent } from './book-details/book-details.component';
+import { LaundryComponent } from './laundry/laundry.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +40,10 @@ import { HouseInfoComponent } from './house-info/house-info.component';
     OneTimeComponent,
     DatePickerComponent,
     HouseInfoComponent,
+    ErrandBookingComponent,
+    PostConstructionComponent,
+    BookDetailsComponent,
+    LaundryComponent,
   ],
   imports: [CommonModule, ComponentsRoutingModule, NgbModule, FormsModule, FlutterwaveModule],
   exports: [
@@ -50,7 +58,11 @@ import { HouseInfoComponent } from './house-info/house-info.component';
     FooterComponent,
     ServiceBookingComponent,
     OneTimeComponent,
-    HouseInfoComponent
+    HouseInfoComponent,
+    ErrandBookingComponent,
+    PostConstructionComponent,
+    BookDetailsComponent,
+    LaundryComponent,
   ],
 })
 export class ComponentsModule {}

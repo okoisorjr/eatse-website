@@ -4,6 +4,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { NotifierService } from 'angular-notifier';
 import { Router } from '@angular/router';
 import { NewUser } from '../models/new-user.model';
+import { addDoc, Firestore, collection, setDoc, doc } from '@angular/fire/firestore';
+import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
+import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 
 @Component({
   selector: 'app-register',
@@ -11,16 +14,15 @@ import { NewUser } from '../models/new-user.model';
   styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent implements OnInit {
-  firstname!: string;
-  lastname!: string;
-  email!: string;
-  phone!: string;
-  password!: string;
   confirmPassword!: string;
   newUser: NewUser = new NewUser();
+  uid: string = '';
 
   constructor(
     private authService: AuthService,
+    private auth: Auth,
+    private currentUser: GlobalResourceService,
+    private fs: Firestore,
     private notifier: NotifierService,
     private router: Router
   ) {}
@@ -28,15 +30,31 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {}
 
   register(form: any) {
+    //this.authService.registerUser(this.newUser);
     console.log(form.value);
-    if (form.invalid) {
-      return this.notifier.notify('error', 'Please, all fields are required!');
-    }
-    /* if(form.controls['confirmPassword'].value !== form.controls['password'].value){
-      return this.notifier.notify('error', 'Oops!....password mismatch!');
-    } */
+    createUserWithEmailAndPassword(
+      this.auth,
+      this.newUser.email,
+      this.newUser.password
+    )
+      .then((res) => {
+        let userInfo = {...this.newUser, id: res.user.uid}
+        const dbInstance = collection(this.fs, 'clients');
+        setDoc(doc(dbInstance, 'clients'), userInfo)
+        addDoc(dbInstance, userInfo, )
+          .then((res) => {
+            this.currentUser.userInfoId = res.id;
+            this.router.navigate(['/auth/registration-success']);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
-    this.authService.registerAccount(this.newUser).subscribe(
+    /* this.authService.registerAccount(this.newUser).subscribe(
       (value) => {
         if (value) {
           console.log(value);
@@ -45,11 +63,8 @@ export class RegisterComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         console.log(error);
-        this.notifier.notify(
-          'error',
-          `${error.error.msg}`
-        );
+        this.notifier.notify('error', `${error.error.msg}`);
       }
-    );
+    ); */
   }
 }
