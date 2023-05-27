@@ -30,7 +30,7 @@
         Eatse
       </p>
       <a routerLink="/about" class="text-[#FFF] hover:text-[#FFF] text-xs my-2" style="display: block;">About us</a>
-      <a routerLink="/auth/sign-up" class="text-[#FFF] hover:text-[#FFF] text-xs my-2" style="display: block;">Join us</a>
+      <a *ngIf="!currentUser" routerLink="/auth/sign-up" class="text-[#FFF] hover:text-[#FFF] text-xs my-2" style="display: block;">Join us</a>
       <a routerLink="/contact" class="text-[#FFF] hover:text-[#FFF] text-xs my-2" style="display: block;">Get in touch</a>
     </div>
 

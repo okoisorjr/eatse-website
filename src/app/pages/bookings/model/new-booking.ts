@@ -1,3 +1,4 @@
+import { LaundryItems } from "./laundry-items";
 import { Room } from "./room";
 
 export class NewBooking {
@@ -6,6 +7,13 @@ export class NewBooking {
   arrivalTime!: string;
   period!: string;
   dates!: string[];
+  days?: string[];
+  errandType?: string;
+  items: LaundryItems[] = [];
+  storeLocation?: string;
+  deliveryAddress?: string;
+  pickupAddress?: string;
+  shoppingItems?: string;
   address!: string;
   cost: string = '0';
   rooms: Room[] = [];
@@ -16,4 +24,5 @@ export class NewBooking {
   officeLocation?: string;
   officeEmail?: string;
   officeContact?: string;
+  paymentStatus?: string;
 }

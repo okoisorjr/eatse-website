@@ -46,7 +46,6 @@ export class OneTimeComponent implements OnInit {
       { id: '1', time: '03:00', period: 'pm'},
       { id: '1', time: '04:00', period: 'pm'},
       { id: '1', time: '05:00', period: 'pm'},
-      { id: '1', time: '06:00', period: 'pm'},
     ];
   }
 
@@ -74,7 +73,7 @@ export class OneTimeComponent implements OnInit {
     }
     else{
       this.updateBooking.emit(this.newBooking);
-      //this.changeStep.emit();
+      this.changeStep.emit(this.step++);
     }    
   }
 }

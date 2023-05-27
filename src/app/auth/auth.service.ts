@@ -5,11 +5,27 @@ import { UserAccount } from './models/user-account.model';
 import { LoginDetails } from './models/login-details.model';
 import { ResourceCreated } from '../global-resource/models/resource-created.model';
 import { NewUser } from './models/new-user.model';
-import { addDoc, Firestore, collection, doc, collectionData, DocumentData } from '@angular/fire/firestore';
-import { Auth, authState, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@angular/fire/auth';
+import {
+  addDoc,
+  Firestore,
+  collection,
+  doc,
+  collectionData,
+  DocumentData,
+} from '@angular/fire/firestore';
+import {
+  Auth,
+  User,
+  UserCredential,
+  authState,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile
+} from '@angular/fire/auth';
 import { GlobalResourceService } from '../global-resource/global-resource.service';
+import { Router } from '@angular/router';
 
-export interface CurrentUser{
+export interface CurrentUser {
   uid: string;
   email: string;
   firstname: string;
@@ -21,65 +37,57 @@ export interface CurrentUser{
   providedIn: 'root',
 })
 export class AuthService {
-  serverIP: string = 'http://localhost:11000/api/v1';
-  currentUser: UserAccount = new UserAccount();
+  currentUser: any;
 
-  constructor(private http: HttpClient, private auth: Auth, private user: GlobalResourceService, private fs: Firestore) {}
+  constructor(
+    private http: HttpClient,
+    private auth: Auth,
+    private user: GlobalResourceService,
+    private fs: Firestore,
+    private router: Router
+  ) {}
 
-  registerAccount(newUser: NewUser): Observable<ResourceCreated> {
-    return this.http.post<ResourceCreated>(
-      `${this.serverIP}/account/create-account`,
-      newUser
-    );
-  }
-
-  registerUser(newUser: NewUser){
+  registerUser(newUser: NewUser) {
     createUserWithEmailAndPassword(this.auth, newUser.email, newUser.password)
-    .then((res) => {
-      console.log(res.user);
-    })
-    .catch((error) => {
-      console.log(error);
-    })
+      .then((res) => {
+        updateProfile(res.user, {
+          displayName: newUser.firstname + ' ' + newUser.lastname,
+        })
+          .then((res) => {
+            this.signOut();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
-  signInUser(email: string, password: string): Observable<CurrentUser[]>{
+  signInUser(email: string, password: string): UserCredential {
     signInWithEmailAndPassword(this.auth, email, password)
-    .then((res) => {
-      if(res){
-        let token = '';
-        this.user.userInfoId = res.user.uid;
-
-        res.user.getIdToken()
-        .then((token) => {
-          token = token;
-        });
-        localStorage.setItem('token', token);
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-
-    const clientRef = collection(this.fs, 'clients')
-    return collectionData(clientRef, {idField: 'id'}) as Observable<CurrentUser[]>;
+      .then((res) => {
+        this.currentUser = res;
+        this.router.navigate(['/']);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      
+    return this.currentUser;
+    
   }
 
-  getClient(): Observable<DocumentData>{
-    const clientRef = collection(this.fs, 'clients')
-    return collectionData(clientRef, {idField: 'id'}) as Observable<DocumentData>;
+  signOut() {
+    this.auth.signOut();
+    this.router.navigate(['/auth/sign-in']);
   }
 
-  login(userInfo: LoginDetails): Observable<any> {
-    console.log(userInfo, 'user-info');
-    const headers = new HttpHeaders().set(
-      'Content-Type',
-      'application/x-www-form-urlencoded'
-    );
-
-    return this.http.post<any>(
-      `${this.serverIP}/account/login`,
-      userInfo
-    );
+  getClient(): Observable<DocumentData> {
+    const clientRef = collection(this.fs, 'clients');
+    return collectionData(clientRef, {
+      idField: 'id',
+    }) as Observable<DocumentData>;
   }
 }

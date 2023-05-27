@@ -4,6 +4,7 @@ import { UserAccount } from 'src/app/auth/models/user-account.model';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 import { NewBooking } from '../model/new-booking';
 import { CurrentUser } from 'src/app/auth/auth.service';
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-list-bookings',
@@ -15,14 +16,15 @@ export class ListBookingsComponent implements OnInit {
   newBooking: NewBooking = new NewBooking();
   currentPage: string = 'booking';
   selectedService!: string;
-  currentUser!: CurrentUser;
+  currentUser: any;
   step: number = 0;
   frequency: string = 'one-time';
 
-  constructor(private user: GlobalResourceService, private router: Router) {}
+  constructor(private user: GlobalResourceService, private router: Router, private auth: Auth) {}
 
   ngOnInit(): void {
-    this.currentUser = this.user.getCurrentUser();
+    this.currentUser = this.auth.currentUser;
+    this.newBooking.frequency = 'one-time';
   }
 
   gotoBooking() {
@@ -35,20 +37,38 @@ export class ListBookingsComponent implements OnInit {
     } else {
       if (service === 'housekeeping') {
         this.selectedService = service;
+        this.newBooking.service = service;
         this.step++;
       } else if (service === 'deep cleaning') {
         this.selectedService = service;
+        this.newBooking.service = service;
         this.step++;
       } else if (service === 'post construction cleaning') {
         this.selectedService = service;
+        this.newBooking.service = service;
         this.step++;
       } else if (service === 'errands') {
         this.selectedService = service;
+        this.newBooking.service = service;
         this.step++;
       } else if (service === 'laundry') {
         this.selectedService = service;
+        this.newBooking.service = service;
+        this.step++;
+      } else if( service === 'office-cleaning'){
+        this.selectedService = service;
+        this.newBooking.service = service;
+        this.step = 2;
+      } else if( service === 'fumigation'){
+        this.selectedService = service;
+        this.newBooking.service = service;
+        this.step++;
+      } else if( service === 'move-in-out-cleaning'){
+        this.selectedService = service;
+        this.newBooking.service = service;
         this.step++;
       }
+
     }
   }
 
@@ -58,7 +78,7 @@ export class ListBookingsComponent implements OnInit {
 
   setBooking(booking: any) {
     this.newBooking = booking;
-    this.updateStep();
+    //this.updateStep();
   }
 
   finalBooking(booking: any) {
@@ -69,8 +89,8 @@ export class ListBookingsComponent implements OnInit {
     this.frequency = $event;
   }
 
-  updateStep() {
+  updateStep($event: any) {
     console.log(this.newBooking);
-    this.step++;
+    this.step = $event;
   }
 }

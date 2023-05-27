@@ -42,12 +42,14 @@
       >About us</a
     >
     <button
+      *ngIf="!currentUser"
       (click)="gotoSignUp()"
       class="btn bg-[#111014] text-white hover:bg-[#111014] rounded-sm border-[#EAEAEA]-100"
     >
       Sign up
     </button>
     <button
+      *ngIf="!currentUser"
       (click)="gotoLogin()"
       class="btn bg-[#111014] text-white hover:bg-[#111014] rounded-sm border-[#EAEAEA]-100"
     >

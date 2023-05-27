@@ -40,7 +40,7 @@ export class RegisterComponent implements OnInit {
       .then((res) => {
         let userInfo = {...this.newUser, id: res.user.uid}
         const dbInstance = collection(this.fs, 'clients');
-        setDoc(doc(dbInstance, 'clients'), userInfo)
+        //setDoc(doc(dbInstance, 'clients'), userInfo)
         addDoc(dbInstance, userInfo, )
           .then((res) => {
             this.currentUser.userInfoId = res.id;

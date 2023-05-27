@@ -3,7 +3,11 @@ import { NotifierService } from 'angular-notifier';
 import { Flutterwave } from 'flutterwave-angular-v3';
 import { UserAccount } from 'src/app/auth/models/user-account.model';
 import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
-import { InlinePaymentOptions, PaymentSuccessResponse } from 'flutterwave-angular-v3';
+import {
+  InlinePaymentOptions,
+  PaymentSuccessResponse,
+} from 'flutterwave-angular-v3';
+import { BookingsService } from 'src/app/services/bookings.service';
 
 interface Room {
   price: string;
@@ -14,13 +18,14 @@ interface Room {
 @Component({
   selector: 'app-book-details',
   templateUrl: './book-details.component.html',
-  styleUrls: ['./book-details.component.css']
+  styleUrls: ['./book-details.component.css'],
 })
 export class BookDetailsComponent implements OnInit {
   @Input() service!: string;
+  @Input() newBooking!: NewBooking;
 
   buildingTypes: string[] = [];
-  newBooking: NewBooking = new NewBooking();
+  /* newBooking: NewBooking = new NewBooking(); */
   selectedBuilding: string = '';
 
   rooms!: Room[];
@@ -29,7 +34,7 @@ export class BookDetailsComponent implements OnInit {
 
   publicKey = 'FLWPUBK_TEST-b54f62bb20ff93d14f9e0b14163e1bd6-X';
 
-  customerDetails!: any
+  customerDetails!: any;
   meta!: any;
 
   customizations = {
@@ -37,12 +42,21 @@ export class BookDetailsComponent implements OnInit {
     description: 'Customization Description',
     logo: 'https://flutterwave.com/images/logo-colored.svg',
   };
-  
-  constructor(private flutterwave: Flutterwave, private notifier: NotifierService) { }
+
+  constructor(
+    private flutterwave: Flutterwave,
+    private notifier: NotifierService,
+    private bookingService: BookingsService
+  ) {}
 
   ngOnInit(): void {
-    this.newBooking.service = this.service;
-    this.buildingTypes = [ 'Office', 'House'];
+    this.newBooking.service = this.newBooking.service;
+    if(this.newBooking.service === 'office-cleaning'){
+      this.newBooking.buildingType = 'Office';
+    }else{
+      this.newBooking.buildingType = 'House';
+    }
+    this.buildingTypes = ['House', 'Office'];
     this.rooms = [
       { price: '5000', roomType: 'Living rooms', count: 0 },
       { price: '5000', roomType: 'Bedrooms', count: 0 },
@@ -51,8 +65,8 @@ export class BookDetailsComponent implements OnInit {
     ];
   }
 
-  selectBuilding(building: string){
-    this.selectedBuilding = building;
+  selectBuilding(building: string) {
+    this.newBooking.buildingType = building;
   }
 
   decreaseRoomSize(room: Room) {
@@ -68,6 +82,31 @@ export class BookDetailsComponent implements OnInit {
     room.count++;
     let cost = Number(room.price) + Number(this.newBooking.cost);
     this.newBooking.cost = String(cost);
+  }
+
+  validateForm() {
+    if (
+      this.newBooking.days!.length == 0 ||
+      this.newBooking.dates.length == 0 ||
+      this.newBooking.buildingType === '' ||
+      this.newBooking.arrivalTime === '' ||
+      this.newBooking.address === '' ||
+      this.newBooking.buildingType === ''
+    ) {
+      return this.notifier.notify(
+        'error',
+        'Please, kindly fill out all the required fields'
+      );
+    } else {
+      return true;
+    }
+  }
+
+  proceedToPay() {
+    let value = this.validateForm();
+    if (value) {
+      this.makePayment();
+    }
   }
 
   makePayment() {
@@ -89,6 +128,9 @@ export class BookDetailsComponent implements OnInit {
     this.flutterwave.inlinePay(paymentData);
   }
   makePaymentCallback(response: PaymentSuccessResponse): void {
+    this.newBooking.paymentStatus = 'success';
+    let bookingData = {...this.newBooking}
+    this.bookingService.saveBooking(bookingData);
     console.log('Payment callback', response);
   }
   closedPaymentModal(): void {
@@ -99,5 +141,4 @@ export class BookDetailsComponent implements OnInit {
     let date = new Date();
     return date.getTime().toString();
   }
-
 }

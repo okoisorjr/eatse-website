@@ -19,6 +19,7 @@
           name="fullname"
           class="p-2 w-full bg-[#111014] rounded-md text-[#FFF]"
           placeholder="Full name"
+          [disabled]="user.firstname"
           [(ngModel)]="fullname"
           ngModel
         />
@@ -30,6 +31,7 @@
           name="email"
           class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
           placeholder="Email"
+          [disabled]="user.email"
           [(ngModel)]="email"
           ngModel
         />
@@ -41,13 +43,14 @@
           name="phone"
           class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
           placeholder="Phone number"
+          [disabled]="user.phone"
           [(ngModel)]="phone"
           ngModel
         />
       </div>
 
       <div class="py-2">
-        <textarea class="w-100 text-[#FFF] bg-[#111014] p-2 rounded-lg" placeholder="Write message....." rows="10"></textarea>
+        <textarea name="message" class="w-100 text-[#FFF] bg-[#111014] p-2 rounded-lg" placeholder="Write message....." rows="10" [(ngModel)]="message"></textarea>
       </div>
 
       <div class="py-2">

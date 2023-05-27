@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CurrentUser } from 'src/app/auth/auth.service';
 import { UserAccount } from 'src/app/auth/models/user-account.model';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-top-nav',
@@ -13,26 +14,36 @@ export class TopNavComponent implements OnInit {
   isMobileDevice!: boolean;
   displayDropdown: boolean = false;
   mobileMenuActive: boolean = false;
-  currentUser!: CurrentUser;
+  currentUser!: any;
 
   constructor(
     private router: Router,
-    private globalService: GlobalResourceService,
-  ) {}
+    private auth: Auth,
+  ) {
+    this.currentUser = this.auth.currentUser;
+  }
 
   ngOnInit(): void {
     window.addEventListener('resize', () => {
       let screenSize = window.innerWidth;
-      console.log(screenSize);
+      
       if (screenSize <= 560) {
         this.isMobileDevice = true;
-        console.log(this.isMobileDevice);
+        
       } else {
         this.isMobileDevice = false;
-        console.log(this.isMobileDevice);
+        
       }
     });
-    this.currentUser  = this.globalService.getCurrentUser();
+    this.currentUser = this.auth.currentUser;
+  }
+
+  signOut(){
+    this.auth.signOut();
+    this.currentUser = null;
+    if(this.currentUser == false){
+      this.router.navigate(['/auth/login']);
+    }
   }
 
   gotoLogin() {

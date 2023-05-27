@@ -7,9 +7,9 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class PostConstructionComponent implements OnInit {
   @Input() service!: string;
+  @Input() step!: number;
 
   currentUser!: boolean;
-  step: number = 1;
   frequency: string = 'one-time';
 
   constructor() { }

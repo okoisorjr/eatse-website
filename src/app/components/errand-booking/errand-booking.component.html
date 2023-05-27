@@ -16,7 +16,7 @@
         <input
           class="self-center"
           type="radio"
-          value="{{ newErrand.errand }}"
+          value="{{ newBooking.errandType }}"
           name="frequency"
           [checked]="selectedErrand === errand"
         /><label class="text-[#FFF] font-bold text-xl accent-[#eee]">{{
@@ -38,8 +38,8 @@
           class="p-2 bg-[#111014] text-[#FFF] rounded-md w-full"
           name="Shopping location"
           type="text"
-          placeholder="address"
-          [(ngModel)]="newErrand.storeLocation"
+          placeholder="Shopping location"
+          [(ngModel)]="newBooking.storeLocation"
         />
       </div>
       <div class="">
@@ -47,8 +47,8 @@
           class="p-2 bg-[#111014] text-[#FFF] rounded-md w-full"
           name="Delivery address"
           type="text"
-          placeholder="address"
-          [(ngModel)]="newErrand.deliveryAddress"
+          placeholder="Delivery address"
+          [(ngModel)]="newBooking.deliveryAddress"
         />
       </div>
       <div class="">
@@ -57,7 +57,7 @@
           name="items"
           [rows]="12"
           placeholder="Shopping list and instructions"
-          [(ngModel)]="newErrand.shoppingItems"
+          [(ngModel)]="newBooking.shoppingItems"
         ></textarea>
       </div>
     </div>
@@ -69,22 +69,22 @@
       <p class="text-[#FFF] font-bold text-lg">Booking details</p>
       <div class="flex flex-row items-center justify-between gap-4">
         <p class="my-2 text-[#FFF] text-xs font-bold">Shopping location</p>
-        <p class="my-2 text-[#FFF] text-xs">{{ newErrand.storeLocation }}</p>
+        <p class="my-2 text-[#FFF] text-xs">{{ newBooking.storeLocation }}</p>
       </div>
 
       <div class="flex flex-row items-center justify-between gap-4">
         <p class="my-2 text-[#FFF] text-xs font-bold">Delivery address</p>
-        <p class="my-2 text-[#FFF] text-xs">{{ newErrand.deliveryAddress }}</p>
+        <p class="my-2 text-[#FFF] text-xs">{{ newBooking.deliveryAddress }}</p>
       </div>
 
       <div class="flex flex-row items-center justify-between">
         <p class="my-2 text-[#FFF] text-xs font-bold">service</p>
-        <p class="my-2 text-[#FFF] text-xs">{{ newErrand.service }}</p>
+        <p class="my-2 text-[#FFF] text-xs">{{ newBooking.service }}</p>
       </div>
 
       <div class="flex flex-row items-center justify-between">
         <p class="my-2 text-[#FFF] text-xs font-bold">Frequency</p>
-        <p class="my-2 text-[#FFF] text-xs">{{ newErrand.frequency }}</p>
+        <p class="my-2 text-[#FFF] text-xs">{{ newBooking.frequency }}</p>
       </div>
     </div>
     <div
@@ -93,7 +93,7 @@
       <p class="text-[#FFF] font-bold text-lg">Payment summary</p>
       <div class="flex flex-row items-center justify-between gap-4">
         <p class="my-2 text-[#FFF] text-xs font-bold">Total</p>
-        <p class="my-2 text-[#FFF] text-xs">{{ newErrand.cost }}.00</p>
+        <p class="my-2 text-[#FFF] text-xs">{{ newBooking.cost }}.00</p>
       </div>
     </div>
     <div>
