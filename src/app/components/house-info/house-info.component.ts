@@ -10,6 +10,7 @@ import { GlobalResourceService } from 'src/app/global-resource/global-resource.s
 import { UserAccount } from 'src/app/auth/models/user-account.model';
 import { CurrentUser } from 'src/app/auth/auth.service';
 import { BookingsService } from 'src/app/services/bookings.service';
+import { Auth } from '@angular/fire/auth';
 
 interface Room {
   price: string;
@@ -31,7 +32,7 @@ export class HouseInfoComponent implements OnInit {
   rooms!: Room[];
   totalCost!: string;
   paymentStatus!: string;
-  currentUser!: CurrentUser;
+  currentUser: any;
 
   publicKey = 'FLWPUBK_TEST-b54f62bb20ff93d14f9e0b14163e1bd6-X';
 
@@ -51,6 +52,7 @@ export class HouseInfoComponent implements OnInit {
     private notifier: NotifierService,
     private flutterwave: Flutterwave,
     private bookingService: BookingsService,
+    private auth: Auth,
     private globalService: GlobalResourceService
   ) {
     this.currentUser = this.globalService.getCurrentUser();
@@ -63,13 +65,12 @@ export class HouseInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.newBooking);
+    this.currentUser = this.auth.currentUser;
     this.customerDetails = {
-      name: this.globalService.currentUser.firstname + this.globalService.currentUser.lastname,
-      email: this.globalService.currentUser.email,
-      phone_number: this.currentUser.phone,
+      name: this.currentUser.displayName ? this.currentUser.displayName : this.currentUser.email,
+      email: this.currentUser.email,
+      userId: this.currentUser.uid,
     };
-    console.log(this.customerDetails);
     this.meta = { service: this.newBooking.service, rooms: this.newBooking.rooms, serviceFrequency: this.newBooking.frequency, counsumer_id: "7898", consumer_mac: "kjs9s8ss7dd" };
   }
 
@@ -86,6 +87,7 @@ export class HouseInfoComponent implements OnInit {
     room.count++;
     let cost = Number(room.price) + Number(this.newBooking.cost);
     this.newBooking.cost = String(cost);
+    this.rooms.push(room);
   }
 
   validateForm(){
