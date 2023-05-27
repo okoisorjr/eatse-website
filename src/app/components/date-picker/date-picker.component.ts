@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
 
 @Component({
@@ -7,6 +7,7 @@ import { NotifierService } from 'angular-notifier';
   styleUrls: ['./date-picker.component.css'],
 })
 export class DatePickerComponent implements OnInit {
+  @Input() frequency!: string;
   @Output() setDates = new EventEmitter();
 
   MONTH_NAMES = [
@@ -38,6 +39,7 @@ export class DatePickerComponent implements OnInit {
   ngOnInit(): void {
     this.initDate();
     this.getNoOfDays();
+    console.log(this.frequency);
   }
 
   initDate() {
@@ -63,26 +65,23 @@ export class DatePickerComponent implements OnInit {
   }
 
   isPast(date: any) {
-    console.log(date);
     const today = new Date().getDate();
     const currentMonth = new Date().getMonth();
-    console.log(currentMonth);
 
-    return date < today ? true : false;
+    return date < today && this.month >= currentMonth ? true : false;
   }
 
   selectDate(date: any) {
     const today = new Date().getDate();
     const currentMonth = new Date().getMonth();
     let selectedDate = new Date(this.year, this.month, date);
-    if (date < today && this.month < currentMonth) {
+    if (this.month <= currentMonth && date < today) {
       return this.notifier.notify(
         'error',
         "sorry, you can't pick a day in the past!"
       );
     }
     else if(this.selectedDays.includes(selectedDate.toDateString())){
-      console.log('date already picked!');
       console.log(this.selectedDays);
       this.selectedDays.splice(this.selectedDays.indexOf(selectedDate.toDateString()), 1);
       let temp = [];
@@ -93,7 +92,7 @@ export class DatePickerComponent implements OnInit {
       console.log(this.selectedDays);
       return;
     }
-    else if(this.selectedDays.length > 0){
+    else if(this.frequency === 'one-time' && this.selectedDays.length > 0){
       return this.notifier.notify('error', 'This is a one time service, you can pick only one day!')
     }
     this.selectedDays.push(selectedDate.toDateString());

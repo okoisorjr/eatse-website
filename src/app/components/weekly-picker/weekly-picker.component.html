@@ -61,39 +61,22 @@
     <div class="flex flex-wrap mb-3 -mx-1">
       <ng-container *ngFor="let day of DAYS; let index = index">
         <div style="width: 14.26%" class="px-1">
-          <div class="text-[#FFF] font-medium text-center text-xs">
+          <div
+            (click)="selectDay(day)"
+            class="text-[#FFF] font-medium text-center p-2 text-xs cursor-pointer"
+            [ngClass]="{
+              'bg-[#008000] text-white rounded-md' : selectedDays.includes(day)
+            }"
+          >
             {{ day }}
           </div>
         </div>
       </ng-container>
     </div>
-
-    <div class="flex flex-wrap -mx-1">
-      <ng-container *ngFor="let blankday of blankdays">
-        <div
-          style="width: 14.28%"
-          class="text-center border-none p-1 border-transparent text-sm"
-        ></div>
-      </ng-container>
-      <ng-container
-        *ngFor="
-          let date of no_of_days;
-          let dateIndex = index;
-          trackBy: trackByIdentity
-        "
-      >
-        <div style="width: 14.28%" class="px-1 mb-1">
-          <div
-            (click)="selectDate(date)"
-            class="cursor-pointer text-center text-sm rounded-sm leading-loose transition ease-in-out duration-100 text-gray-400"
-            [ngClass]="{
-              'bg-[#008000] text-white': isSelectedDay(date)
-            }"
-          >
-            {{ date }}
-          </div>
-        </div>
-      </ng-container>
-    </div>
   </div>
+</div>
+<div class="w-full bg-[#008000] bg-opacity-25 p-2 rounded-sm">
+  <p class="text-[#FFF] text-sm text-center">
+    Payment will be deducted every month
+  </p>
 </div>

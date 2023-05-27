@@ -23,6 +23,7 @@ import { ErrandBookingComponent } from './errand-booking/errand-booking.componen
 import { PostConstructionComponent } from './post-construction/post-construction.component';
 import { BookDetailsComponent } from './book-details/book-details.component';
 import { LaundryComponent } from './laundry/laundry.component';
+import { WeeklyPickerComponent } from './weekly-picker/weekly-picker.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { LaundryComponent } from './laundry/laundry.component';
     PostConstructionComponent,
     BookDetailsComponent,
     LaundryComponent,
+    WeeklyPickerComponent,
   ],
   imports: [CommonModule, ComponentsRoutingModule, NgbModule, FormsModule, FlutterwaveModule],
   exports: [

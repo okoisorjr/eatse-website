@@ -8,13 +8,17 @@
         <img src="assets/logo.png" class="" />
       </a>
     </div>
+
+    <!-- Web view Navigation -->
     <div class="hidden lg:block xl:block flex-1">
       <div class="flex flex-row gap-3">
         <a routerLink="/booking" class="text-white">Booking</a>
         <a routerLink="/about" class="text-white">About us</a>
       </div>
     </div>
-    <div *ngIf="!currentUser" class="hidden lg:block xl:block flex-2">
+
+    <!-- View for a not signed in user-->
+    <div *ngIf="currentUser == null" class="hidden lg:block xl:block flex-2">
       <div class="flex flex-row gap-3 items-center">
         <a routerLink="/auth/sign-up" style="cursor: pointer" class="text-white"
           >Sign up</a
@@ -27,7 +31,8 @@
         </button>
       </div>
     </div>
-    <!-- Dark Dropdowns -->
+
+    <!-- View for Signed in user -->
     <div *ngIf="currentUser" class="hidden lg:block xl:block dropdown">
       <button
         class="btn btn-lg fs-14 fw-medium"
@@ -37,28 +42,36 @@
         aria-expanded="false"
         style="border-radius: 50%; background-color: #008000; color: #fff"
       >
-        {{ currentUser.firstname[0] }}
+        {{
+          currentUser.displayName
+            ? currentUser.displayName[0].toUpperCase()
+            : currentUser.email[0].toUpperCase()
+        }}
       </button>
       <ul
         class="dropdown-menu dropdown-menu-dark"
         aria-labelledby="dropdownMenuButton2"
       >
         <li>
-          <a class="dropdown-item" href="#">{{
-            currentUser.firstname + " " + currentUser.lastname
+          <a class="dropdown-item cursor-pointer">{{
+            currentUser.displayName
+              ? currentUser.displayName
+              : currentUser.email
           }}</a>
         </li>
         <li>
           <hr class="dropdown-divider" />
         </li>
         <li>
-          <a class="dropdown-item" href="#"
+          <a (click)="signOut()" class="dropdown-item cursor-pointer"
             ><i class="material-icons mr-2 fs-12 me-2 align-middle">logout</i
             >Logout</a
           >
         </li>
       </ul>
     </div>
+
+    <!-- Mobile menu button, displays on mobile device-->
     <div class="lg:hidden">
       <svg
         *ngIf="!mobileMenuActive"

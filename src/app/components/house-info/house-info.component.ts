@@ -9,6 +9,7 @@ import {
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 import { UserAccount } from 'src/app/auth/models/user-account.model';
 import { CurrentUser } from 'src/app/auth/auth.service';
+import { BookingsService } from 'src/app/services/bookings.service';
 
 interface Room {
   price: string;
@@ -49,6 +50,7 @@ export class HouseInfoComponent implements OnInit {
   constructor(
     private notifier: NotifierService,
     private flutterwave: Flutterwave,
+    private bookingService: BookingsService,
     private globalService: GlobalResourceService
   ) {
     this.currentUser = this.globalService.getCurrentUser();
@@ -86,6 +88,21 @@ export class HouseInfoComponent implements OnInit {
     this.newBooking.cost = String(cost);
   }
 
+  validateForm(){
+    if(this.newBooking.address === '' || this.newBooking.frequency === '' || this.newBooking.frequency === '' || this.newBooking.arrivalTime === '' || this.newBooking.cost === '0'){
+      return this.notifier.notify('error', 'Please, make sure to fill out all the required fields');
+    }else{
+      return true;
+    }
+  }
+
+  proceedToPay(){
+    let value = this.validateForm();
+    if(value){
+      this.makePayment();
+    }
+  }
+
   makePayment() {
     this.setNewBooking.emit(this.newBooking);
     let paymentData = {
@@ -109,6 +126,9 @@ export class HouseInfoComponent implements OnInit {
     console.log('Payment callback', response);
   }
   closedPaymentModal(): void {
+    this.newBooking.paymentStatus = 'cancelled';
+    let bookingData = {...this.newBooking}
+    this.bookingService.saveBooking(bookingData);
     console.log('payment is closed');
   }
 

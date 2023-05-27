@@ -1,7 +1,7 @@
 <div
   class="container grid gap-5 grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-5 sm:gap-2 md:gap-5 bg-[url('/assets/wave2.png')]"
 >
-  <div class="col-span-1 sm:col-span-1 md:col-span-1">
+  <div *ngIf="newBooking.service !== 'office-cleaning'" class="col-span-1 sm:col-span-1 md:col-span-1">
     <div>
       <p class="text-[#FFF] font-bold text-lg">Select the type of building</p>
       <div
@@ -9,8 +9,8 @@
         *ngFor="let building of buildingTypes"
         class="flex flex-row p-3 my-2 gap-4 items-center w-full rounded-lg"
         [ngClass]="{
-          'bg-[#008000]': selectedBuilding === building,
-          'bg-[#111014]': selectedBuilding !== building
+          'bg-[#008000]': newBooking.buildingType === building,
+          'bg-[#111014]': newBooking.buildingType !== building
         }"
       >
         <input
@@ -56,7 +56,10 @@
       </div>
     </div>
   </div>
-  <div class="col-span-1 sm:col-span-1 md:col-span-1">
+  <div
+    *ngIf="newBooking.buildingType === 'House'"
+    class="col-span-1 sm:col-span-1 md:col-span-1"
+  >
     <p class="text-[#FFF] font-bold text-lg mb-2">
       House address and information
     </p>
@@ -80,7 +83,74 @@
       </div>
     </div>
   </div>
-  <div class="col-span-1 sm:col-span-1 md:col-span-1 mt-2">
+  <div
+    *ngIf="newBooking.buildingType === 'Office'"
+    class="col-span-1 sm:col-span-1 md:col-span-1"
+  >
+    <p class="text-[#FFF] font-bold text-lg mb-2">
+      Office location and contact information
+    </p>
+    <div class="flex flex-col gap-2">
+      <div class="">
+        <input
+          class="p-2 bg-[#111014] text-[#FFF] rounded-md w-full"
+          name="officeLocation"
+          type="text"
+          placeholder="Office location"
+          [(ngModel)]="newBooking.officeLocation"
+        />
+      </div>
+      <div class="">
+        <input
+          class="p-2 bg-[#111014] text-[#FFF] rounded-md w-full"
+          name="officeEmail"
+          type="text"
+          placeholder="Email"
+          [(ngModel)]="newBooking.officeEmail"
+        />
+      </div>
+      <div class="">
+        <input
+          class="p-2 bg-[#111014] text-[#FFF] rounded-md w-full"
+          name="officePhone"
+          type="text"
+          placeholder="Phone number"
+          [(ngModel)]="newBooking.officeContact"
+        />
+      </div>
+      <div class="">
+        <textarea
+          class="p-2 bg-[#111014] text-[#FFF] rounded-md w-full"
+          name="extraInfo"
+          [rows]="12"
+          placeholder="Enter additional information"
+        ></textarea>
+      </div>
+      <div>
+        <button class="w-100 ui-green-btn">Book appointment</button>
+      </div>
+    </div>
+  </div>
+  <div
+    *ngIf="newBooking.buildingType === 'Office'"
+    class="col-span-1 sm:col-span-1 md:col-span-1 mt-2"
+  >
+    <div class="flex flex-col place-content-center self-center">
+      <div class="flex items-center gap-2">
+        <i class="material-icons font-bold font-lg text-[#FFF]">info</i>
+        <p class="text-[#FFF] text-lg font-bold">Important</p>
+      </div>
+      <p class="text-[#FFF] text-sm font-bold">
+        Due to the structural differences, complexity and flexibility of
+        offices, in order to provide suitable and tailored pricing, a physical
+        onsite evaluation of the office is required.
+      </p>
+    </div>
+  </div>
+  <div
+    *ngIf="newBooking.buildingType === 'House'"
+    class="col-span-1 sm:col-span-1 md:col-span-1 mt-2"
+  >
     <div
       class="p-6 mt-4 w-100 bg-[#111014] lg:bg-[#111014] rounded-md flex flex-col"
     >

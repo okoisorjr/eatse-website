@@ -1,9 +1,13 @@
 <app-top-nav></app-top-nav>
-<div class="container grid grid-cols-1 lg:grid-cols md:grid-cols-2 lg:grid-cols-2">
-  <div class="w-96 sm:w-100 md:w-100 flex self-center place-self-center md:place-self-center sm:place-self-center col-span-1 p-5">
+<div
+  class="container grid grid-cols-1 lg:grid-cols md:grid-cols-2 lg:grid-cols-2"
+>
+  <div
+    class="w-96 sm:w-100 md:w-100 flex self-center place-self-center md:place-self-center sm:place-self-center col-span-1 p-5"
+  >
     <form
       #loginForm="ngForm"
-      (ngSubmit)="handleLogin(loginForm)"
+      (ngSubmit)="login(loginForm)"
       class="flex flex-col justify-center"
     >
       <p class="text-center text-white text-xl my-4 lg:text-2xl">
@@ -16,7 +20,7 @@
           name="email"
           class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
           placeholder="Email address"
-          [(ngModel)]="email"
+          [(ngModel)]="loginDetails.email"
           ngModel
         />
       </div>
@@ -27,14 +31,26 @@
           name="password"
           class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
           placeholder="Password"
-          [(ngModel)]="password"
+          [(ngModel)]="loginDetails.password"
           ngModel
         />
       </div>
-      <a routerLink="/auth/reset-password" class="text-[#008000] hover:text-[#008000] text-right text-sm">Forgot password?</a>
+      <a
+        routerLink="/auth/reset-password"
+        class="text-[#008000] hover:text-[#008000] text-right text-sm"
+        >Forgot password?</a
+      >
+
+      <div
+        *ngIf="error"
+        class="w-100 bg-red-600 bg-opacity-25 p-2.5 my-2 rounded-md"
+      >
+        <p class="text-[#FFF] text-sm text-center">{{ error }}</p>
+      </div>
 
       <div class="">
         <button
+          type="submit" (click)="login(loginForm)"
           class="w-100 bg-[#008000] hover:bg-[#008000]-700 text-white font-normal py-2 my-3 px-4 rounded"
         >
           Login

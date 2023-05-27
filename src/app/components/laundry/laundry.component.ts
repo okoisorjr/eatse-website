@@ -6,6 +6,7 @@ import { PaymentSuccessResponse, InlinePaymentOptions } from 'flutterwave-angula
 import { NotifierService } from 'angular-notifier';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 import { CurrentUser } from 'src/app/auth/auth.service';
+import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
 
 @Component({
   selector: 'app-laundry',
@@ -15,7 +16,8 @@ import { CurrentUser } from 'src/app/auth/auth.service';
 export class LaundryComponent implements OnInit {
 
   @Input() service!: string;
-
+  @Input() newBooking!: NewBooking;
+ 
   totalCost: number = 0;
   paymentStatus!: string;
   currentUser!: CurrentUser;

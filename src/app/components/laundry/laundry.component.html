@@ -48,7 +48,7 @@
           name="address"
           type="text"
           placeholder="Pick up address"
-          [(ngModel)]="newLaundry.pickupAddress"
+          [(ngModel)]="newBooking.pickupAddress"
         />
       </div>
       <div class="">
@@ -57,7 +57,7 @@
           name="address"
           type="text"
           placeholder="Delivery address"
-          [(ngModel)]="newLaundry.deliveryAddress"
+          [(ngModel)]="newBooking.deliveryAddress"
         />
       </div>
       <div class="">
@@ -66,7 +66,7 @@
           name="extraInfo"
           [rows]="12"
           placeholder="Enter additional information"
-          [(ngModel)]="newLaundry.extraInformation"
+          [(ngModel)]="newBooking.extraInformation"
         ></textarea>
       </div>
     </div>
@@ -78,22 +78,22 @@
       <p class="text-[#FFF] font-bold text-lg">Booking details</p>
       <div class="flex flex-row items-center justify-between gap-4">
         <p class="my-2 text-[#FFF] text-xs font-bold">Pick up address</p>
-        <p class="my-2 text-[#FFF] text-xs">{{ newLaundry.pickupAddress }}</p>
+        <p class="my-2 text-[#FFF] text-xs">{{ newBooking.pickupAddress }}</p>
       </div>
 
       <div class="flex flex-row items-center justify-between gap-4">
         <p class="my-2 text-[#FFF] text-xs font-bold">Delivery address</p>
-        <p class="my-2 text-[#FFF] text-xs">{{ newLaundry.deliveryAddress }}</p>
+        <p class="my-2 text-[#FFF] text-xs">{{ newBooking.deliveryAddress }}</p>
       </div>
 
       <div class="flex flex-row items-center justify-between">
         <p class="my-2 text-[#FFF] text-xs font-bold">service</p>
-        <p class="my-2 text-[#FFF] text-xs">{{ newLaundry.service }}</p>
+        <p class="my-2 text-[#FFF] text-xs">{{ newBooking.service }}</p>
       </div>
 
       <div class="flex flex-row items-center justify-between">
         <p class="my-2 text-[#FFF] text-xs font-bold">Frequency</p>
-        <p class="my-2 text-[#FFF] text-xs">{{ newLaundry.frequency }}</p>
+        <p class="my-2 text-[#FFF] text-xs">{{ newBooking.frequency }}</p>
       </div>
     </div>
     <div
@@ -102,7 +102,7 @@
       <p class="text-[#FFF] font-bold text-lg">Payment summary</p>
       <div class="flex flex-row items-center justify-between gap-4">
         <p class="my-2 text-[#FFF] text-xs font-bold">Total</p>
-        <p class="my-2 text-[#FFF] text-xs">{{ newLaundry.cost }}.00</p>
+        <p class="my-2 text-[#FFF] text-xs">{{ newBooking.cost }}.00</p>
       </div>
     </div>
     <div>

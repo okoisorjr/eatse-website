@@ -26,7 +26,8 @@
     </div>
   </div>
   <div class="col-span-1 sm:col-span-1 md:col-span-1">
-    <app-date-picker (setDates)="setDate($event)"></app-date-picker>
+    <app-date-picker *ngIf="selectedFrequency !== 'weekly'" [frequency]="selectedFrequency" (setDates)="setDate($event)"></app-date-picker>
+    <app-weekly-picker *ngIf="selectedFrequency === 'weekly'" [frequency]="selectedFrequency"></app-weekly-picker>
   </div>
   <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-1">
     <p class="text-[#FFF] font-bold text-lg">Pick arrival time</p>
