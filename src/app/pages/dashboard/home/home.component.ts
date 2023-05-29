@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  currentUser: any;
+
+  constructor(private auth: Auth) { 
+    this.auth.onAuthStateChanged((credential) => {
+      if(credential){
+        this.currentUser = credential;
+      }
+    });
+  }
 
   ngOnInit(): void {
+    this.currentUser = this.auth.currentUser;
   }
 
 }

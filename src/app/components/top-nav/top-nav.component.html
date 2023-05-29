@@ -10,7 +10,7 @@
     </div>
 
     <!-- Web view Navigation -->
-    <div class="hidden lg:block xl:block flex-1">
+    <div class="hidden md:block lg:block xl:block flex-1">
       <div class="flex flex-row gap-3">
         <a routerLink="/booking" class="text-white">Booking</a>
         <a routerLink="/about" class="text-white">About us</a>
@@ -18,7 +18,7 @@
     </div>
 
     <!-- View for a not signed in user-->
-    <div *ngIf="currentUser == null" class="hidden lg:block xl:block flex-2">
+    <div *ngIf="!currentUser" class="hidden md:block lg:block xl:block flex-2">
       <div class="flex flex-row gap-3 items-center">
         <a routerLink="/auth/sign-up" style="cursor: pointer" class="text-white"
           >Sign up</a
@@ -33,9 +33,9 @@
     </div>
 
     <!-- View for Signed in user -->
-    <div *ngIf="currentUser" class="hidden lg:block xl:block dropdown">
+    <div *ngIf="currentUser" class="hidden md:block lg:block xl:block dropdown">
       <button
-        class="btn btn-lg fs-14 fw-medium"
+        class="btn btn-md fs-14 fw-medium"
         type="button"
         id="dropdownMenuButton2"
         data-bs-toggle="dropdown"
@@ -72,7 +72,7 @@
     </div>
 
     <!-- Mobile menu button, displays on mobile device-->
-    <div class="lg:hidden">
+    <div class="lg:hidden md:hidden">
       <svg
         *ngIf="!mobileMenuActive"
         (click)="showMenu()"
@@ -135,4 +135,5 @@
   *ngIf="mobileMenuActive"
   [menuState]="mobileMenuActive"
   (updateMenuState)="hideMenu($event)"
+  (signOut)="signOut()"
 ></app-mobile-menu>

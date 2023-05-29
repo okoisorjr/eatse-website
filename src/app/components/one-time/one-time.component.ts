@@ -32,7 +32,7 @@ export class OneTimeComponent implements OnInit {
   ngOnInit(): void {
     this.newBooking.frequency = this.frequency;
     this.selectedFrequency = this.frequency;
-    this.frequencies = ['one-time', 'weekly', 'monthly', 'custom'];
+    this.frequencies = ['one-time', /*'weekly'*/ 'monthly', 'custom']; //weekly removed temporarily
     this.times = [
       { id: '1', time: '06:00', period: 'am'},
       { id: '1', time: '07:00', period: 'am'},
@@ -73,7 +73,7 @@ export class OneTimeComponent implements OnInit {
     }
     else{
       this.updateBooking.emit(this.newBooking);
-      this.changeStep.emit(this.step++);
+      this.changeStep.emit();
     }    
   }
 }

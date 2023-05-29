@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CurrentUser } from 'src/app/auth/auth.service';
+import { AuthService, CurrentUser } from 'src/app/auth/auth.service';
 import { UserAccount } from 'src/app/auth/models/user-account.model';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 import { Auth } from '@angular/fire/auth';
@@ -19,31 +19,31 @@ export class TopNavComponent implements OnInit {
   constructor(
     private router: Router,
     private auth: Auth,
+    private authService: AuthService,
+    private user: GlobalResourceService
   ) {
-    this.currentUser = this.auth.currentUser;
   }
 
   ngOnInit(): void {
-    window.addEventListener('resize', () => {
-      let screenSize = window.innerWidth;
-      
-      if (screenSize <= 560) {
-        this.isMobileDevice = true;
-        
-      } else {
-        this.isMobileDevice = false;
-        
+    this.auth.onAuthStateChanged((credential) => {
+      if (credential) {
+        this.currentUser = credential;
       }
     });
-    this.currentUser = this.auth.currentUser;
+    window.addEventListener('resize', () => {
+      let screenSize = window.innerWidth;
+
+      if (screenSize <= 460) {
+        this.isMobileDevice = true;
+      } else {
+        this.isMobileDevice = false;
+        this.mobileMenuActive = false;
+      }
+    });
   }
 
-  signOut(){
-    this.auth.signOut();
-    this.currentUser = null;
-    if(this.currentUser == false){
-      this.router.navigate(['/auth/login']);
-    }
+  signOut() {
+    this.authService.signOut();
   }
 
   gotoLogin() {
@@ -62,7 +62,7 @@ export class TopNavComponent implements OnInit {
     this.mobileMenuActive = false;
   }
 
-  toggleDropdown(){
+  toggleDropdown() {
     this.displayDropdown = !this.displayDropdown;
     console.log(this.displayDropdown);
   }

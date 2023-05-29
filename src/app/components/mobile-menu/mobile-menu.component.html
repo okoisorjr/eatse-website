@@ -1,4 +1,6 @@
-<div class="px-2 bg-[#000] w-screen min-h-screen absolute top-0 left-0 right-0 overflow-y">
+<div
+  class="px-2 bg-[#000] w-screen min-h-screen absolute top-0 left-0 right-0 overflow-y"
+>
   <div class="my-3 flex flex-row justify-between">
     <a routerLink="/eatse"><img src="assets/logo.png" /></a>
     <svg
@@ -30,13 +32,13 @@
   </div>
   <div class="flex flex-col gap-4">
     <a
-      routerLink="/eatse/booking"
+      routerLink="/booking"
       (click)="hideMenu()"
       class="hover:text-[#008000] text-[#FFF] text-sm"
       >Booking</a
     >
     <a
-      routerLink="/eatse/about"
+      routerLink="/about"
       (click)="hideMenu()"
       class="hover:text-[#008000] text-[#FFF] text-sm"
       >About us</a
@@ -55,5 +57,27 @@
     >
       Customer Login
     </button>
+
+    <div
+      *ngIf="currentUser"
+      class="p-2 flex items-center justify-between bg-[#111014] w-100 rounded-md"
+    >
+      <div class="flex items-center gap-3">
+        <div
+          class="p-2 w-10 rounded-[50%] bg-[#008000] text-[#FFF] font-semibold text-center"
+          type="button"
+        >
+          {{
+            currentUser.displayName
+              ? currentUser.displayName[0].toUpperCase()
+              : currentUser.email[0].toUpperCase()
+          }}
+        </div>
+        <span class="text-[#FFF] font-bold text-center text-lg">{{
+          currentUser.displayName ? currentUser.displayName : currentUser.email
+        }}</span>
+      </div>
+      <i (click)="logOut()" class="material-icons text-[#FFF]">logout</i>
+    </div>
   </div>
 </div>

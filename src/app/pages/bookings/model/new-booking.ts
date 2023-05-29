@@ -16,11 +16,12 @@ export class NewBooking {
   shoppingItems?: string;
   address!: string;
   cost: string = '0';
+  servicePrice!: number;
   rooms: Room[] = [];
   buildingType?: string;
   extraInformation?: string;
-  percentageDiscount!: string;
-  discountedPrice!: string;
+  percentageDiscount!: number;
+  discountedPrice!: number;
   officeLocation?: string;
   officeEmail?: string;
   officeContact?: string;

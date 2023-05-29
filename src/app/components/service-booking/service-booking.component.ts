@@ -72,5 +72,8 @@ export class ServiceBookingComponent implements OnInit {
     if (this.incoming === 'booking') {
       this.sendClick.emit(service);
     }
+    else{
+      this.router.navigate(['services', service]);
+    }
   }
 }

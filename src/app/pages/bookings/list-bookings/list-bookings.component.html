@@ -47,7 +47,7 @@
       *ngIf="step === 1"
       (updateBooking)="setBooking($event)"
       (setFrequency)="setFrequency($event)"
-      (changeStep)="updateStep($event)"
+      (changeStep)="updateStep()"
     ></app-one-time>
 </div>
 
@@ -57,7 +57,6 @@
       [step]="step"
       *ngIf="step === 2"
       [newBooking]="newBooking"
-      (setNewBooking)="finalBooking($event)"
     ></app-house-info>
   </div>
 
@@ -116,7 +115,6 @@
       [step]="step"
       *ngIf="step === 2"
       [newBooking]="newBooking"
-      (setNewBooking)="finalBooking($event)"
     ></app-house-info>
   </div>
 
@@ -164,6 +162,10 @@
 </div>
 
 <div *ngIf="newBooking.service === 'laundry'">
+  <app-laundry *ngIf="step === 2" [newBooking]="newBooking"></app-laundry>
+</div>
+
+<div *ngIf="newBooking.service === 'fumigation'">
   <app-laundry *ngIf="step === 2" [newBooking]="newBooking"></app-laundry>
 </div>
 

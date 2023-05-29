@@ -1,5 +1,7 @@
 <app-top-nav></app-top-nav>
-<div class="container grid grid-cols-1 lg:grid-cols md:grid-cols-2 lg:grid-cols-2">
+<div
+  class="container grid grid-cols-1 lg:grid-cols md:grid-cols-2 lg:grid-cols-2"
+>
   <div class="w-100 flex self-center place-self-center col-span-1 p-5">
     <form
       #registrationForm="ngForm"
@@ -77,16 +79,19 @@
         <p class="text-[#FFF] text-xs lg:text-sm">
           I have agreed to the
           <span class="text-[#008000]"
-            >terms and condition & privacy policy</span
+            ><a routerLink="/terms-and-conditions">terms and condition</a>
+            <a routerLink="/privacy-policy">& privacy policy</a></span
           >
         </p>
       </div>
 
       <div class="">
         <button
+          [disabled]="submitted"
           class="w-100 bg-[#008000] hover:bg-[#008000]-700 text-white font-normal py-2 my-3 px-4 rounded"
+          [ngClass]="{'bg-green-800' : submitted}"
         >
-          Create account
+          {{ submitted ? 'Creating account.....' : 'Create account'}}
         </button>
         <p class="text-center text-[#FFF]">
           Already have an account?

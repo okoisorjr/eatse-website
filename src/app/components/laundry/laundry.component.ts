@@ -1,12 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Flutterwave } from 'flutterwave-angular-v3';
 import { LaundryItems } from 'src/app/pages/bookings/model/laundry-items';
-import { NewLaundry } from 'src/app/pages/bookings/model/new-laundry';
 import { PaymentSuccessResponse, InlinePaymentOptions } from 'flutterwave-angular-v3';
 import { NotifierService } from 'angular-notifier';
-import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
-import { CurrentUser } from 'src/app/auth/auth.service';
 import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-laundry',
@@ -20,13 +18,12 @@ export class LaundryComponent implements OnInit {
  
   totalCost: number = 0;
   paymentStatus!: string;
-  currentUser!: CurrentUser;
+  currentUser: any;
 
   publicKey = 'FLWPUBK_TEST-b54f62bb20ff93d14f9e0b14163e1bd6-X';
 
   customerDetails!: any
   meta!: any;
-  newLaundry: NewLaundry = new NewLaundry();
   laundryItems: LaundryItems[] = [];
 
   customizations = {
@@ -35,11 +32,11 @@ export class LaundryComponent implements OnInit {
     logo: 'https://flutterwave.com/images/logo-colored.svg',
   };
 
-  constructor(private flutterwave: Flutterwave, private notifier: NotifierService, private globalService: GlobalResourceService) { }
+  constructor(private flutterwave: Flutterwave, private notifier: NotifierService, private auth: Auth) { }
 
   ngOnInit(): void {
-    this.newLaundry.service = this.service;
-    this.currentUser = this.globalService.currentUser;
+    this.newBooking.service = this.service;
+    this.currentUser = this.auth.currentUser;
     this.customerDetails = {
       email: this.currentUser.email,
       fullname: this.currentUser.firstname + ' ' + this.currentUser.lastname,
@@ -61,14 +58,14 @@ export class LaundryComponent implements OnInit {
     item.count++;
     this.totalCost += Number(item.price);
     item.totalPrice = Number(item.price) * item.count;
-    this.newLaundry.cost = String(this.totalCost);
-    if(this.newLaundry.items.includes(item)){
-      this.newLaundry.items.indexOf(item)
+    this.newBooking.cost = String(this.totalCost);
+    if(this.newBooking.items.includes(item)){
+      this.newBooking.items.indexOf(item)
     }
     else{
-      this.newLaundry.items.push(item);
+      this.newBooking.items.push(item);
     }
-    console.log(this.newLaundry);
+    console.log(this.newBooking);
   }
 
   decreaseItemCount(item: LaundryItems){
@@ -77,14 +74,14 @@ export class LaundryComponent implements OnInit {
     }
     item.count--;
     this.totalCost -= Number(item.price);
-    this.newLaundry.cost = String(this.totalCost);
+    this.newBooking.cost = String(this.totalCost);
   }
 
   makePayment() {
     let paymentData = {
       public_key: this.publicKey,
       tx_ref: this.generateReference(),
-      amount: Number(this.newLaundry.cost),
+      amount: Number(this.newBooking.cost),
       currency: 'NGN',
       payment_options: 'card,ussd',
       redirect_url: '',

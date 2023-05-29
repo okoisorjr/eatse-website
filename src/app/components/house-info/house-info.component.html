@@ -11,10 +11,16 @@
             <div class="inline-flex rounded-md shadow-sm" role="group">
               <button
                 type="button"
+                [disabled]="room.count === 0"
                 (click)="decreaseRoomSize(room)"
                 class="px-2 py-1 text-sm font-medium text-gray-900 bg-[#111014] focus:z-10 focus:ring-2 focus:ring-transparent rounded-l-md"
+                [ngClass]="{ 'bg-opacity-50': room.count === 0 }"
               >
-                <i class="material-icons text-[#FFF]">remove</i>
+                <i
+                  class="material-icons text-[#FFF]"
+                  [ngClass]="{ 'text-gray-600': room.count === 0 }"
+                  >remove</i
+                >
               </button>
               <button
                 type="button"
@@ -84,8 +90,31 @@
     >
       <p class="text-[#FFF] font-bold text-lg">Payment summary</p>
       <div class="flex flex-row items-center justify-between gap-4">
-        <p class="my-2 text-[#FFF] text-xs font-bold">Total</p>
-        <p class="my-2 text-[#FFF] text-xs">{{ newBooking.cost }}.00</p>
+        <p class="my-2 text-[#FFF] text-xs font-bold">Initial cost of service</p>
+        <p class="my-2 text-[#FFF] text-xs">₦{{ newBooking.cost }}.00</p>
+      </div>
+
+      <div *ngIf="newBooking.percentageDiscount">
+        <div class="flex flex-row items-center justify-between gap-4">
+          <p class="my-2 text-[#FFF] text-xs font-bold">percentage discount</p>
+          <p class="my-2 text-[#FFF] text-xs">
+            {{ newBooking.percentageDiscount }}%
+          </p>
+        </div>
+
+        <div class="flex flex-row items-center justify-between gap-4">
+          <p class="my-2 text-[#FFF] text-xs font-bold">Discounted Price</p>
+          <p class="my-2 text-[#FFF] text-xs">
+            ₦{{ newBooking.discountedPrice }}.00
+          </p>
+        </div>
+
+        <div *ngIf="newBooking.servicePrice > 0" class="flex flex-row items-center justify-between gap-4">
+          <p class="my-2 text-[#FFF] text-xs font-bold">Total Cost</p>
+          <p class="my-2 text-[#FFF] text-xs">
+            Initial Price * {{ newBooking.dates.length }} = {{ newBooking.servicePrice }}.00
+          </p>
+        </div>
       </div>
     </div>
     <div>

@@ -49,16 +49,18 @@ export class ListBookingsComponent implements OnInit {
         this.step++;
       } else if (service === 'errands') {
         this.selectedService = service;
+        this.newBooking.cost = '2500';
         this.newBooking.service = service;
         this.step++;
       } else if (service === 'laundry') {
         this.selectedService = service;
         this.newBooking.service = service;
         this.step++;
-      } else if( service === 'office-cleaning'){
+      } else if(service === 'office-cleaning'){
         this.selectedService = service;
         this.newBooking.service = service;
-        this.step = 2;
+        this.step += 2;
+        console.log(this.newBooking.service);
       } else if( service === 'fumigation'){
         this.selectedService = service;
         this.newBooking.service = service;
@@ -81,16 +83,12 @@ export class ListBookingsComponent implements OnInit {
     //this.updateStep();
   }
 
-  finalBooking(booking: any) {
-    this.newBooking = booking;
-  }
-
   setFrequency($event: any) {
     this.frequency = $event;
   }
 
-  updateStep($event: any) {
+  updateStep() {
     console.log(this.newBooking);
-    this.step = $event;
+    this.step++;
   }
 }
