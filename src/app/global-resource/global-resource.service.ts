@@ -14,9 +14,8 @@ interface Services {
   providedIn: 'root',
 })
 export class GlobalResourceService {
-  currentUser!: CurrentUser;
+  currentUser: any;
   mobileMenu: boolean = false;
-  userInfoId: string = '';
 
   constructor(private http: HttpClient) {}
 

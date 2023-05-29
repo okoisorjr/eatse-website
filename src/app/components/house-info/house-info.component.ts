@@ -26,8 +26,6 @@ interface Room {
 export class HouseInfoComponent implements OnInit {
   @Input() newBooking!: NewBooking;
   @Input() step!: number;
-  @Output() setNewBooking = new EventEmitter();
-  @Output() payFee = new EventEmitter();
 
   rooms!: Room[];
   totalCost!: string;
@@ -35,17 +33,9 @@ export class HouseInfoComponent implements OnInit {
   currentUser: any;
 
   publicKey = 'FLWPUBK_TEST-b54f62bb20ff93d14f9e0b14163e1bd6-X';
-
-  customerDetails!: any
+  customizations: any;
+  customerDetails: any;
   meta!: any;
-
-  customizations = {
-    title: 'Customization Title',
-    description: 'Customization Description',
-    logo: 'https://flutterwave.com/images/logo-colored.svg',
-  };
-
-
   paymentData!: InlinePaymentOptions;
 
   constructor(
@@ -57,56 +47,105 @@ export class HouseInfoComponent implements OnInit {
   ) {
     this.currentUser = this.globalService.getCurrentUser();
     this.rooms = [
-      { price: '5000', roomType: 'Living rooms', count: 0 },
-      { price: '5000', roomType: 'Bedrooms', count: 0 },
-      { price: '6000', roomType: 'Kitchen & dining area', count: 0 },
-      { price: '3500', roomType: 'Store/other rooms', count: 0 },
+      { price: '500', roomType: 'Living rooms / dining area', count: 0 },
+      { price: '2000', roomType: 'Bedrooms', count: 0 },
+      { price: '1000', roomType: 'Kitchen', count: 0 },
+      { price: '1000', roomType: 'Toilets', count: 0 },
+      { price: '500', roomType: 'Study', count: 0 },
+      { price: '500', roomType: 'Store', count: 0 },
+      { price: '500', roomType: 'Outdoor / balcony', count: 0 },
     ];
   }
 
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser;
+    this.newBooking.discountedPrice = 0;
+    this.customizations = {
+      title: 'Eatse Global Resources Ltd.',
+      description: `Payment for the ${this.newBooking.service} service`,
+      logo: 'https://eatse.ng/assets/logo.png',
+    };
     this.customerDetails = {
-      name: this.currentUser.displayName ? this.currentUser.displayName : this.currentUser.email,
+      name: this.currentUser.displayName
+        ? this.currentUser.displayName
+        : this.currentUser.email,
       email: this.currentUser.email,
       userId: this.currentUser.uid,
     };
-    this.meta = { service: this.newBooking.service, rooms: this.newBooking.rooms, serviceFrequency: this.newBooking.frequency, counsumer_id: "7898", consumer_mac: "kjs9s8ss7dd" };
+    this.meta = {
+      service: this.newBooking.service,
+      rooms: this.newBooking.rooms.length,
+      serviceFrequency: this.newBooking.frequency,
+      counsumer_id: '7898',
+      consumer_mac: 'kjs9s8ss7dd',
+    };
+    if (
+      this.newBooking.frequency === 'monthly' &&
+      (this.newBooking.dates.length <= 4 && this.newBooking.dates.length > 1)
+    ) {
+      this.newBooking.percentageDiscount = 25;
+    } else if (
+      this.newBooking.frequency === 'monthly' &&
+      this.newBooking.dates.length >= 5
+    ) {
+      this.newBooking.percentageDiscount = 35;
+    }
+  }
+
+  calculatePercentage() {
+    let discountPrice: any; 
+    if (this.newBooking.percentageDiscount) {
+      discountPrice = (Number(this.newBooking.cost) * this.newBooking.percentageDiscount) / 100;
+      console.log(discountPrice);
+    }
+    return discountPrice;
   }
 
   decreaseRoomSize(room: Room) {
-    if (room.count === 0) {
-      return this.notifier.notify('error', "sorry, can't go below 0");
-    }
     room.count--;
     let cost = Number(this.newBooking.cost) - Number(room.price);
     this.newBooking.cost = String(cost);
+    if (this.newBooking.percentageDiscount) {
+      this.newBooking.discountedPrice = Number(this.newBooking.cost) - this.calculatePercentage(); // calcluate the discount from the initial service cost
+      this.newBooking.servicePrice = this.newBooking.discountedPrice * this.newBooking.dates.length; // Calculate the total price against the frequency
+    }
   }
 
   increaseRoomSize(room: Room) {
     room.count++;
     let cost = Number(room.price) + Number(this.newBooking.cost);
     this.newBooking.cost = String(cost);
-    this.rooms.push(room);
+    this.newBooking.rooms.push(room);
+    if (this.newBooking.percentageDiscount) {
+      this.newBooking.discountedPrice = Number(this.newBooking.cost) - this.calculatePercentage(); // calcluate the discount from the initial service cost
+      this.newBooking.servicePrice = this.newBooking.discountedPrice * this.newBooking.dates.length; // Calculate the total price against the frequency
+    }
   }
 
-  validateForm(){
-    if(this.newBooking.address === '' || this.newBooking.frequency === '' || this.newBooking.frequency === '' || this.newBooking.arrivalTime === '' || this.newBooking.cost === '0'){
-      return this.notifier.notify('error', 'Please, make sure to fill out all the required fields');
-    }else{
+  validateForm() {
+    if (
+      this.newBooking.address === '' ||
+      this.newBooking.frequency === '' ||
+      this.newBooking.arrivalTime === '' ||
+      this.newBooking.cost === '0'
+    ) {
+      return this.notifier.notify(
+        'error',
+        'Please, make sure to fill out all the required fields'
+      );
+    } else {
       return true;
     }
   }
 
-  proceedToPay(){
+  proceedToPay() {
     let value = this.validateForm();
-    if(value){
+    if (value) {
       this.makePayment();
     }
   }
 
   makePayment() {
-    this.setNewBooking.emit(this.newBooking);
     let paymentData = {
       public_key: this.publicKey,
       tx_ref: this.generateReference(),
@@ -129,7 +168,7 @@ export class HouseInfoComponent implements OnInit {
   }
   closedPaymentModal(): void {
     this.newBooking.paymentStatus = 'cancelled';
-    let bookingData = {...this.newBooking}
+    let bookingData = { ...this.newBooking };
     this.bookingService.saveBooking(bookingData);
     console.log('payment is closed');
   }

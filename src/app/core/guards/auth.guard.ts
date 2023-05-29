@@ -9,18 +9,21 @@ import { GlobalResourceService } from 'src/app/global-resource/global-resource.s
 })
 export class AuthGuard implements CanActivate {
   constructor(private auth: Auth, private user: GlobalResourceService, private router: Router) {
-
+    this.auth.onAuthStateChanged((credential) => {
+      if(credential){
+        this.user.currentUser = credential;
+      }
+    });
   }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      if(!this.auth.currentUser){
-        console.log(this.auth.currentUser);
+      if(!this.user.currentUser){
         return true;
       }
       else{
-        this.router.navigate(['/bookings'])
+        this.router.navigate(['/booking'])
         return false;
       }
   }

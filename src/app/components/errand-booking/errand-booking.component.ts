@@ -23,17 +23,11 @@ export class ErrandBookingComponent implements OnInit {
   selectedErrand!: string;
   errands: string[] = [];
   currentUser: any;
-
+  customizations: any;
   publicKey = 'FLWPUBK_TEST-b54f62bb20ff93d14f9e0b14163e1bd6-X';
 
   customerDetails!: any;
   meta!: any;
-
-  customizations = {
-    title: 'Customization Title',
-    description: 'Customization Description',
-    logo: 'https://flutterwave.com/images/logo-colored.svg',
-  };
 
   constructor(
     private flutterwave: Flutterwave,
@@ -45,6 +39,13 @@ export class ErrandBookingComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser;
     this.errands = ['Shopping', 'Pick up and delivery'];
+    this.newBooking.errandType = 'Shopping';
+    //this.newBooking.cost = '2500'
+    this.customizations = {
+      title: 'Eatse Global Resources Ltd.',
+      description: `Payment for the ${this.newBooking.service} service`,
+      logo: 'https://eatse.ng/assets/logo.png',
+    };
     this.customerDetails = {
       email: this.currentUser.email,
       customerName: this.currentUser.displayName,
@@ -54,7 +55,7 @@ export class ErrandBookingComponent implements OnInit {
   }
 
   selectErrand(errand: string) {
-    this.selectedErrand = errand;
+    this.newBooking.errandType = errand;
   }
 
   makePayment() {

@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UserAccount } from './models/user-account.model';
-import { LoginDetails } from './models/login-details.model';
-import { ResourceCreated } from '../global-resource/models/resource-created.model';
 import { NewUser } from './models/new-user.model';
 import {
   addDoc,
@@ -12,6 +8,7 @@ import {
   doc,
   collectionData,
   DocumentData,
+  where,
 } from '@angular/fire/firestore';
 import {
   Auth,
@@ -19,8 +16,9 @@ import {
   UserCredential,
   authState,
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   signInWithEmailAndPassword,
-  updateProfile
+  updateProfile,
 } from '@angular/fire/auth';
 import { GlobalResourceService } from '../global-resource/global-resource.service';
 import { Router } from '@angular/router';
@@ -37,51 +35,56 @@ export interface CurrentUser {
   providedIn: 'root',
 })
 export class AuthService {
-  currentUser: any;
-
   constructor(
-    private http: HttpClient,
     private auth: Auth,
     private user: GlobalResourceService,
     private fs: Firestore,
     private router: Router
   ) {}
 
-  registerUser(newUser: NewUser) {
-    createUserWithEmailAndPassword(this.auth, newUser.email, newUser.password)
-      .then((res) => {
+  async registerUser(newUser: NewUser) {
+    let user = await createUserWithEmailAndPassword(
+      this.auth,
+      newUser.email,
+      newUser.password
+    );
+    if (user) {
+      await sendEmailVerification(user.user);
+      await updateProfile(user.user, {
+        displayName: newUser.firstname + ' ' + newUser.lastname,
+      });
+      this.auth.signOut();
+      this.router.navigate(['auth', 'registration-success']);
+    }
+    /* .then((res) => {
+        let done = await 
         updateProfile(res.user, {
           displayName: newUser.firstname + ' ' + newUser.lastname,
-        })
-          .then((res) => {
-            this.signOut();
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        });
       })
       .catch((error) => {
         console.log(error);
-      });
+      }); */
   }
 
-  signInUser(email: string, password: string): UserCredential {
+  signInUser(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((res) => {
-        this.currentUser = res;
+        this.user.currentUser = res;
+        if(res.user.emailVerified === false){
+          sendEmailVerification(res.user);
+        }
         this.router.navigate(['/']);
       })
       .catch((error) => {
         console.log(error);
       });
-      
-    return this.currentUser;
-    
   }
 
   signOut() {
     this.auth.signOut();
     this.router.navigate(['/auth/sign-in']);
+    location.reload();
   }
 
   getClient(): Observable<DocumentData> {

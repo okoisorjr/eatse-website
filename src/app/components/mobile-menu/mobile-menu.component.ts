@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 
 @Component({
   selector: 'app-mobile-menu',
@@ -10,13 +11,22 @@ import { Router } from '@angular/router';
 export class MobileMenuComponent implements OnInit {
   @Input() menuState!: boolean;
   @Output() updateMenuState = new EventEmitter();
+  @Output() signOut = new EventEmitter();
 
   currentUser: any;
 
-  constructor(private router: Router, private auth: Auth) {}
+  constructor(
+    private router: Router,
+    private auth: Auth,
+    private userService: GlobalResourceService
+  ) {}
 
   ngOnInit(): void {
-    this.currentUser = this.auth.currentUser;
+    this.auth.onAuthStateChanged((credential) => {
+      if (credential) {
+        this.currentUser = credential;
+      }
+    });
   }
 
   hideMenu() {
@@ -29,13 +39,17 @@ export class MobileMenuComponent implements OnInit {
     }
   }
 
-  gotoSignUp(){
+  gotoSignUp() {
     this.router.navigate(['/auth/sign-up']);
     this.hideMenu();
   }
 
-  gotoLogin(){
+  gotoLogin() {
     this.router.navigate(['/auth/sign-in']);
     this.hideMenu();
+  }
+
+  logOut() {
+    this.signOut.emit();
   }
 }

@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   error!: string;
 
   constructor(
-    private notifier: NotifierService,
+    private userService: GlobalResourceService,
     private authService: AuthService,
     private router: Router
   ) {}
@@ -25,21 +25,17 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   login(form: any) {
-    if(this.loginDetails.email === ' ' && this.loginDetails.password === ' '){
+    if (this.loginDetails.email === ' ' && this.loginDetails.password === ' ') {
       this.error = 'Please enter your email address and password!';
     } else if (this.loginDetails.email === ' ') {
       this.error = 'Please enter your email address!';
     } else if (this.loginDetails.password === ' ') {
       this.error = 'Please enter your password!';
-    } else{
-      this.currentUser = this.authService.signInUser(
+    } else {
+      this.authService.signInUser(
         this.loginDetails.email,
         this.loginDetails.password
       );
-      console.log(this.currentUser);
-      if (this.currentUser) {
-        this.router.navigate(['']);
-      }
     }
   }
 }

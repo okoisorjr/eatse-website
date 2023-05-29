@@ -9,8 +9,8 @@
         *ngFor="let errand of errands"
         class="flex flex-row p-3 my-2 gap-4 items-center w-full rounded-lg"
         [ngClass]="{
-          'bg-[#008000]': selectedErrand === errand,
-          'bg-[#111014]': selectedErrand !== errand
+          'bg-[#008000]': newBooking.errandType === errand,
+          'bg-[#111014]': newBooking.errandType !== errand
         }"
       >
         <input

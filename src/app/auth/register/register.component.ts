@@ -17,6 +17,7 @@ export class RegisterComponent implements OnInit {
   confirmPassword!: string;
   newUser: NewUser = new NewUser();
   uid: string = '';
+  submitted: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -30,7 +31,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {}
 
   register(form: any) {
-    //this.authService.registerUser(this.newUser);
+    this.submitted = true;
     console.log(form.value);
     createUserWithEmailAndPassword(
       this.auth,
@@ -40,14 +41,15 @@ export class RegisterComponent implements OnInit {
       .then((res) => {
         let userInfo = {...this.newUser, id: res.user.uid}
         const dbInstance = collection(this.fs, 'clients');
-        //setDoc(doc(dbInstance, 'clients'), userInfo)
+        setDoc(doc(dbInstance, 'clients'), userInfo, { merge: true})
         addDoc(dbInstance, userInfo, )
           .then((res) => {
-            this.currentUser.userInfoId = res.id;
+            this.submitted = false;
             this.router.navigate(['/auth/registration-success']);
           })
           .catch((error) => {
             console.log(error);
+            this.submitted = false;
           });
       })
       .catch((error) => {

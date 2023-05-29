@@ -57,12 +57,27 @@ export class BookDetailsComponent implements OnInit {
       this.newBooking.buildingType = 'House';
     }
     this.buildingTypes = ['House', 'Office'];
-    this.rooms = [
-      { price: '5000', roomType: 'Living rooms', count: 0 },
-      { price: '5000', roomType: 'Bedrooms', count: 0 },
-      { price: '6000', roomType: 'Kitchen & dining area', count: 0 },
-      { price: '3500', roomType: 'Store/other rooms', count: 0 },
-    ];
+    if(this.newBooking.service === 'post construction cleaning'){
+      this.rooms = [
+        { price: '15000', roomType: 'Living room', count: 0 },
+        { price: '10000', roomType: 'Bedroom', count: 0 },
+        { price: '10000', roomType: 'Kitchen', count: 0 },
+        { price: '10000', roomType: 'Dinning area', count: 0 },
+        { price: '5000', roomType: 'Study', count: 0 },
+        { price: '5000', roomType: 'Store', count: 0 },
+        { price: '5000', roomType: 'Outdoor / Balcony', count: 0 },
+      ];
+    }else if(this.newBooking.service === 'move-in-out-cleaning'){
+      this.rooms = [
+        { price: '5000', roomType: 'Living room / dining area', count: 0 },
+        { price: '5000', roomType: 'Bedroom', count: 0 },
+        { price: '5000', roomType: 'Kitchen', count: 0 },
+        { price: '2500', roomType: 'Study', count: 0 },
+        { price: '2000', roomType: 'Store', count: 0 },
+        { price: '2500', roomType: 'Outdoor / Balcony', count: 0 },
+      ];
+    }
+    
   }
 
   selectBuilding(building: string) {
