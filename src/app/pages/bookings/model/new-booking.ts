@@ -26,4 +26,5 @@ export class NewBooking {
   officeEmail?: string;
   officeContact?: string;
   paymentStatus?: string;
+  userId?: string;
 }

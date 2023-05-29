@@ -47,15 +47,14 @@ export interface BookingData {
   providedIn: 'root',
 })
 export class BookingsService {
-  query:any;
+  query: any;
   booking_list: BookingData[] = [];
 
   constructor(
     private fs: Firestore,
     private auth: Auth,
     private userService: GlobalResourceService
-  ) {
-  }
+  ) {}
 
   saveBooking(bookingData: BookingData) {
     const bookingRef = collection(this.fs, 'bookings');
@@ -68,12 +67,16 @@ export class BookingsService {
       });
   }
 
-  async getBookings(): Promise<BookingData[]>{
-    const bookingRef = collection(this.fs, 'bookings');
-    let booking_data = await getDocs(bookingRef);
-    booking_data.forEach((document) => {
-      this.booking_list.push(document.data());
-    });
+  async getBookings(): Promise<BookingData[]> {
+    this.booking_list = [];
+    if (this.auth.currentUser) {
+      const bookingRef = collection(this.fs, 'bookings');
+      let booking_data = await getDocsFromServer(bookingRef);
+      booking_data.forEach((document) => {
+        this.booking_list.push(document.data());
+      });
+    }
+
     return this.booking_list;
   }
 }

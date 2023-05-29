@@ -12,8 +12,10 @@
             <div class="inline-flex rounded-md shadow-sm" role="group">
               <button
                 type="button"
+                [disabled]="item.count == 0"
                 (click)="decreaseItemCount(item)"
                 class="px-2 py-1 text-sm font-medium text-gray-900 bg-[#111014] focus:z-10 focus:ring-2 focus:ring-transparent rounded-l-md"
+                [ngClass]="{'bg-opacity-50' : item.count == 0}"
               >
                 <i class="material-icons text-[#FFF]">remove</i>
               </button>
