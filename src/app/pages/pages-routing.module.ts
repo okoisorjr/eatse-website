@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ContactComponent } from './contact/contact.component';
+import { PageConstructionComponent } from '../components/page-construction/page-construction.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,10 @@ const routes: Routes = [
     path: 'contact',
     component: ContactComponent,
   },
+  {
+    path: 'page-construction',
+    component: PageConstructionComponent
+  }
 ];
 
 @NgModule({
