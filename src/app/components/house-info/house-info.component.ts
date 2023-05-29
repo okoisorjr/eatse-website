@@ -81,7 +81,8 @@ export class HouseInfoComponent implements OnInit {
     };
     if (
       this.newBooking.frequency === 'monthly' &&
-      (this.newBooking.dates.length <= 4 && this.newBooking.dates.length > 1)
+      this.newBooking.dates.length <= 4 &&
+      this.newBooking.dates.length > 1
     ) {
       this.newBooking.percentageDiscount = 25;
     } else if (
@@ -93,9 +94,11 @@ export class HouseInfoComponent implements OnInit {
   }
 
   calculatePercentage() {
-    let discountPrice: any; 
+    let discountPrice: any;
     if (this.newBooking.percentageDiscount) {
-      discountPrice = (Number(this.newBooking.cost) * this.newBooking.percentageDiscount) / 100;
+      discountPrice =
+        (Number(this.newBooking.cost) * this.newBooking.percentageDiscount) /
+        100;
       console.log(discountPrice);
     }
     return discountPrice;
@@ -106,8 +109,10 @@ export class HouseInfoComponent implements OnInit {
     let cost = Number(this.newBooking.cost) - Number(room.price);
     this.newBooking.cost = String(cost);
     if (this.newBooking.percentageDiscount) {
-      this.newBooking.discountedPrice = Number(this.newBooking.cost) - this.calculatePercentage(); // calcluate the discount from the initial service cost
-      this.newBooking.servicePrice = this.newBooking.discountedPrice * this.newBooking.dates.length; // Calculate the total price against the frequency
+      this.newBooking.discountedPrice =
+        Number(this.newBooking.cost) - this.calculatePercentage(); // calcluate the discount from the initial service cost
+      this.newBooking.servicePrice =
+        this.newBooking.discountedPrice * this.newBooking.dates.length; // Calculate the total price against the frequency
     }
   }
 
@@ -117,8 +122,10 @@ export class HouseInfoComponent implements OnInit {
     this.newBooking.cost = String(cost);
     this.newBooking.rooms.push(room);
     if (this.newBooking.percentageDiscount) {
-      this.newBooking.discountedPrice = Number(this.newBooking.cost) - this.calculatePercentage(); // calcluate the discount from the initial service cost
-      this.newBooking.servicePrice = this.newBooking.discountedPrice * this.newBooking.dates.length; // Calculate the total price against the frequency
+      this.newBooking.discountedPrice =
+        Number(this.newBooking.cost) - this.calculatePercentage(); // calcluate the discount from the initial service cost
+      this.newBooking.servicePrice =
+        this.newBooking.discountedPrice * this.newBooking.dates.length; // Calculate the total price against the frequency
     }
   }
 
@@ -149,7 +156,7 @@ export class HouseInfoComponent implements OnInit {
     let paymentData = {
       public_key: this.publicKey,
       tx_ref: this.generateReference(),
-      amount: Number(this.newBooking.cost),
+      amount: this.newBooking.servicePrice,
       currency: 'NGN',
       payment_options: 'card,ussd',
       redirect_url: '',
@@ -164,10 +171,15 @@ export class HouseInfoComponent implements OnInit {
     this.flutterwave.inlinePay(paymentData);
   }
   makePaymentCallback(response: PaymentSuccessResponse): void {
+    this.newBooking.paymentStatus = 'cancelled';
+    this.newBooking.userId = this.auth.currentUser?.uid;
+    let bookingData = { ...this.newBooking };
+    this.bookingService.saveBooking(bookingData);
     console.log('Payment callback', response);
   }
   closedPaymentModal(): void {
     this.newBooking.paymentStatus = 'cancelled';
+    this.newBooking.userId = this.auth.currentUser?.uid;
     let bookingData = { ...this.newBooking };
     this.bookingService.saveBooking(bookingData);
     console.log('payment is closed');

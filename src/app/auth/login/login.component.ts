@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   loginDetails: LoginDetails = new LoginDetails();
   currentUser: any;
   error!: string;
+  submitted: boolean = false;
 
   constructor(
     private userService: GlobalResourceService,
@@ -25,17 +26,23 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   login(form: any) {
+    this.submitted = true;
+    console.log(this.submitted);
     if (this.loginDetails.email === ' ' && this.loginDetails.password === ' ') {
+      this.submitted = false;
       this.error = 'Please enter your email address and password!';
     } else if (this.loginDetails.email === ' ') {
+      this.submitted = false;
       this.error = 'Please enter your email address!';
     } else if (this.loginDetails.password === ' ') {
+      this.submitted = false;
       this.error = 'Please enter your password!';
     } else {
       this.authService.signInUser(
         this.loginDetails.email,
         this.loginDetails.password
       );
+      this.submitted = false;
     }
   }
 }

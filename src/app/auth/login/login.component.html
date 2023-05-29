@@ -50,10 +50,12 @@
 
       <div class="">
         <button
-          type="submit" (click)="login(loginForm)"
-          class="w-100 bg-[#008000] hover:bg-[#008000]-700 text-white font-normal py-2 my-3 px-4 rounded"
+          type="submit"
+          [disabled]="submitted === true"
+          class="w-100 bg-[#008000] text-white font-normal py-2 my-3 px-4 rounded"
+          [ngClass]="{ 'bg-green-800': submitted, 'bg-opacity-30': submitted }"
         >
-          Login
+          {{ submitted === true ? "Logging in....." : "Login" }}
         </button>
         <p class="text-center text-[#FFF]">
           Don't have an account?
