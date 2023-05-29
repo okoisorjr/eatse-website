@@ -23,12 +23,12 @@
         <a routerLink="/auth/sign-up" style="cursor: pointer" class="text-white"
           >Sign up</a
         >
-        <button
-          (click)="gotoLogin()"
+        <a
+          routerLink="/auth/sign-in"
           class="btn bg-[#111014] text-white hover:bg-[#111014] rounded-xl border-[#EAEAEA]-100"
         >
           Customer Login
-        </button>
+        </a>
       </div>
     </div>
 
@@ -63,7 +63,7 @@
           <hr class="dropdown-divider" />
         </li>
         <li>
-          <a (click)="signOut()" class="dropdown-item cursor-pointer"
+          <a (click)="logout()" class="dropdown-item cursor-pointer"
             ><i class="material-icons mr-2 fs-12 me-2 align-middle">logout</i
             >Logout</a
           >

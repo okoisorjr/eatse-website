@@ -84,7 +84,7 @@ export class AuthService {
   signOut() {
     this.auth.signOut();
     this.router.navigate(['/auth/sign-in']);
-    //location.reload();
+    location.reload();
   }
 
   getClient(): Observable<DocumentData> {

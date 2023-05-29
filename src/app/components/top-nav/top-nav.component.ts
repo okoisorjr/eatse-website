@@ -42,8 +42,14 @@ export class TopNavComponent implements OnInit {
     });
   }
 
-  signOut() {
-    this.authService.signOut();
+  logout() {
+    this.auth.signOut();
+    console.log('signed out!');
+    this.router.navigateByUrl('/auth/sign-in', {skipLocationChange: true});
+  }
+
+  signOut(){
+    this.auth.signOut();
   }
 
   gotoLogin() {
