@@ -48,6 +48,7 @@
       (updateBooking)="setBooking($event)"
       (setFrequency)="setFrequency($event)"
       (changeStep)="updateStep()"
+      (back)="back()"
     ></app-one-time>
 </div>
 
@@ -57,6 +58,7 @@
       [step]="step"
       *ngIf="step === 2"
       [newBooking]="newBooking"
+      (back)="back()"
     ></app-house-info>
   </div>
 

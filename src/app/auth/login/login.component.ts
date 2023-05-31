@@ -5,6 +5,7 @@ import { GlobalResourceService } from 'src/app/global-resource/global-resource.s
 import { Router } from '@angular/router';
 import { Auth } from '@angular/fire/auth';
 import { LoginDetails } from '../models/login-details.model';
+import { signInWithEmailAndPassword } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private userService: GlobalResourceService,
+    private auth: Auth,
     private authService: AuthService,
     private router: Router
   ) {}
@@ -26,6 +28,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   login(form: any) {
+    this.error = '';
     this.submitted = true;
     console.log(this.submitted);
     if (this.loginDetails.email === ' ' && this.loginDetails.password === ' ') {
@@ -38,11 +41,21 @@ export class LoginComponent implements OnInit {
       this.submitted = false;
       this.error = 'Please enter your password!';
     } else {
-      this.authService.signInUser(
+      signInWithEmailAndPassword(
+        this.auth,
         this.loginDetails.email,
         this.loginDetails.password
-      );
-      this.submitted = false;
+      )
+      .then((res) => {
+        this.submitted = false;
+        this.userService.currentUser = res;
+        console.log(this.userService.getPreviousUrl());
+        this.router.navigate(['/'])
+      })
+      .catch((error) => {
+        this.submitted = false;
+        this.error = error.message;
+      })
     }
   }
 }

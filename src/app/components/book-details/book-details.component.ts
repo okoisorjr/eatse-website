@@ -90,13 +90,13 @@ export class BookDetailsComponent implements OnInit {
     }
     room.count--;
     let cost = Number(this.newBooking.cost) - Number(room.price);
-    this.newBooking.cost = String(cost);
+    this.newBooking.cost = cost;
   }
 
   increaseRoomSize(room: Room) {
     room.count++;
-    let cost = Number(room.price) + Number(this.newBooking.cost);
-    this.newBooking.cost = String(cost);
+    let cost = Number(room.price) + this.newBooking.cost;
+    this.newBooking.cost = cost;
   }
 
   validateForm() {

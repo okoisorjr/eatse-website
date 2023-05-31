@@ -15,7 +15,7 @@ export class NewBooking {
   pickupAddress?: string;
   shoppingItems?: string;
   address!: string;
-  cost: string = '0';
+  cost!: number;
   servicePrice!: number;
   rooms: Room[] = [];
   buildingType?: string;

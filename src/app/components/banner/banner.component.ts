@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-banner',
@@ -9,7 +10,7 @@ import { Auth } from '@angular/fire/auth';
 export class BannerComponent implements OnInit {
   currentUser: any;
 
-  constructor(private auth: Auth) {
+  constructor(private auth: Auth, private router: Router) {
     this.auth.onAuthStateChanged((credential) => {
       if (credential) {
         this.currentUser = credential;
@@ -18,4 +19,8 @@ export class BannerComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  gotoRegister(){
+    this.router.navigate(['/auth/sign-up']);
+  }
 }

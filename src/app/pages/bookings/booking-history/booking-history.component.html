@@ -17,7 +17,7 @@
   </div>
 </div>
 
-<div class="container">
+<div *ngIf="!currentUser && bookings.length === 0" class="container">
   <div class="flex flex-col justify-center items-center my-25">
     <div class="py-10">
       <img
@@ -29,6 +29,27 @@
       No booking yet. Click the button below to book a service.
     </p>
     <button (click)="gotoBooking()" class="ui-green-btn my-3">Book now</button>
+  </div>
+</div>
+
+<div class="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-3 my-5">
+  <div
+    *ngFor="let booking of bookings"
+    class="block w-full p-6 bg-[#121214] rounded-lg shadow"
+  >
+    <div class="flex items-center justify-between">
+      <p class="text-[#FFF] text-lg font-semibold">{{ booking.service }}</p>
+      <div class="p-3 flex flex-row justify-between items-center gap-3 border-b-gray-700">
+        <p class="text-[#FFF] text-md">₦ {{ booking.servicePrice ? booking.servicePrice : booking.cost }}</p>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="w-2 h-2 bg-[#008000] rounded-full"></div>
+          <p class="text-[#FFF]">{{ booking.frequency }}</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p class="text-[#FFF] text-md">{{ booking.address }}</p>
+    </div>
   </div>
 </div>
 

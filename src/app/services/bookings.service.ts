@@ -29,7 +29,7 @@ export interface BookingData {
   pickupAddress?: string;
   shoppingItems?: string;
   address?: string;
-  cost?: string;
+  cost?: number;
   rooms?: Room[];
   buildingType?: string;
   extraInformation?: string;

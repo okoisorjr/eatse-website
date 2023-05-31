@@ -39,8 +39,12 @@
   >
     <div class="flex items-center justify-between">
       <p class="text-[#FFF] text-lg font-semibold">{{ booking.service }}</p>
-      <div class="p-3 border-b-gray-700">
+      <div class="p-3 flex flex-row justify-between items-center gap-3 border-b-gray-700">
         <p class="text-[#FFF] text-md">₦ {{ booking.servicePrice ? booking.servicePrice : booking.cost }}</p>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="w-2 h-2 bg-[#008000] rounded-full"></div>
+          <p class="text-[#FFF]">{{ booking.frequency }}</p>
+        </div>
       </div>
     </div>
     <div>

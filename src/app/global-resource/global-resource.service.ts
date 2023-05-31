@@ -3,11 +3,14 @@ import { UserAccount } from '../auth/models/user-account.model';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { CurrentUser } from '../auth/auth.service';
+import { DocumentData, Firestore, collection, doc, getDoc, getDocs, getDocsFromServer } from '@angular/fire/firestore';
+import { getStorage, ref } from '@firebase/storage';
+import { NavigationEnd, Router } from '@angular/router';
 
-interface Services {
+export interface Services {
   service: string;
   description: string;
-  cost: string;
+  imgPath: string;
 }
 
 @Injectable({
@@ -15,9 +18,22 @@ interface Services {
 })
 export class GlobalResourceService {
   currentUser: any;
+  private currentUrl: string;
+  private previousUrl!: string;
   mobileMenu: boolean = false;
+  allServices: any[] = [];
+  footerServices: any[] = [];
+  service: any;
 
-  constructor(private http: HttpClient) {}
+  constructor(private fs: Firestore, private router: Router) {
+    this.currentUrl = this.router.url;
+    router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {        
+        this.previousUrl = this.currentUrl;
+        this.currentUrl = event.url;
+      };
+    });
+  }
 
   setCurrentUser(user: CurrentUser) {
     this.currentUser = user;
@@ -35,9 +51,36 @@ export class GlobalResourceService {
     return this.mobileMenu;
   }
 
-  fetchServices(): Observable<Services[]> {
-    return this.http.get<Services[]>(`http://localhost:11000/api/v1/services`, {
-      withCredentials: false,
+  getPreviousUrl(){
+    return this.previousUrl;
+  }
+
+  async fetchServices(): Promise<Services[]> {
+    this.allServices = [];
+    const servicesRef = collection(this.fs, 'services');
+    let services = await getDocsFromServer(servicesRef);
+    services.forEach((document) => {
+      this.allServices.push(document.data());
+      this.footerServices = this.allServices;
     });
+
+    return this.allServices;
+  }
+
+  async fetchFooterServices(): Promise<Services[]> {
+    let servicess:any = [];
+    const servicesRef = collection(this.fs, 'services');
+    let services = await getDocs(servicesRef);
+    services.forEach((document) => {
+      servicess.push(document.data());
+    });
+
+    return servicess;
+  }
+
+  async getSingleService(serviceName: string): Promise<Services>{
+    const serviceRef = doc(this.fs, `services`, serviceName);
+    this.service = await getDoc(serviceRef);
+    return this.service.data();
   }
 }

@@ -20,7 +20,9 @@ export class ListBookingsComponent implements OnInit {
   step: number = 0;
   frequency: string = 'one-time';
 
-  constructor(private user: GlobalResourceService, private router: Router, private auth: Auth) {}
+  constructor(private user: GlobalResourceService, private router: Router, private auth: Auth) {
+    
+  }
 
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser;
@@ -49,7 +51,7 @@ export class ListBookingsComponent implements OnInit {
         this.step++;
       } else if (service === 'errands') {
         this.selectedService = service;
-        this.newBooking.cost = '2500';
+        this.newBooking.cost = 2500;
         this.newBooking.service = service;
         this.step++;
       } else if (service === 'laundry') {
@@ -88,7 +90,10 @@ export class ListBookingsComponent implements OnInit {
   }
 
   updateStep() {
-    console.log(this.newBooking);
     this.step++;
+  }
+
+  back(){
+    this.step--;
   }
 }
