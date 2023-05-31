@@ -43,41 +43,47 @@ export class AuthService {
   ) {}
 
   async registerUser(newUser: NewUser) {
-    let user = await createUserWithEmailAndPassword(
+    /* let user = await createUserWithEmailAndPassword(
       this.auth,
       newUser.email,
       newUser.password
     );
     if (user) {
-      await sendEmailVerification(user.user);
-      await updateProfile(user.user, {
+      sendEmailVerification(user.user);
+      updateProfile(user.user, {
         displayName: newUser.firstname + ' ' + newUser.lastname,
       });
       this.auth.signOut();
       this.router.navigate(['auth', 'registration-success']);
+      location.reload();
     }
-    /* .then((res) => {
-        let done = await 
+    else{
+      console.log('account creation failed', error)
+    } */
+    createUserWithEmailAndPassword(this.auth, newUser.email, newUser.password)
+      .then((res) => {
         updateProfile(res.user, {
           displayName: newUser.firstname + ' ' + newUser.lastname,
         });
       })
       .catch((error) => {
         console.log(error);
-      }); */
+        return error;
+      });
   }
 
   signInUser(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((res) => {
         this.user.currentUser = res;
-        if(res.user.emailVerified === false){
+        if (res.user.emailVerified === false) {
           sendEmailVerification(res.user);
         }
-        this.router.navigate(['/']);
+        return res.user;
       })
       .catch((error) => {
         console.log(error);
+        return error;
       });
   }
 

@@ -77,9 +77,13 @@ export class ErrandBookingComponent implements OnInit {
     this.flutterwave.inlinePay(paymentData);
   }
   makePaymentCallback(response: PaymentSuccessResponse): void {
+    this.newBooking.userId = this.auth.currentUser?.uid;
+    let bookingData = { ...this.newBooking };
+    this.bookingService.saveBooking(bookingData);
     console.log('Payment callback', response);
   }
   closedPaymentModal(): void {
+    this.newBooking.userId = this.auth.currentUser?.uid;
     let bookingData = { ...this.newBooking };
     this.bookingService.saveBooking(bookingData);
     console.log('payment is closed');

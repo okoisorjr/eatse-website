@@ -1,5 +1,5 @@
 export class Room {
-  price!: string;
+  price!: number;
   roomType!: string;
   count!: number;
 }

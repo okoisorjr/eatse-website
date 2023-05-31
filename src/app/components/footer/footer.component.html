@@ -16,22 +16,37 @@
 
     <div class="">
       <p class="text-[#FFF] font-bold text-sm">Services</p>
-      <a routerLink="/services/house-keeping" class="text-[#FFF] hover:text-[#FFF] text-xs my-2" style="display: block;">Housekeeping</a>
-      <a routerLink="/services/office-cleaning" class="text-[#FFF] hover:text-[#FFF] text-xs my-2" style="display: block;">Office cleaning</a>
-      <a routerLink="/services/post-construction-cleaning" class="text-[#FFF] hover:text-[#FFF] text-xs my-2" style="display: block;">Post construction cleaning</a>
-      <a routerLink="/services/fumigation" class="text-[#FFF] hover:text-[#FFF] text-xs my-2" style="display: block;">Fumigation service</a>
-      <a routerLink="/services/move-in-out-cleaning" class="text-[#FFF] hover:text-[#FFF] text-xs my-2" style="display: block;">Move-in/move-out cleaning</a>
-      <a routerLink="/services/laundry" class="text-[#FFF] hover:text-[#FFF] text-xs my-2" style="display: block;">Laundry service</a>
-      <a routerLink="/services/errands" class="text-[#FFF] hover:text-[#FFF] text-xs my-2" style="display: block;">Errands</a>
+      <ng-container *ngFor="let service of services">
+        <a
+          routerLink="/services/{{ service.service }}"
+          class="text-[#FFF] hover:text-[#FFF] text-xs my-2"
+          style="display: block"
+          >{{ service.service }}</a
+        >
+      </ng-container>
     </div>
 
     <div class="">
-      <p routerLink="/about" class="text-[#FFF] font-bold text-sm">
-        Eatse
-      </p>
-      <a routerLink="/about" class="text-[#FFF] hover:text-[#FFF] text-xs my-2" style="display: block;">About us</a>
-      <a *ngIf="!currentUser" routerLink="/auth/sign-up" class="text-[#FFF] hover:text-[#FFF] text-xs my-2" style="display: block;">Join us</a>
-      <a routerLink="/contact" class="text-[#FFF] hover:text-[#FFF] text-xs my-2" style="display: block;">Get in touch</a>
+      <p routerLink="/about" class="text-[#FFF] font-bold text-sm">Eatse</p>
+      <a
+        routerLink="/about"
+        class="text-[#FFF] hover:text-[#FFF] text-xs my-2"
+        style="display: block"
+        >About us</a
+      >
+      <a
+        *ngIf="!currentUser"
+        routerLink="/auth/sign-up"
+        class="text-[#FFF] hover:text-[#FFF] text-xs my-2"
+        style="display: block"
+        >Join us</a
+      >
+      <a
+        routerLink="/contact"
+        class="text-[#FFF] hover:text-[#FFF] text-xs my-2"
+        style="display: block"
+        >Get in touch</a
+      >
     </div>
 
     <div class="">

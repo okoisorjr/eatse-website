@@ -20,6 +20,7 @@ export class OneTimeComponent implements OnInit {
   @Output() updateBooking = new EventEmitter();
   @Output() setFrequency = new EventEmitter();
   @Output() changeStep = new EventEmitter();
+  @Output() back = new EventEmitter();
 
   //newBooking: NewBooking = new NewBooking();
   times: AvailableTime[] = [];
@@ -65,6 +66,10 @@ export class OneTimeComponent implements OnInit {
     if(this.dates.length > 0){
       this.newBooking.dates = this.dates;
     }
+  }
+
+  goBack(){
+    this.back.emit()
   }
 
   nextPhase(){

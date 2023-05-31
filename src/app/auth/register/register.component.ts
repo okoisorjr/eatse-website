@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { NotifierService } from 'angular-notifier';
 import { Router } from '@angular/router';
 import { NewUser } from '../models/new-user.model';
 import { addDoc, Firestore, collection, setDoc, doc } from '@angular/fire/firestore';
-import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, updateCurrentUser, updatePhoneNumber, updateProfile } from '@angular/fire/auth';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 
 @Component({
@@ -16,21 +15,20 @@ import { GlobalResourceService } from 'src/app/global-resource/global-resource.s
 export class RegisterComponent implements OnInit {
   confirmPassword!: string;
   newUser: NewUser = new NewUser();
-  uid: string = '';
+  error: string = '';
   submitted: boolean = false;
 
   constructor(
-    private authService: AuthService,
     private auth: Auth,
     private currentUser: GlobalResourceService,
     private fs: Firestore,
-    private notifier: NotifierService,
     private router: Router
   ) {}
 
   ngOnInit(): void {}
 
   register(form: any) {
+    this.error = '';
     this.submitted = true;
     console.log(form.value);
     createUserWithEmailAndPassword(
@@ -39,21 +37,23 @@ export class RegisterComponent implements OnInit {
       this.newUser.password
     )
       .then((res) => {
+        this.submitted = false;
         let userInfo = {...this.newUser, id: res.user.uid}
         const dbInstance = collection(this.fs, 'clients');
-        setDoc(doc(dbInstance, 'clients'), userInfo, { merge: true})
+        updateProfile(res.user, {displayName: this.newUser.firstname + " " + this.newUser.lastname});
+        //setDoc(doc(dbInstance, 'clients'), userInfo, { merge: true});
         addDoc(dbInstance, userInfo, )
           .then((res) => {
-            this.submitted = false;
             this.router.navigate(['/auth/registration-success']);
           })
           .catch((error) => {
             console.log(error);
-            this.submitted = false;
           });
       })
       .catch((error) => {
-        console.log(error);
+        this.submitted = false;
+        this.error = error.message;
+        console.log(error.errors[0].message);
       });
 
     /* this.authService.registerAccount(this.newUser).subscribe(

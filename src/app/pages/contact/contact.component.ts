@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Auth } from '@angular/fire/auth';
 import { CurrentUser } from 'src/app/auth/auth.service';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 import { ContactEatseService } from 'src/app/services/contact-eatse.service';
@@ -14,16 +15,19 @@ export class ContactComponent implements OnInit {
   email!: string;
   phone!: string;
   message!: string;
-  user!: CurrentUser;
+  currentUser: any;
 
-  constructor(private currentUser: GlobalResourceService, private contactService: ContactEatseService) { }
+  constructor(private auth: Auth, private contactService: ContactEatseService) { 
+    this.auth.onAuthStateChanged((credential) => {
+      if(credential){
+        this.currentUser = credential;
+      }
+    })
+  }
 
   ngOnInit(): void {
-    this.user = this.currentUser.currentUser;
-
-    this.email = this.user.email;
-    this.fullname = this.user.firstname + ' ' + this.user.lastname;
-    this.phone = this.user.phone;
+    this.email = this.currentUser.email;
+    this.fullname = this.currentUser.displayName;
   }
 
   submitForm(form: any){

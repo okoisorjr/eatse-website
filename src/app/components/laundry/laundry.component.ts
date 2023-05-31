@@ -12,8 +12,6 @@ import { Auth } from '@angular/fire/auth';
   styleUrls: ['./laundry.component.css']
 })
 export class LaundryComponent implements OnInit {
-
-  @Input() service!: string;
   @Input() newBooking!: NewBooking;
  
   totalCost: number = 0;
@@ -35,7 +33,6 @@ export class LaundryComponent implements OnInit {
   constructor(private flutterwave: Flutterwave, private notifier: NotifierService, private auth: Auth) { }
 
   ngOnInit(): void {
-    this.newBooking.service = this.service;
     this.currentUser = this.auth.currentUser;
     this.customerDetails = {
       email: this.currentUser.email,
@@ -58,7 +55,7 @@ export class LaundryComponent implements OnInit {
     item.count++;
     this.totalCost += Number(item.price);
     item.totalPrice = Number(item.price) * item.count;
-    this.newBooking.cost = String(this.totalCost);
+    this.newBooking.cost = this.totalCost;
     if(this.newBooking.items.includes(item)){
       this.newBooking.items.indexOf(item)
     }
@@ -74,7 +71,7 @@ export class LaundryComponent implements OnInit {
     }
     item.count--;
     this.totalCost -= Number(item.price);
-    this.newBooking.cost = String(this.totalCost);
+    this.newBooking.cost = this.totalCost;
   }
 
   makePayment() {

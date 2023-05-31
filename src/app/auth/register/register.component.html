@@ -85,6 +85,13 @@
         </p>
       </div>
 
+      <div
+        *ngIf="error"
+        class="w-100 bg-red-600 bg-opacity-25 p-2.5 my-2 rounded-md"
+      >
+        <p class="text-[#FFF] text-sm text-center">{{ error }}</p>
+      </div>
+
       <div class="">
         <button
           [disabled]="submitted"
