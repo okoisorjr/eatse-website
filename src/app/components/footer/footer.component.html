@@ -19,7 +19,7 @@
       <ng-container *ngFor="let service of services">
         <a
           routerLink="/services/{{ service.service }}"
-          class="text-[#FFF] hover:text-[#FFF] text-xs my-2"
+          class="text-[#FFF] hover:text-[#008000] text-xs my-2"
           style="display: block"
           >{{ service.service }}</a
         >
@@ -30,20 +30,20 @@
       <p routerLink="/about" class="text-[#FFF] font-bold text-sm">Eatse</p>
       <a
         routerLink="/about"
-        class="text-[#FFF] hover:text-[#FFF] text-xs my-2"
+        class="text-[#FFF] text-xs my-2 cursor-pointer hover:text-[#008000]"
         style="display: block"
         >About us</a
       >
       <a
         *ngIf="!currentUser"
         routerLink="/auth/sign-up"
-        class="text-[#FFF] hover:text-[#FFF] text-xs my-2"
+        class="text-[#FFF] cursor-pointer hover:text-[#008000] text-xs my-2"
         style="display: block"
         >Join us</a
       >
       <a
         routerLink="/contact"
-        class="text-[#FFF] hover:text-[#FFF] text-xs my-2"
+        class="text-[#FFF] cursor-pointer hover:text-[#008000] text-xs my-2"
         style="display: block"
         >Get in touch</a
       >
@@ -51,10 +51,9 @@
 
     <div class="">
       <p class="text-[#FFF] font-bold text-sm">More</p>
-      <p class="text-[#FFF] text-xs my-2">Privacy policy</p>
-      <p class="text-[#FFF] text-xs my-2">Terms and conditions</p>
-      <p class="text-[#FFF] text-xs my-2">F.A.Q</p>
-      <p class="text-[#FFF] text-xs my-2">Get help</p>
+      <a routerLink="/our-policy" class="text-[#FFF] text-xs my-2 cursor-pointer hover:text-[#008000]">Privacy policy</a>
+      <p class="text-[#FFF] text-xs my-2 cursor-pointer hover:text-[#008000]">F.A.Q</p>
+      <a routerLink="/contact" class="text-[#FFF] text-xs my-2 cursor-pointer hover:text-[#008000]">Get help</a>
     </div>
 
     <div class="col-span-2 lg:col-span-1 lg:px-auto">

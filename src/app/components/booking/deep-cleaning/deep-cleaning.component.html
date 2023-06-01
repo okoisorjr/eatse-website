@@ -1,4 +1,86 @@
-<div
+<ng-container *ngIf="step === 1">
+  <div
+    class="container grid gap-4 grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-5 sm:gap-2 md:gap-5 bg-[url('/assets/wave2.png')]"
+  >
+    <div class="col-span-1 sm:col-span-1 md:col-span-1">
+      <div class="w-full">
+        <p class="text-[#FFF] font-bold text-lg">Frequency</p>
+        <div
+          (click)="selectFrequency(frequency)"
+          *ngFor="let frequency of frequencies"
+          class="flex flex-row p-3 my-2 gap-4 items-center w-full rounded-lg"
+          [ngClass]="{
+            'bg-[#008000]': newBooking.frequency === frequency,
+            'bg-[#111014]': newBooking.frequency !== frequency
+          }"
+        >
+          <input
+            class="self-center"
+            type="radio"
+            value="{{ newBooking.frequency }}"
+            name="frequency"
+            [checked]="newBooking.frequency === frequency"
+          /><label class="text-[#FFF] font-bold text-xl accent-[#eee]">{{
+            frequency
+          }}</label>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-1 sm:col-span-1 md:col-span-1">
+      <app-date-picker
+        *ngIf="newBooking.frequency !== 'weekly'"
+        [booking]="newBooking"
+        (setDates)="setDate($event)"
+      ></app-date-picker>
+      <app-weekly-picker
+        *ngIf="newBooking.frequency === 'weekly'"
+        [frequency]="newBooking.frequency"
+      ></app-weekly-picker>
+    </div>
+    <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-1">
+      <p class="text-[#FFF] font-bold text-lg">Pick arrival time</p>
+      <div class="w-full my-2 flex flex-wrap gap-2">
+        <div
+          *ngFor="let time of times"
+          (click)="setArrivalTime(time)"
+          class="p-3 w-20 rounded-lg bg-[#111014] cursor-pointer"
+          [ngClass]="{
+            'bg-[#008000]':
+              newBooking.arrivalTime === time.time &&
+              newBooking.period === time.period,
+            'bg-[#111014]':
+              newBooking.arrivalTime !== time.time ||
+              newBooking.period !== time.period
+          }"
+        >
+          <p class="text-[#FFF] text-center text-sm">
+            {{ time.time }}{{ time.period }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex items-center justify-center gap-2 my-4">
+    <button
+      class="w-20 bg-[#111014] text-[#FFF] my-3 p-2 rounded-md"
+      (click)="gotoBooking()"
+    >
+      Previous
+    </button>
+    <button
+      [disabled]="newBooking.dates.length === 0 || !newBooking.arrivalTime || !newBooking.period"
+      class="w-20 bg-[#008000] text-[#FFF] my-3 p-2 rounded-md"
+      [ngClass]="{'bg-opacity-30': newBooking.dates.length === 0 || !newBooking.arrivalTime || !newBooking.period}"
+      (click)="nextPhase()"
+    >
+      Next
+    </button>
+  </div>
+</ng-container>
+
+
+<ng-container *ngIf="step === 2">
+  <div
   class="container grid gap-5 grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-5 sm:gap-2 md:gap-5 bg-[url('/assets/wave2.png')]"
 >
   <div class="col-span-1 sm:col-span-1 md:col-span-1">
@@ -91,7 +173,7 @@
       <p class="text-[#FFF] font-bold text-lg">Payment summary</p>
       <div class="flex flex-row items-center justify-between gap-4">
         <p class="my-2 text-[#FFF] text-xs font-bold">Initial cost of service</p>
-        <p class="my-2 text-[#FFF] text-xs">₦{{ newBooking.cost }}.00</p>
+        <p class="my-2 text-[#FFF] text-xs">₦ {{ newBooking.cost }}.00</p>
       </div>
 
       <div *ngIf="newBooking.percentageDiscount">
@@ -105,22 +187,22 @@
         <div class="flex flex-row items-center justify-between gap-4">
           <p class="my-2 text-[#FFF] text-xs font-bold">Discounted Price</p>
           <p class="my-2 text-[#FFF] text-xs">
-            ₦{{ newBooking.discountedPrice }}.00
+            ₦ {{ newBooking.discountedPrice }}.00
           </p>
         </div>
 
         <div *ngIf="newBooking.servicePrice > 0" class="flex flex-row items-center justify-between gap-4">
           <p class="my-2 text-[#FFF] text-xs font-bold">Total Cost</p>
           <p class="my-2 text-[#FFF] text-xs">
-            Initial Price * {{ newBooking.dates.length }} = {{ newBooking.servicePrice }}.00
+            Discount Price x {{ newBooking.dates.length }} = ₦ {{ newBooking.servicePrice }}.00
           </p>
         </div>
       </div>
     </div>
     <div class="flex gap-3">
       <button
-        class="w-50 bg-red-700 bg-opacity-30 text-[#FFF] my-3 p-2 rounded-md"
-        (click)="goBack()"
+        class="w-50 bg-[#111014] text-[#FFF] my-3 p-2 rounded-md"
+        (click)="back()"
       >
         Previous
       </button>
@@ -133,3 +215,6 @@
     </div>
   </div>
 </div>
+
+</ng-container>
+

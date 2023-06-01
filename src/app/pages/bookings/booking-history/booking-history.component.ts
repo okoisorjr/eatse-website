@@ -14,10 +14,16 @@ export class BookingHistoryComponent implements OnInit {
   activeRoute: string = '';
   currentUser: any;
 
-  constructor(private router: Router, private auth: Auth, private ar: ActivatedRoute, private bookingService: BookingsService) { }
+  constructor(private router: Router, private auth: Auth, private ar: ActivatedRoute, private bookingService: BookingsService) { 
+    this.auth.onAuthStateChanged((credential) => {
+      if(credential){
+        this.currentUser = credential;
+      }
+    })
+  }
 
   ngOnInit(): void {
-    this.currentUser = this.auth.currentUser;
+    //this.currentUser = this.auth.currentUser;
     this.ar.url.subscribe((param) => {
       if(param[0].path === 'active'){
         this.activeRoute = param[0].path;
@@ -25,10 +31,11 @@ export class BookingHistoryComponent implements OnInit {
     });
     this.bookingService.getBookings()
     .then((res) => {
-      res.filter((booking) => {
-        if(booking.userId === this.auth.currentUser?.uid)
+      /* res.filter((booking) => {
+        if(booking.userId === this.currentUser.uid)
         this.bookings.push(booking);
-      });
+      }); */
+      this.bookings = res;
       console.log(this.bookings);
     })
     .catch((error) => {

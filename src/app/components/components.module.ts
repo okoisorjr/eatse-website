@@ -15,15 +15,17 @@ import { MobileMenuComponent } from './mobile-menu/mobile-menu.component';
 import { BannerComponent } from './banner/banner.component';
 import { PageConstructionComponent } from './page-construction/page-construction.component';
 import { ServiceBookingComponent } from './service-booking/service-booking.component';
-import { OneTimeComponent } from './one-time/one-time.component';
 import { DatePickerComponent } from './date-picker/date-picker.component';
 import { FormsModule } from '@angular/forms';
-import { HouseInfoComponent } from './house-info/house-info.component';
-import { ErrandBookingComponent } from './errand-booking/errand-booking.component';
-import { PostConstructionComponent } from './post-construction/post-construction.component';
-import { BookDetailsComponent } from './book-details/book-details.component';
-import { LaundryComponent } from './laundry/laundry.component';
 import { WeeklyPickerComponent } from './weekly-picker/weekly-picker.component';
+import { HousekeepingComponent } from './booking/housekeeping/housekeeping.component';
+import { DeepCleaningComponent } from './booking/deep-cleaning/deep-cleaning.component';
+import { ErrandComponent } from './booking/errand/errand.component';
+import { LaundryComponent } from './booking/laundry/laundry.component';
+import { FumigationComponent } from './booking/fumigation/fumigation.component';
+import { OfficeCleaningComponent } from './booking/office-cleaning/office-cleaning.component';
+import { PostConstructionComponent } from './booking/post-construction/post-construction.component';
+import { MoveInOutComponent } from './booking/move-in-out/move-in-out.component';
 
 @NgModule({
   declarations: [
@@ -38,14 +40,16 @@ import { WeeklyPickerComponent } from './weekly-picker/weekly-picker.component';
     BannerComponent,
     PageConstructionComponent,
     ServiceBookingComponent,
-    OneTimeComponent,
     DatePickerComponent,
-    HouseInfoComponent,
-    ErrandBookingComponent,
-    PostConstructionComponent,
-    BookDetailsComponent,
-    LaundryComponent,
     WeeklyPickerComponent,
+    HousekeepingComponent,
+    DeepCleaningComponent,
+    ErrandComponent,
+    LaundryComponent,
+    FumigationComponent,
+    OfficeCleaningComponent,
+    PostConstructionComponent,
+    MoveInOutComponent
   ],
   imports: [CommonModule, ComponentsRoutingModule, NgbModule, FormsModule, FlutterwaveModule],
   exports: [
@@ -59,12 +63,14 @@ import { WeeklyPickerComponent } from './weekly-picker/weekly-picker.component';
     PageConstructionComponent,
     FooterComponent,
     ServiceBookingComponent,
-    OneTimeComponent,
-    HouseInfoComponent,
-    ErrandBookingComponent,
-    PostConstructionComponent,
-    BookDetailsComponent,
+    HousekeepingComponent,
+    DeepCleaningComponent,
     LaundryComponent,
+    ErrandComponent,
+    FumigationComponent,
+    PostConstructionComponent,
+    OfficeCleaningComponent,
+    MoveInOutComponent
   ],
 })
 export class ComponentsModule {}

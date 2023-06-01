@@ -2,15 +2,13 @@ import { Injectable } from '@angular/core';
 import { LaundryItems } from '../pages/bookings/model/laundry-items';
 import { Room } from '../pages/bookings/model/room';
 import {
-  CollectionReference,
   Firestore,
   query,
   addDoc,
   collection,
-  getDocs,
-  docSnapshots,
   getDocsFromServer,
-  DocumentData,
+  orderBy,
+  where,
 } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
 import { GlobalResourceService } from '../global-resource/global-resource.service';
@@ -47,7 +45,6 @@ export interface BookingData {
   providedIn: 'root',
 })
 export class BookingsService {
-  query: any;
   booking_list: BookingData[] = [];
 
   constructor(
@@ -71,12 +68,13 @@ export class BookingsService {
     this.booking_list = [];
     if (this.auth.currentUser) {
       const bookingRef = collection(this.fs, 'bookings');
-      let booking_data = await getDocsFromServer(bookingRef);
+      const q = query(bookingRef, where('userId', '==', this.auth.currentUser.uid));
+      let booking_data = await getDocsFromServer(q);
       booking_data.forEach((document) => {
         this.booking_list.push(document.data());
       });
     }
-
+    console.log(this.booking_list);
     return this.booking_list;
   }
 }

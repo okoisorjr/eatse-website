@@ -25,15 +25,16 @@ export class ServiceComponent implements OnInit {
     this.serviceName = this.ar.snapshot.params['id'];
     const storage = getStorage();
     this.globalService.getSingleService(this.serviceName).then((doc) => {
-      let pathRef = ref(storage, `service-images/${doc.imgPath}`);
+      /* let pathRef = ref(storage, `service-images/${doc.imgPath}`);
       getDownloadURL(pathRef).then((url) => {
         doc.imgPath = url;
         this.service = doc;
-      });
+      }); */
+      this.service = doc;
     });
   }
 
-  routeToBooking(){
-    this.router.navigate(['/booking']);
+  routeToBooking(service: string){
+    this.router.navigate(['/booking/' + service]);
   }
 }

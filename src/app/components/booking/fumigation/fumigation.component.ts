@@ -1,13 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
-import { Flutterwave } from 'flutterwave-angular-v3';
-import { UserAccount } from 'src/app/auth/models/user-account.model';
+import { Flutterwave, PaymentSuccessResponse } from 'flutterwave-angular-v3';
 import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
-import {
-  InlinePaymentOptions,
-  PaymentSuccessResponse,
-} from 'flutterwave-angular-v3';
 import { BookingsService } from 'src/app/services/bookings.service';
+import { DatePickerComponent } from '../../date-picker/date-picker.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 interface Room {
   price: string;
@@ -15,18 +12,26 @@ interface Room {
   count: number;
 }
 
-@Component({
-  selector: 'app-book-details',
-  templateUrl: './book-details.component.html',
-  styleUrls: ['./book-details.component.css'],
-})
-export class BookDetailsComponent implements OnInit {
-  @Input() service!: string;
-  @Input() newBooking!: NewBooking;
+interface AvailableTime {
+  id: string;
+  time: string;
+  period: string;
+}
 
+@Component({
+  selector: 'app-fumigation',
+  templateUrl: './fumigation.component.html',
+  styleUrls: ['./fumigation.component.css'],
+})
+export class FumigationComponent implements OnInit {
+  @ViewChild(DatePickerComponent) resetButton!: DatePickerComponent;
+
+  newBooking: NewBooking = new NewBooking();
+  step: number = 1;
   buildingTypes: string[] = [];
-  /* newBooking: NewBooking = new NewBooking(); */
   selectedBuilding: string = '';
+  frequencies: string[] = [];
+  times: AvailableTime[] = [];
 
   rooms!: Room[];
   totalCost!: string;
@@ -46,18 +51,41 @@ export class BookDetailsComponent implements OnInit {
   constructor(
     private flutterwave: Flutterwave,
     private notifier: NotifierService,
-    private bookingService: BookingsService
+    private bookingService: BookingsService,
+    private router: Router,
+    private ar: ActivatedRoute
   ) {}
 
+  ngAfterViewInit() {
+    this.resetButton.resetSelectedDates();
+  }
+
   ngOnInit(): void {
-    this.newBooking.service = this.newBooking.service;
-    if(this.newBooking.service === 'office-cleaning'){
+    this.newBooking.service = this.ar.snapshot.params['id'];
+    this.newBooking.frequency = 'one-time';
+    if (this.newBooking.service === 'office-cleaning') {
       this.newBooking.buildingType = 'Office';
-    }else{
+    } else {
       this.newBooking.buildingType = 'House';
     }
     this.buildingTypes = ['House', 'Office'];
-    if(this.newBooking.service === 'post construction cleaning'){
+    this.newBooking.dates = [];
+    this.frequencies = ['one-time', /*'weekly'*/ 'monthly', 'custom']; //weekly removed temporarily
+    this.times = [
+      { id: '1', time: '06:00', period: 'am' },
+      { id: '1', time: '07:00', period: 'am' },
+      { id: '1', time: '08:00', period: 'am' },
+      { id: '1', time: '09:00', period: 'am' },
+      { id: '1', time: '10:00', period: 'am' },
+      { id: '1', time: '11:00', period: 'am' },
+      { id: '1', time: '12:00', period: 'pm' },
+      { id: '1', time: '01:00', period: 'pm' },
+      { id: '1', time: '02:00', period: 'pm' },
+      { id: '1', time: '03:00', period: 'pm' },
+      { id: '1', time: '04:00', period: 'pm' },
+      { id: '1', time: '05:00', period: 'pm' },
+    ];
+    if (this.newBooking.service === 'post construction cleaning') {
       this.rooms = [
         { price: '15000', roomType: 'Living room', count: 0 },
         { price: '10000', roomType: 'Bedroom', count: 0 },
@@ -67,7 +95,7 @@ export class BookDetailsComponent implements OnInit {
         { price: '5000', roomType: 'Store', count: 0 },
         { price: '5000', roomType: 'Outdoor / Balcony', count: 0 },
       ];
-    }else if(this.newBooking.service === 'move-in-out-cleaning'){
+    } else if (this.newBooking.service === 'move-in-out-cleaning') {
       this.rooms = [
         { price: '5000', roomType: 'Living room / dining area', count: 0 },
         { price: '5000', roomType: 'Bedroom', count: 0 },
@@ -77,7 +105,65 @@ export class BookDetailsComponent implements OnInit {
         { price: '2500', roomType: 'Outdoor / Balcony', count: 0 },
       ];
     }
+  }
+
+  gotoBooking() {
+    this.router.navigate(['/booking']);
+  }
+
+  back() {
+    window.scroll({ top: 0 });
+    this.step--;
+  }
+
+  selectFrequency(frequency: any) {
+    this.newBooking.frequency = frequency;
+    this.newBooking.dates = [];
+    this.resetButton.resetSelectedDates();
+  }
+
+  setArrivalTime(time: AvailableTime) {
+    this.newBooking.arrivalTime = time.time;
+    this.newBooking.period = time.period;
+  }
+
+  setDate(date: any) {
+    /* this.dates = date;
     
+    if (this.dates.length > 0) {
+      this.newBooking.dates = this.dates;
+    } */
+    this.newBooking.dates = date;
+  }
+
+  nextPhase() {
+    window.scrollTo({ top: 0 });
+    if (
+      this.newBooking.frequency === 'monthly' &&
+      this.newBooking.dates.length <= 3 &&
+      this.newBooking.dates.length > 1
+    ) {
+      this.newBooking.percentageDiscount = 35;
+    } else if (
+      this.newBooking.frequency === 'monthly' &&
+      this.newBooking.dates.length <= 7 &&
+      this.newBooking.dates.length > 3
+    ) {
+      this.newBooking.percentageDiscount = 50;
+    } else if (
+      this.newBooking.frequency === 'monthly' &&
+      this.newBooking.dates.length <= 14 &&
+      this.newBooking.dates.length > 7
+    ) {
+      this.newBooking.percentageDiscount = 60;
+    } else if (
+      this.newBooking.frequency === 'monthly' &&
+      this.newBooking.dates.length <= 31 &&
+      this.newBooking.dates.length > 14
+    ) {
+      this.newBooking.percentageDiscount = 80;
+    }
+    this.step++;
   }
 
   selectBuilding(building: string) {
@@ -144,7 +230,7 @@ export class BookDetailsComponent implements OnInit {
   }
   makePaymentCallback(response: PaymentSuccessResponse): void {
     this.newBooking.paymentStatus = 'success';
-    let bookingData = {...this.newBooking}
+    let bookingData = { ...this.newBooking };
     this.bookingService.saveBooking(bookingData);
     console.log('Payment callback', response);
   }

@@ -1,0 +1,75 @@
+<div
+  class="container grid gap-5 grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 p-5 sm:gap-2 md:gap-5 bg-[url('/assets/wave2.png')]"
+>
+  <div class="col-span-1 sm:col-span-1 md:col-span-1">
+    <p class="text-[#FFF] font-bold text-lg mb-2">
+      Office location and contact information
+    </p>
+    <div class="flex flex-col gap-2">
+      <div class="">
+        <input
+          class="p-2 bg-[#111014] text-[#FFF] rounded-md w-full"
+          name="officeLocation"
+          type="text"
+          placeholder="Office location"
+          [(ngModel)]="newBooking.officeLocation"
+        />
+      </div>
+      <div class="">
+        <input
+          class="p-2 bg-[#111014] text-[#FFF] rounded-md w-full"
+          name="officeEmail"
+          type="text"
+          placeholder="Email"
+          [(ngModel)]="newBooking.officeEmail"
+        />
+      </div>
+      <div class="">
+        <input
+          class="p-2 bg-[#111014] text-[#FFF] rounded-md w-full"
+          name="officePhone"
+          type="text"
+          placeholder="Phone number"
+          [(ngModel)]="newBooking.officeContact"
+        />
+      </div>
+      <div class="">
+        <textarea
+          class="p-2 bg-[#111014] text-[#FFF] rounded-md w-full"
+          name="extraInfo"
+          [rows]="12"
+          placeholder="Enter additional information"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="col-span-1 sm:col-span-1 md:col-span-1 mt-4">
+    <div class="flex flex-col place-content-center self-center">
+      <div class="flex items-center gap-2">
+        <i class="material-icons font-bold font-lg text-[#FFF]">info</i>
+        <p class="text-[#FFF] text-lg font-bold">Important</p>
+      </div>
+      <p class="text-[#FFF] text-sm font-bold">
+        Due to the structural differences, complexity and flexibility of
+        offices, in order to provide suitable and tailored pricing, a physical
+        onsite evaluation of the office is required.
+      </p>
+    </div>
+  </div>
+</div>
+<div class="flex justify-center items-center gap-2">
+  <button
+      class="w-30 bg-[#111014] text-[#FFF] my-3 p-2 rounded-md"
+      (click)="gotoBooking()"
+    >
+      Previous
+    </button>
+    <button
+      [disabled]="newBooking.dates.length === 0 || !newBooking.arrivalTime || !newBooking.period"
+      class="w-30 bg-[#008000] text-[#FFF] my-3 p-2 rounded-md"
+      [ngClass]="{'bg-opacity-30': newBooking.dates.length === 0 || !newBooking.arrivalTime || !newBooking.period}"
+      (click)="bookAppointment()"
+    >
+      Book appointment
+    </button>
+</div>

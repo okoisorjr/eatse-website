@@ -5,11 +5,13 @@ import { FormsModule } from '@angular/forms';
 
 import { PagesRoutingModule } from './pages-routing.module';
 import { ContactComponent } from './contact/contact.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 
 
 @NgModule({
   declarations: [
-    ContactComponent
+    ContactComponent,
+    PrivacyPolicyComponent
   ],
   imports: [
     CommonModule,
