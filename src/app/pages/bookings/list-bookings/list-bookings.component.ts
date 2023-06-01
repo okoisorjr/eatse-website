@@ -21,7 +21,7 @@ export class ListBookingsComponent implements OnInit {
   frequency: string = 'one-time';
 
   constructor(private user: GlobalResourceService, private router: Router, private auth: Auth) {
-    
+
   }
 
   ngOnInit(): void {
@@ -39,36 +39,44 @@ export class ListBookingsComponent implements OnInit {
     } else {
       if (service === 'housekeeping') {
         this.selectedService = service;
+        this.router.navigate(['/booking/' + service]);
         this.newBooking.service = service;
         this.step++;
       } else if (service === 'deep cleaning') {
         this.selectedService = service;
+        this.router.navigate(['/booking/' + service]);
         this.newBooking.service = service;
         this.step++;
       } else if (service === 'post construction cleaning') {
         this.selectedService = service;
+        this.router.navigate(['/booking/' + service]);
         this.newBooking.service = service;
         this.step++;
       } else if (service === 'errands') {
         this.selectedService = service;
+        this.router.navigate(['/booking/' + service]);
         this.newBooking.cost = 2500;
         this.newBooking.service = service;
         this.step++;
       } else if (service === 'laundry') {
         this.selectedService = service;
+        this.router.navigate(['/booking/' + service]);
         this.newBooking.service = service;
         this.step++;
       } else if(service === 'office-cleaning'){
         this.selectedService = service;
+        this.router.navigate(['/booking/' + service]);
         this.newBooking.service = service;
         this.step += 2;
         console.log(this.newBooking.service);
       } else if( service === 'fumigation'){
         this.selectedService = service;
+        this.router.navigate(['/booking/' + service]);
         this.newBooking.service = service;
         this.step++;
       } else if( service === 'move-in-out-cleaning'){
         this.selectedService = service;
+        this.router.navigate(['/booking/' + service]);
         this.newBooking.service = service;
         this.step++;
       }
@@ -93,7 +101,9 @@ export class ListBookingsComponent implements OnInit {
     this.step++;
   }
 
-  back(){
+  back(booking: any){
+    this.newBooking = booking;
+    console.log(this.newBooking);
     this.step--;
   }
 }

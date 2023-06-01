@@ -1,32 +1,36 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { NotifierService } from 'angular-notifier';
+import { Component, OnInit, Output, Input, ViewChild, AfterViewInit, EventEmitter } from '@angular/core';
+import { Flutterwave, InlinePaymentOptions, PaymentSuccessResponse } from 'flutterwave-angular-v3';
+import { Room } from 'src/app/pages/bookings/model/room';
+import { DatePickerComponent } from '../../date-picker/date-picker.component';
 import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
-import {
-  Flutterwave,
-  InlinePaymentOptions,
-  PaymentSuccessResponse,
-} from 'flutterwave-angular-v3';
-import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
-import { UserAccount } from 'src/app/auth/models/user-account.model';
-import { CurrentUser } from 'src/app/auth/auth.service';
+import { NotifierService } from 'angular-notifier';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BookingsService } from 'src/app/services/bookings.service';
 import { Auth } from '@angular/fire/auth';
+import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 
-interface Room {
-  price: number;
-  roomType: string;
-  count: number;
+interface AvailableTime {
+  id: string;
+  time: string;
+  period: string;
 }
 
 @Component({
-  selector: 'app-house-info',
-  templateUrl: './house-info.component.html',
-  styleUrls: ['./house-info.component.css'],
+  selector: 'app-deep-cleaning',
+  templateUrl: './deep-cleaning.component.html',
+  styleUrls: ['./deep-cleaning.component.css']
 })
-export class HouseInfoComponent implements OnInit {
-  @Input() newBooking!: NewBooking;
-  @Input() step!: number;
-  @Output() back = new EventEmitter();
+export class DeepCleaningComponent implements OnInit {
+
+  @Output() updateBooking = new EventEmitter();
+
+  @ViewChild(DatePickerComponent) resetButton!: DatePickerComponent;
+
+  step: number = 1;
+  newBooking: NewBooking = new NewBooking();
+  times: AvailableTime[] = [];
+  frequencies: string[] = [];
+  dates: string[] = [];
 
   rooms!: Room[];
   totalCost!: string;
@@ -41,12 +45,24 @@ export class HouseInfoComponent implements OnInit {
 
   constructor(
     private notifier: NotifierService,
+    private ar: ActivatedRoute,
     private flutterwave: Flutterwave,
     private bookingService: BookingsService,
     private auth: Auth,
-    private globalService: GlobalResourceService
+    private globalService: GlobalResourceService,
+    private router: Router
   ) {
-    this.currentUser = this.globalService.getCurrentUser();
+    this.auth.onAuthStateChanged((credential) => {
+      if(credential){
+        this.currentUser = credential;
+        this.customerDetails = {
+          email: this.currentUser.email,
+          customerName: this.currentUser.displayName,
+          userId: this.currentUser.uid,
+        };
+      }
+    });
+
     this.rooms = [
       { price: 500, roomType: 'Living rooms / dining area', count: 0 },
       { price: 2000, roomType: 'Bedrooms', count: 0 },
@@ -58,7 +74,30 @@ export class HouseInfoComponent implements OnInit {
     ];
   }
 
+  ngAfterViewInit() {
+    this.resetButton.resetSelectedDates();
+  }
+
   ngOnInit(): void {
+    this.newBooking.service = this.ar.snapshot.params['id'];
+    this.newBooking.frequency = 'one-time';
+    this.newBooking.dates = [];
+    this.frequencies = ['one-time', /*'weekly'*/ 'monthly', 'custom']; //weekly removed temporarily
+    this.times = [
+      { id: '1', time: '06:00', period: 'am' },
+      { id: '1', time: '07:00', period: 'am' },
+      { id: '1', time: '08:00', period: 'am' },
+      { id: '1', time: '09:00', period: 'am' },
+      { id: '1', time: '10:00', period: 'am' },
+      { id: '1', time: '11:00', period: 'am' },
+      { id: '1', time: '12:00', period: 'pm' },
+      { id: '1', time: '01:00', period: 'pm' },
+      { id: '1', time: '02:00', period: 'pm' },
+      { id: '1', time: '03:00', period: 'pm' },
+      { id: '1', time: '04:00', period: 'pm' },
+      { id: '1', time: '05:00', period: 'pm' },
+    ];
+
     this.currentUser = this.auth.currentUser;
     this.newBooking.cost = 0;
     this.newBooking.discountedPrice = 0;
@@ -67,13 +106,6 @@ export class HouseInfoComponent implements OnInit {
       description: `Payment for the ${this.newBooking.service} service`,
       logo: 'https://firebasestorage.googleapis.com/v0/b/eatse-4dbd3.appspot.com/o/service-images%2Fbrand-logo.jpg?alt=media&token=9ba32825-4020-4d8d-ae29-76ffc41a35a5',
     };
-    this.customerDetails = {
-      name: this.currentUser.displayName
-        ? this.currentUser.displayName
-        : this.currentUser.email,
-      email: this.currentUser.email,
-      userId: this.currentUser.uid,
-    };
     this.meta = {
       service: this.newBooking.service,
       rooms: this.newBooking.rooms.length,
@@ -81,6 +113,30 @@ export class HouseInfoComponent implements OnInit {
       counsumer_id: '7898',
       consumer_mac: 'kjs9s8ss7dd',
     };
+  }
+
+  selectFrequency(frequency: any) {
+    this.newBooking.frequency = frequency;
+    this.newBooking.dates = [];
+    this.resetButton.resetSelectedDates();
+  }
+
+  setArrivalTime(time: AvailableTime) {
+    this.newBooking.arrivalTime = time.time;
+    this.newBooking.period = time.period;
+  }
+
+  setDate(date: any) {
+    /* this.dates = date;
+    
+    if (this.dates.length > 0) {
+      this.newBooking.dates = this.dates;
+    } */
+    this.newBooking.dates = date;
+  }
+
+  nextPhase() {
+    window.scrollTo({top: 0});
     if (
       this.newBooking.frequency === 'monthly' &&
       this.newBooking.dates.length <= 3 &&
@@ -106,6 +162,7 @@ export class HouseInfoComponent implements OnInit {
     ) {
       this.newBooking.percentageDiscount = 80;
     }
+    this.step++;
   }
 
   calculatePercentage() {
@@ -165,6 +222,14 @@ export class HouseInfoComponent implements OnInit {
     }
   }
 
+  gotoBooking() {
+    this.router.navigate(['/booking']);
+  }
+
+  back() {
+    this.step--;
+  }
+
   proceedToPay() {
     let value = this.validateForm();
     if (value) {
@@ -210,9 +275,5 @@ export class HouseInfoComponent implements OnInit {
   generateReference(): string {
     let date = new Date();
     return date.getTime().toString();
-  }
-
-  goBack() {
-    this.back.emit();
   }
 }

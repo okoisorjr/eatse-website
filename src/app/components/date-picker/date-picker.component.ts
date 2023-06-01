@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
+import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
 
 @Component({
   selector: 'app-date-picker',
@@ -8,6 +9,7 @@ import { NotifierService } from 'angular-notifier';
 })
 export class DatePickerComponent implements OnInit {
   @Input() frequency!: string;
+  @Input() booking!: NewBooking;
   @Output() setDates = new EventEmitter();
 
   MONTH_NAMES = [
@@ -39,7 +41,15 @@ export class DatePickerComponent implements OnInit {
   ngOnInit(): void {
     this.initDate();
     this.getNoOfDays();
-    console.log(this.frequency);
+    if(this.booking.dates){
+      this.selectedDays = this.booking.dates;
+    }
+    
+  }
+
+  resetSelectedDates(){
+    this.booking.dates = [];
+    this.ngOnInit();
   }
 
   initDate() {
@@ -92,7 +102,7 @@ export class DatePickerComponent implements OnInit {
       console.log(this.selectedDays);
       return;
     }
-    else if(this.frequency === 'one-time' && this.selectedDays.length > 0){
+    else if(this.booking.frequency === 'one-time' && this.selectedDays.length > 0){
       return this.notifier.notify('error', 'This is a one time service, you can pick only one day!')
     }
     this.selectedDays.push(selectedDate.toDateString());

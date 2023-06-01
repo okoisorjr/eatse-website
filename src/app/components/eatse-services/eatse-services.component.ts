@@ -23,13 +23,16 @@ export class EatseServicesComponent implements OnInit {
   ngOnInit(): void {
     const storage = getStorage();
     this.globalServices.fetchServices().then((doc) => {
-      doc.forEach((element) => {
+      /* doc.forEach((element) => {
         let pathRef = ref(storage, `service-images/${element.imgPath}`); //set the download url path from firebase storage
         getDownloadURL(pathRef).then((url) => {
           element.imgPath = url;
-          this.services.push(element);        
-        });
-      })
+          this.services.push(element);     
+          console.log(this.services);
+        }); */
+        this.services = doc;
+        console.log(this.services);
+      //})
     });
   }
 

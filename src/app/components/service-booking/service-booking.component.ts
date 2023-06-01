@@ -46,7 +46,7 @@ export class ServiceBookingComponent implements OnInit {
       },
       {
         image: 'assets/office-cleaning-img.png',
-        service: 'office-cleaning ',
+        service: 'office-cleaning',
         description:
           'Lets help you clean and organize your office while you focus on your work.',
       },

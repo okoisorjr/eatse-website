@@ -1,0 +1,30 @@
+<app-top-nav></app-top-nav>
+<div class="border-y-2 border-gray-600 w-full">
+  <div class="flex flex-row justify-center items-center gap-5 p-4">
+    <a routerLink="/booking/active"
+      ><div class="flex flex-col items-center justify-center cursor-pointer">
+        <i class="material-icons text-[#FFF]">event</i>
+        <p class="text-[#FFF]">Active bookings</p>
+      </div></a
+    >
+    <a routerLink="/booking/history"
+      ><div class="flex flex-col items-center justify-center cursor-pointer">
+        <i class="material-icons text-[#FFF]">history</i>
+        <p class="text-[#FFF]">Booking history</p>
+      </div></a
+    >
+  </div>
+</div>
+<app-housekeeping *ngIf="service === 'housekeeping'"></app-housekeeping>
+<app-deep-cleaning *ngIf="service === 'deep cleaning'"></app-deep-cleaning>
+<app-laundry *ngIf="service === 'laundry'"></app-laundry>
+<app-errand *ngIf="service === 'errands'"></app-errand>
+<app-fumigation *ngIf="service === 'fumigation'"></app-fumigation>
+<app-post-construction
+  *ngIf="service === 'post construction cleaning'"
+></app-post-construction>
+<app-office-cleaning
+  *ngIf="service === 'office-cleaning'"
+></app-office-cleaning>
+<app-move-in-out *ngIf="service === 'move-in-out-cleaning'"></app-move-in-out>
+<app-footer></app-footer>

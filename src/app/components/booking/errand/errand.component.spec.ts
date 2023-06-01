@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OneTimeComponent } from './one-time.component';
+import { ErrandComponent } from './errand.component';
 
-describe('OneTimeComponent', () => {
-  let component: OneTimeComponent;
-  let fixture: ComponentFixture<OneTimeComponent>;
+describe('ErrandComponent', () => {
+  let component: ErrandComponent;
+  let fixture: ComponentFixture<ErrandComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OneTimeComponent ]
+      declarations: [ ErrandComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OneTimeComponent);
+    fixture = TestBed.createComponent(ErrandComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
