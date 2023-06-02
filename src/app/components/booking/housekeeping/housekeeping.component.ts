@@ -42,7 +42,7 @@ export class HousekeepingComponent implements OnInit {
   times: AvailableTime[] = [];
   frequencies: string[] = [];
   dates: string[] = [];
-  nextButtonEnabled:boolean = true;
+  nextButtonEnabled: boolean = true;
 
   rooms!: Room[];
   totalCost!: string;
@@ -124,11 +124,14 @@ export class HousekeepingComponent implements OnInit {
     };
   }
 
-  validateFields(){
-    if(this.newBooking.dates.length > 0 && this.newBooking.period && this.newBooking.address){
+  validateFields() {
+    if (
+      this.newBooking.dates.length > 0 &&
+      this.newBooking.period &&
+      this.newBooking.address
+    ) {
       return true;
-    }
-    else{
+    } else {
       return false;
     }
   }
@@ -138,7 +141,7 @@ export class HousekeepingComponent implements OnInit {
     this.newBooking.dates = [];
     this.resetButton.resetSelectedDates();
     let val = this.validateFields();
-    if(val){
+    if (val) {
       this.nextButtonEnabled = true;
     }
   }
@@ -147,7 +150,7 @@ export class HousekeepingComponent implements OnInit {
     this.newBooking.arrivalTime = time.time;
     this.newBooking.period = time.period;
     let val = this.validateFields();
-    if(val){
+    if (val) {
       this.nextButtonEnabled = true;
     }
   }
@@ -162,7 +165,7 @@ export class HousekeepingComponent implements OnInit {
   }
 
   nextPhase() {
-    window.scrollTo({top: 0});
+    window.scrollTo({ top: 0 });
     if (
       this.newBooking.frequency === 'monthly' &&
       this.newBooking.dates.length <= 3 &&
@@ -224,30 +227,6 @@ export class HousekeepingComponent implements OnInit {
     }
   }
 
-  validateForm() {
-    if (
-      this.newBooking.address === '' ||
-      this.newBooking.frequency === '' ||
-      this.newBooking.arrivalTime === '' ||
-      this.newBooking.cost === 0
-    ) {
-      return this.notifier.notify(
-        'error',
-        'Please, make sure to fill out all the required fields'
-      );
-    } else if (
-      this.newBooking.servicePrice < 4000 ||
-      this.newBooking.cost < 4000
-    ) {
-      this.notifier.notify(
-        'error',
-        'Please, the minimum accumulated price cannot be under 4k'
-      );
-    } else {
-      return true;
-    }
-  }
-
   gotoBooking() {
     this.router.navigate(['/booking']);
   }
@@ -257,10 +236,7 @@ export class HousekeepingComponent implements OnInit {
   }
 
   proceedToPay() {
-    let value = this.validateForm();
-    if (value) {
-      this.makePayment();
-    }
+    this.makePayment();
   }
 
   makePayment() {

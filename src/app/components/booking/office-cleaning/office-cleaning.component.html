@@ -59,17 +59,26 @@
 </div>
 <div class="flex justify-center items-center gap-2">
   <button
-      class="w-30 bg-[#111014] text-[#FFF] my-3 p-2 rounded-md"
-      (click)="gotoBooking()"
-    >
-      Previous
-    </button>
-    <button
-      [disabled]="newBooking.dates.length === 0 || !newBooking.arrivalTime || !newBooking.period"
-      class="w-30 bg-[#008000] text-[#FFF] my-3 p-2 rounded-md"
-      [ngClass]="{'bg-opacity-30': newBooking.dates.length === 0 || !newBooking.arrivalTime || !newBooking.period}"
-      (click)="bookAppointment()"
-    >
-      Book appointment
-    </button>
+    class="w-30 bg-[#111014] text-[#FFF] my-3 p-2 rounded-md"
+    (click)="gotoBooking()"
+  >
+    Previous
+  </button>
+  <button
+    [disabled]="
+      newBooking.dates.length === 0 ||
+      !newBooking.arrivalTime ||
+      !newBooking.period
+    "
+    class="w-30 bg-[#008000] text-[#FFF] my-3 p-2 rounded-md"
+    [ngClass]="{
+      'bg-opacity-30':
+        newBooking.dates.length === 0 ||
+        !newBooking.arrivalTime ||
+        !newBooking.period
+    }"
+    (click)="bookAppointment()"
+  >
+    Book appointment
+  </button>
 </div>

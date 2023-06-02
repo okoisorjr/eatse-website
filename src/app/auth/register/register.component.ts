@@ -3,8 +3,21 @@ import { AuthService } from '../auth.service';
 import { NotifierService } from 'angular-notifier';
 import { Router } from '@angular/router';
 import { NewUser } from '../models/new-user.model';
-import { addDoc, Firestore, collection, setDoc, doc } from '@angular/fire/firestore';
-import { Auth, createUserWithEmailAndPassword, updateCurrentUser, updatePhoneNumber, updateProfile } from '@angular/fire/auth';
+import {
+  addDoc,
+  Firestore,
+  collection,
+  setDoc,
+  doc,
+} from '@angular/fire/firestore';
+import {
+  Auth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  updateCurrentUser,
+  updatePhoneNumber,
+  updateProfile,
+} from '@angular/fire/auth';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 
 @Component({
@@ -38,12 +51,16 @@ export class RegisterComponent implements OnInit {
     )
       .then((res) => {
         this.submitted = false;
-        let userInfo = {...this.newUser, id: res.user.uid}
+        let userInfo = { ...this.newUser, id: res.user.uid };
         const dbInstance = collection(this.fs, 'clients');
-        updateProfile(res.user, {displayName: this.newUser.firstname + " " + this.newUser.lastname});
+        updateProfile(res.user, {
+          displayName: this.newUser.firstname + ' ' + this.newUser.lastname,
+        });
+        sendEmailVerification(res.user);
         //setDoc(doc(dbInstance, 'clients'), userInfo, { merge: true});
-        addDoc(dbInstance, userInfo, )
+        addDoc(dbInstance, userInfo)
           .then((res) => {
+            this.auth.signOut();
             this.router.navigate(['/auth/registration-success']);
           })
           .catch((error) => {
@@ -55,18 +72,5 @@ export class RegisterComponent implements OnInit {
         this.error = error.message;
         console.log(error.errors[0].message);
       });
-
-    /* this.authService.registerAccount(this.newUser).subscribe(
-      (value) => {
-        if (value) {
-          console.log(value);
-          this.router.navigate(['/auth/registration-success']);
-        }
-      },
-      (error: HttpErrorResponse) => {
-        console.log(error);
-        this.notifier.notify('error', `${error.error.msg}`);
-      }
-    ); */
   }
 }

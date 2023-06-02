@@ -44,7 +44,7 @@ export class BookingHistoryComponent implements OnInit {
   }
 
   gotoBooking(){
-    this.router.navigate([''])
+    this.router.navigate(['/booking'])
   }
 
 }

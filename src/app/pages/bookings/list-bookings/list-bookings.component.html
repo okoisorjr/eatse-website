@@ -1,5 +1,22 @@
 <app-top-nav></app-top-nav>
 
+<div class="border-y-2 border-gray-600 w-full">
+  <div class="flex flex-row justify-center items-center gap-5 p-4">
+    <a routerLink="/booking/active"
+      ><div class="flex flex-col items-center justify-center cursor-pointer">
+        <i class="material-icons text-[#FFF]">event</i>
+        <p class="text-[#FFF]">Active bookings</p>
+      </div></a
+    >
+    <a routerLink="/booking/history"
+      ><div class="flex flex-col items-center justify-center cursor-pointer">
+        <i class="material-icons text-[#FFF]">history</i>
+        <p class="text-[#FFF]">Booking history</p>
+      </div></a
+    >
+  </div>
+</div>
+
 <div *ngIf="!currentUser" class="container">
   <div class="flex flex-col justify-center items-center my-25">
     <div class="py-10">
@@ -15,7 +32,7 @@
   </div>
 </div>
 
-<div *ngIf="currentUser && step === 0" class="my-3">
+<div *ngIf="currentUser" class="my-3">
   <app-service-booking
     [incoming]="currentPage"
     (sendClick)="gotoServiceBooking($event)"

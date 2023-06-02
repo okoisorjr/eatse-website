@@ -197,6 +197,8 @@
         </button>
         <button
           class="w-50 bg-[#008000] text-[#FFF] my-3 p-2 rounded-md"
+          [disabled]="newBooking.rooms.length < 3 || !newBooking.address"
+          [ngClass]="{'bg-opacity-30': newBooking.items.length < 1 || !newBooking.pickupAddress || !newBooking.deliveryAddress}"
           (click)="makePayment()"
         >
           Proceed to payment
