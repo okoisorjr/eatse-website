@@ -2,15 +2,42 @@
   <div class="container grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
     <div class="">
       <p class="text-[#FFF] font-bold text-sm">Contact us</p>
-      <p class="text-[#FFF] text-xs my-4">+234 704 763 6360</p>
-
-      <p class="text-[#FFF] text-xs my-4">
-        St.James house, 167 Adetokumbo Ademola Crescent, Wuse, Abuja
+      <p class="text-[#FFF] text-xs my-4 cursor-pointer hover:text-[#008000]">
+        <i class="ri-phone-line"></i> +234 704 763 6360
       </p>
-      <p class="text-[#FFF] text-xs">support@eatseofficaial.ng</p>
-      <div>
-        <img />
-        <img />
+
+      <p class="text-[#FFF] text-xs my-4 cursor-pointer hover:text-[#008000]">
+        <i class="ri-building-line"></i> St.James house, 167 Adetokumbo Ademola
+        Crescent, Wuse, Abuja
+      </p>
+      <p class="text-[#FFF] text-xs cursor-pointer hover:text-[#008000]">
+        <i class="ri-mail-line"></i> support@eatseofficaial.ng
+      </p>
+      <div class="flex gap-2 flex-col my-2">
+        <p class="text-[#FFF] text-sm font-bold">Social media</p>
+        <div class="flex gap-2 flex-wrap">
+          <a href="https://linkedin.com/eatse.ng" target="_blank"
+            ><i
+              class="ri-linkedin-box-fill text-blue-950 fs-16 cursor-pointer"
+            ></i
+          ></a>
+          <a href="https://www.instagram.com/eatse.nig/" target="_blank"
+            ><i class="ri-instagram-line text-pink-900 fs-16 cursor-pointer"></i
+          ></a>
+          <a href="https://twitter.com/EatseNg" target="_blank"
+            ><i class="ri-twitter-line text-blue-400 fs-16 cursor-pointer"></i
+          ></a>
+          <a
+            href="https://www.facebook.com/Eatse.com.ng?mibextid=ZbWKwL"
+            target="_blank"
+            ><i
+              class="ri-facebook-circle-fill text-blue-950 fs-16 cursor-pointer"
+            ></i
+          ></a>
+          <a href="https://eatse.ng" target="_blank"
+            ><i class="ri-whatsapp-fill text-green-700 fs-16 cursor-pointer"></i
+          ></a>
+        </div>
       </div>
     </div>
 
@@ -32,28 +59,33 @@
         routerLink="/about"
         class="text-[#FFF] text-xs my-2 cursor-pointer hover:text-[#008000]"
         style="display: block"
-        >About us</a
+        ><i class="ri-group-line"></i> About us</a
       >
       <a
         *ngIf="!currentUser"
         routerLink="/auth/sign-up"
         class="text-[#FFF] cursor-pointer hover:text-[#008000] text-xs my-2"
         style="display: block"
-        >Join us</a
+        ><i class="ri-user-follow-line"></i> Join us</a
       >
       <a
         routerLink="/contact"
         class="text-[#FFF] cursor-pointer hover:text-[#008000] text-xs my-2"
         style="display: block"
-        >Get in touch</a
+        ><i class="ri-send-plane-line"></i> Get in touch</a
       >
     </div>
 
     <div class="">
       <p class="text-[#FFF] font-bold text-sm">More</p>
-      <a routerLink="/our-policy" class="text-[#FFF] text-xs my-2 cursor-pointer hover:text-[#008000]">Privacy policy</a>
-      <p class="text-[#FFF] text-xs my-2 cursor-pointer hover:text-[#008000]">F.A.Q</p>
-      <a routerLink="/contact" class="text-[#FFF] text-xs my-2 cursor-pointer hover:text-[#008000]">Get help</a>
+      <a
+        routerLink="/our-policy"
+        class="text-[#FFF] text-xs my-2 cursor-pointer hover:text-[#008000]"
+        ><i class="ri-shield-user-line"></i> Privacy policy</a
+      >
+      <p class="text-[#FFF] text-xs my-2 cursor-pointer hover:text-[#008000]">
+        <i class="ri-questionnaire-line"></i> F.A.Q
+      </p>
     </div>
 
     <div class="col-span-2 lg:col-span-1 lg:px-auto">

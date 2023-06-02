@@ -17,7 +17,7 @@ import { BankDetails } from '../model/bank-details.model';
   styleUrls: ['./easer-registration.component.css'],
 })
 export class EaserRegistrationComponent implements OnInit {
-  step: number = 2;
+  step: number = 1;
   confirmPassword!: string;
   newEaser: NewEaser = new NewEaser();
   error: string = '';
@@ -149,5 +149,13 @@ export class EaserRegistrationComponent implements OnInit {
         this.error = error.message;
         console.log(error.errors[0].message);
       });
+  }
+
+  gotoPrivacyPolicy(){
+    this.router.navigate(['/our-policy']);
+  }
+
+  gotoTermsAndConditions(){
+    this.router.navigate(['/terms-of-service']);
   }
 }

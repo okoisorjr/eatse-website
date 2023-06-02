@@ -79,8 +79,12 @@
         <p class="text-[#FFF] text-xs lg:text-sm">
           I have agreed to the
           <span class="text-[#008000]"
-            ><a routerLink="/terms-and-conditions">terms and condition</a>
-            <a routerLink="/privacy-policy">& privacy policy</a></span
+            ><a class="hover:text-[#008000]" routerLink="/terms-of-service"
+              >terms and condition
+            </a>
+            <a class="hover:text-[#008000]" routerLink="/our-policy">
+              & privacy policy</a
+            ></span
           >
         </p>
       </div>
@@ -96,9 +100,9 @@
         <button
           [disabled]="submitted"
           class="w-100 bg-[#008000] hover:bg-[#008000]-700 text-white font-normal py-2 my-3 px-4 rounded"
-          [ngClass]="{'bg-opacity-30' : submitted}"
+          [ngClass]="{ 'bg-opacity-30': submitted }"
         >
-          {{ submitted ? 'Creating account.....' : 'Create account'}}
+          {{ submitted ? "Creating account....." : "Create account" }}
         </button>
         <p class="text-center text-[#FFF]">
           Already have an account?
