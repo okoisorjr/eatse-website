@@ -208,6 +208,8 @@
       </button>
       <button
         class="w-50 bg-[#008000] text-[#FFF] my-3 p-2 rounded-md"
+        [disabled]="newBooking.rooms.length < 3 || !newBooking.address || newBooking.cost < 4000"
+        [ngClass]="{'bg-opacity-30': newBooking.rooms.length < 3 || !newBooking.address || newBooking.cost < 4000 }"
         (click)="proceedToPay()"
       >
         Proceed to payment

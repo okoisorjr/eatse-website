@@ -17,4 +17,8 @@ export class FeaturesComponent implements OnInit {
     this.router.navigate(['/eatse/booking']);
   }
 
+  gotoEaserRegistration(){
+    this.router.navigate(['/auth/easer-registration']);
+  }
+
 }

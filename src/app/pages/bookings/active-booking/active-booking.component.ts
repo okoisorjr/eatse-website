@@ -37,6 +37,6 @@ export class ActiveBookingComponent implements OnInit {
   }
 
   gotoBooking(){
-    this.router.navigate([''])
+    this.router.navigate(['/booking'])
   }
 }

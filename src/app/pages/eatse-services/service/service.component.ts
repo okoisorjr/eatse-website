@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Auth } from '@angular/fire/auth';
 import { getDownloadURL, getStorage, ref } from '@angular/fire/storage';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
@@ -14,7 +15,7 @@ export class ServiceComponent implements OnInit {
   service: any;
   selectedService: any;
 
-  constructor(private router: Router, private ar: ActivatedRoute, private globalService: GlobalResourceService) { }
+  constructor(private router: Router, private ar: ActivatedRoute, private globalService: GlobalResourceService, private auth: Auth) { }
 
   ngOnInit(): void {
     this.router.events.subscribe((event) => {
@@ -35,6 +36,11 @@ export class ServiceComponent implements OnInit {
   }
 
   routeToBooking(service: string){
-    this.router.navigate(['/booking/' + service]);
+    if(this.auth.currentUser){
+      this.router.navigate(['/booking/' + service]);
+    }else{
+      this.router.navigate(['auth', 'sign-in']);
+    }
+    
   }
 }

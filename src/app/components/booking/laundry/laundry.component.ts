@@ -7,10 +7,10 @@ import {
   PaymentSuccessResponse,
 } from 'flutterwave-angular-v3';
 import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
-import { Room } from 'src/app/pages/bookings/model/room';
 import { DatePickerComponent } from '../../date-picker/date-picker.component';
 import { LaundryItems } from 'src/app/pages/bookings/model/laundry-items';
 import { NotifierService } from 'angular-notifier';
+import { BookingsService } from 'src/app/services/bookings.service';
 
 interface AvailableTime {
   id: string;
@@ -49,9 +49,16 @@ export class LaundryComponent implements OnInit {
     private ar: ActivatedRoute,
     private auth: Auth,
     private notifier: NotifierService,
+    private bookingService: BookingsService,
     private flutterwave: Flutterwave,
     private router: Router
-  ) {}
+  ) {
+    this.auth.onAuthStateChanged((credentials) => {
+      if (credentials) {
+        this.currentUser = credentials;
+      }
+    });
+  }
 
   ngAfterViewInit() {
     this.resetButton.resetSelectedDates();
@@ -77,16 +84,19 @@ export class LaundryComponent implements OnInit {
       { id: '1', time: '05:00', period: 'pm' },
     ];
     this.laundryItems = [
-      {items: 'Shirts/blouse/tops', count: 0, price: '300', totalPrice: 0 },
-      {items: 'Shorts/skirts/bottoms', count: 0, price: '300', totalPrice: 0},
-      {items: 'Suits/coats', count: 0, price: '500', totalPrice: 0},
-      {items: 'Sweaters/joggers/outer-wears', count: 0, price: '400', totalPrice: 0},
-      {items: 'Dresses/gowns/kimonos', count: 0, price: '300', totalPrice: 0},
-      {items: 'Curtains/bed-sheets', count: 0, price: '500', totalPrice: 0},
-      {items: 'Others', count: 0, price: '200', totalPrice: 0},
+      { items: 'Shirts/blouse/tops', count: 0, price: '300', totalPrice: 0 },
+      { items: 'Shorts/skirts/bottoms', count: 0, price: '300', totalPrice: 0 },
+      { items: 'Suits/coats', count: 0, price: '500', totalPrice: 0 },
+      {
+        items: 'Sweaters/joggers/outer-wears',
+        count: 0,
+        price: '400',
+        totalPrice: 0,
+      },
+      { items: 'Dresses/gowns/kimonos', count: 0, price: '300', totalPrice: 0 },
+      { items: 'Curtains/bed-sheets', count: 0, price: '500', totalPrice: 0 },
+      { items: 'Others', count: 0, price: '200', totalPrice: 0 },
     ];
-
-    this.currentUser = this.auth.currentUser;
     this.newBooking.cost = 0;
     this.newBooking.discountedPrice = 0;
     this.customizations = {
@@ -138,46 +148,22 @@ export class LaundryComponent implements OnInit {
   increaseItemCount(item: LaundryItems) {
     item.count++;
     this.newBooking.cost += Number(item.price);
-    if(this.newBooking.items.includes(item)){
+    if (this.newBooking.items.includes(item)) {
       this.newBooking.items[this.newBooking.items.indexOf(item)] = item;
-    }else{
+    } else {
       this.newBooking.items.push(item);
     }
-    
+
     console.log(this.newBooking);
   }
 
   decreaseItemCount(item: LaundryItems) {
     item.count--;
     this.newBooking.cost -= Number(item.price);
-    if(item.count == 0 && this.newBooking.items.includes(item)){
+    if (item.count == 0 && this.newBooking.items.includes(item)) {
       this.newBooking.items.splice(this.newBooking.items.indexOf(item), 1);
     }
     console.log(this.newBooking.items);
-  }
-
-  validateForm() {
-    if (
-      this.newBooking.address === '' ||
-      this.newBooking.frequency === '' ||
-      this.newBooking.arrivalTime === '' ||
-      this.newBooking.cost === 0
-    ) {
-      return this.notifier.notify(
-        'error',
-        'Please, make sure to fill out all the required fields'
-      );
-    } else if (
-      this.newBooking.servicePrice < 4000 ||
-      this.newBooking.cost < 4000
-    ) {
-      this.notifier.notify(
-        'error',
-        'Please, the minimum accumulated price cannot be under 4k'
-      );
-    } else {
-      return true;
-    }
   }
 
   gotoBooking() {
@@ -189,10 +175,7 @@ export class LaundryComponent implements OnInit {
   }
 
   proceedToPay() {
-    let value = this.validateForm();
-    if (value) {
-      this.makePayment();
-    }
+    this.makePayment();
   }
 
   makePayment() {
@@ -214,9 +197,17 @@ export class LaundryComponent implements OnInit {
     this.flutterwave.inlinePay(paymentData);
   }
   makePaymentCallback(response: PaymentSuccessResponse): void {
+    this.newBooking.paymentStatus = 'cancelled';
+    this.newBooking.userId = this.currentUser.uid;
+    let bookingData = { ...this.newBooking };
+    this.bookingService.saveBooking(bookingData);
     console.log('Payment callback', response);
   }
   closedPaymentModal(): void {
+    this.newBooking.paymentStatus = 'cancelled';
+    this.newBooking.userId = this.currentUser.uid;
+    let bookingData = { ...this.newBooking };
+    this.bookingService.saveBooking(bookingData);
     console.log('payment is closed');
   }
 

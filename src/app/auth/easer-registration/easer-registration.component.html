@@ -1,0 +1,192 @@
+<app-top-nav></app-top-nav>
+<div class="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+  <div class="w-full sm:col-span-1 p-5">
+    <form
+      #easerRegistrationForm="ngForm"
+      (ngSubmit)="registerEaser(easerRegistrationForm)"
+      class="flex flex-col justify-center"
+    >
+      <p class="text-[#FFF] text-center text-lg font-bold">
+        Sign up to be an Easer
+      </p>
+      <p
+        class="flex items-center gap-2 justify-center text-[#FFF] text-center text-sm my-2"
+      >
+        <i *ngIf="step === 2" (click)="previousStep()" class="material-icon"
+          >arrow</i
+        >Step {{ step }} of 2
+      </p>
+
+      <div *ngIf="step === 1">
+        <div class="py-2">
+          <input
+            name="firstname"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="First name"
+            [(ngModel)]="newEaser.firstname"
+            ngModel
+          />
+        </div>
+
+        <div class="py-2">
+          <input
+            name="lastname"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Last name"
+            [(ngModel)]="newEaser.lastname"
+            ngModel
+          />
+        </div>
+
+        <div class="py-2">
+          <input
+            name="email"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Email address"
+            [(ngModel)]="newEaser.email"
+            ngModel
+          />
+        </div>
+
+        <div class="py-2">
+          <input
+            name="phone"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Phone"
+            [(ngModel)]="newEaser.phone"
+            ngModel
+          />
+        </div>
+
+        <div class="py-2">
+          <select
+            (change)="showSelectedState($event)"
+            name="residentState"
+            class="w-full p-2 rounded-md bg-[#111014] text-gray-400"
+          >
+            <option disabled selected>State of residence</option>
+            <option *ngFor="let state of states">{{ state }}</option>
+          </select>
+        </div>
+
+        <div class="py-2">
+          <input
+            name="residentCity"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="City of residence"
+            [(ngModel)]="newEaser.residentCity"
+            ngModel
+          />
+        </div>
+
+        <div class="py-2">
+          <input
+            name="residentAddress"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Residential address"
+            [(ngModel)]="newEaser.residentAddress"
+            ngModel
+          />
+        </div>
+
+        <button
+          [disabled]="
+            !newEaser.firstname ||
+            !newEaser.lastname ||
+            !newEaser.email ||
+            !newEaser.phone ||
+            !newEaser.residentState ||
+            !newEaser.residentCity ||
+            !newEaser.residentAddress
+          "
+          class="w-100 bg-[#008000] hover:bg-[#008000]-700 text-white font-normal py-2 my-3 px-4 rounded"
+          [ngClass]="{
+            'bg-opacity-30':
+              !newEaser.firstname ||
+              !newEaser.lastname ||
+              !newEaser.email ||
+              !newEaser.phone ||
+              !newEaser.residentState ||
+              !newEaser.residentCity ||
+              !newEaser.residentAddress
+          }"
+          (click)="nextStep()"
+        >
+          Next
+        </button>
+      </div>
+
+      <div *ngIf="step === 2">
+        <div class="py-2">
+          <input
+            name="accountName"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Bank account holder's name"
+            [(ngModel)]="accountDetails.accountName"
+            ngModel
+          />
+        </div>
+
+        <div class="py-2">
+          <input
+            name="accountNo"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Account number"
+            [(ngModel)]="accountDetails.accountNo"
+            ngModel
+          />
+        </div>
+
+        <div class="py-2">
+          <select
+            (change)="showSelectedBank($event)"
+            name="bank"
+            class="w-full p-2 rounded-md bg-[#111014] text-gray-400"
+          >
+            <option disabled selected>Choose bank</option>
+            <option *ngFor="let bank of banks">{{ bank }}</option>
+          </select>
+        </div>
+
+        <div class="flex flex-row gap-2 py-2 justify-center">
+          <input type="checkbox" class="mt-1 self-start accent-[#008000]" />
+          <p class="text-[#FFF] text-xs lg:text-sm">
+            I have agreed to the
+            <span class="text-[#008000]"
+              ><a routerLink="/terms-and-conditions">terms and condition </a>
+              <a routerLink="/privacy-policy"> & privacy policy</a></span
+            >
+          </p>
+        </div>
+
+        <div
+          *ngIf="error"
+          class="w-100 bg-red-600 bg-opacity-25 p-2.5 my-2 rounded-md"
+        >
+          <p class="text-[#FFF] text-sm text-center">{{ error }}</p>
+        </div>
+
+        <button
+          [disabled]="
+            !accountDetails.accountName ||
+            !accountDetails.accountNo ||
+            !accountDetails.bank
+          "
+          class="w-100 bg-[#008000] hover:bg-[#008000]-700 text-white font-normal py-2 my-3 px-4 rounded"
+          [ngClass]="{
+            'bg-opacity-30':
+              !accountDetails.accountName ||
+              !accountDetails.accountNo ||
+              !accountDetails.bank
+          }"
+        >
+          {{ submitted ? "Creating account....." : "Create account" }}
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="sm:col-span-1 hidden md:block lg:block">
+    <img src="assets/hero-img-sign-up.png" class="w-full" />
+  </div>
+</div>
+<app-footer></app-footer>
