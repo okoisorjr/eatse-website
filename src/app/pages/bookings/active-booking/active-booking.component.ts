@@ -37,6 +37,10 @@ export class ActiveBookingComponent implements OnInit {
   }
 
   gotoBooking(){
-    this.router.navigate(['/booking'])
+    if(this.auth.currentUser){
+      this.router.navigate(['/booking']);
+    }else{
+      this.router.navigate(['/auth/sign-in']);
+    }
   }
 }

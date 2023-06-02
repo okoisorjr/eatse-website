@@ -12,8 +12,11 @@
       <p
         class="flex items-center gap-2 justify-center text-[#FFF] text-center text-sm my-2"
       >
-        <i *ngIf="step === 2" (click)="previousStep()" class="material-icon"
-          >arrow</i
+        <i
+          *ngIf="step === 2"
+          (click)="previousStep()"
+          class="ri-arrow-left-line"
+        ></i
         >Step {{ step }} of 2
       </p>
 
@@ -148,13 +151,17 @@
           </select>
         </div>
 
-        <div class="flex flex-row gap-2 py-2 justify-center">
+        <div class="flex flex-row gap-2 py-2">
           <input type="checkbox" class="mt-1 self-start accent-[#008000]" />
           <p class="text-[#FFF] text-xs lg:text-sm">
             I have agreed to the
             <span class="text-[#008000]"
-              ><a routerLink="/terms-and-conditions">terms and condition </a>
-              <a routerLink="/privacy-policy"> & privacy policy</a></span
+              ><a class="hover:text-[#008000]" routerLink="/terms-of-service"
+                >terms and condition
+              </a>
+              <a class="hover:text-[#008000]" routerLink="/our-policy">
+                & privacy policy</a
+              ></span
             >
           </p>
         </div>
