@@ -50,6 +50,7 @@ export class MobileMenuComponent implements OnInit {
   }
 
   logOut() {
+    this.hideMenu();
     this.signOut.emit();
   }
 }

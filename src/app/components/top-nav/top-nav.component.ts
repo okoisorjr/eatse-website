@@ -19,9 +19,12 @@ export class TopNavComponent implements OnInit {
   constructor(
     private router: Router,
     private auth: Auth,
-    private authService: AuthService,
-    private user: GlobalResourceService
   ) {
+    this.auth.onAuthStateChanged((credential) => {
+      if(credential){
+        this.currentUser = credential;
+      }
+    })
   }
 
   ngOnInit(): void {
@@ -50,6 +53,7 @@ export class TopNavComponent implements OnInit {
 
   signOut(){
     this.auth.signOut();
+    this.router.navigate(['auth', 'sign-in']);
   }
 
   gotoLogin() {

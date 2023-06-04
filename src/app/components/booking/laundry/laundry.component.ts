@@ -56,6 +56,13 @@ export class LaundryComponent implements OnInit {
     this.auth.onAuthStateChanged((credentials) => {
       if (credentials) {
         this.currentUser = credentials;
+        this.customerDetails = {
+          name: this.currentUser.displayName
+            ? this.currentUser.displayName
+            : this.currentUser.email,
+          email: this.currentUser.email,
+          userId: this.currentUser.uid,
+        };
       }
     });
   }
@@ -103,13 +110,6 @@ export class LaundryComponent implements OnInit {
       title: 'Eatse Global Resources Ltd.',
       description: `Payment for the ${this.newBooking.service} service`,
       logo: 'https://firebasestorage.googleapis.com/v0/b/eatse-4dbd3.appspot.com/o/service-images%2Fbrand-logo.jpg?alt=media&token=9ba32825-4020-4d8d-ae29-76ffc41a35a5',
-    };
-    this.customerDetails = {
-      name: this.currentUser.displayName
-        ? this.currentUser.displayName
-        : this.currentUser.email,
-      email: this.currentUser.email,
-      userId: this.currentUser.uid,
     };
     this.meta = {
       service: this.newBooking.service,
