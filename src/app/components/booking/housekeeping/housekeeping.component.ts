@@ -1,11 +1,9 @@
 import {
   Component,
   OnInit,
-  Input,
   Output,
   EventEmitter,
   ViewChild,
-  AfterViewInit,
 } from '@angular/core';
 import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
 import { DatePickerComponent } from '../../date-picker/date-picker.component';
@@ -20,6 +18,7 @@ import { Auth } from '@angular/fire/auth';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 import { Room } from 'src/app/pages/bookings/model/room';
 import { ActivatedRoute, Router } from '@angular/router';
+import { serverTimestamp } from '@angular/fire/firestore';
 
 interface AvailableTime {
   id: string;
@@ -248,7 +247,7 @@ export class HousekeepingComponent implements OnInit {
         : this.newBooking.cost,
       currency: 'NGN',
       payment_options: 'card,ussd',
-      redirect_url: '',
+      redirect_url: 'https://eatse.ng/booking/active',
       meta: this.meta,
       customer: this.customerDetails,
       customizations: this.customizations,
@@ -260,16 +259,16 @@ export class HousekeepingComponent implements OnInit {
     this.flutterwave.inlinePay(paymentData);
   }
   makePaymentCallback(response: PaymentSuccessResponse): void {
-    this.newBooking.paymentStatus = 'cancelled';
+    this.newBooking.paymentStatus = 'successful';
     this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking };
+    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
     this.bookingService.saveBooking(bookingData);
     console.log('Payment callback', response);
   }
   closedPaymentModal(): void {
     this.newBooking.paymentStatus = 'cancelled';
     this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking };
+    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
     this.bookingService.saveBooking(bookingData);
     console.log('payment is closed');
   }

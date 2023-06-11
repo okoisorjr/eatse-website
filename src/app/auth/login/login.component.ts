@@ -54,8 +54,19 @@ export class LoginComponent implements OnInit {
       })
       .catch((error) => {
         this.submitted = false;
-        this.error = error.message;
-      })
+        if(error.code === 'auth/user-disabled'){
+          this.error = 'Account Inactive!';
+        }
+        else if(error.code === 'auth/user-not-found'){
+          this.error = 'This Account Does Not Exist!';
+        }
+        else if(error.code === 'auth/wrong-password'){
+          this.error = 'Invalid Login Credentials!';
+        }
+        else if(error.code === 'auth/invalid-email'){
+          this.error = 'Invalid Email Address!';
+        }
+      });
     }
   }
 }

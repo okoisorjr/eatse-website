@@ -29,6 +29,6 @@ export class ContactComponent implements OnInit {
 
   submitForm(form: any) {
     console.log(form.value);
-    this.contactService.sendMessage(form.value);
+    this.contactService.sendMessage(form.value, this.auth.currentUser?.uid);
   }
 }

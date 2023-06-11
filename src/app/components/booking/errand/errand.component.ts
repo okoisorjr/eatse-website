@@ -6,6 +6,7 @@ import { Flutterwave, PaymentSuccessResponse } from 'flutterwave-angular-v3';
 import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
 import { BookingsService } from 'src/app/services/bookings.service';
 import { DatePickerComponent } from '../../date-picker/date-picker.component';
+import { serverTimestamp } from '@angular/fire/firestore';
 
 interface AvailableTime {
   id: string;
@@ -172,14 +173,16 @@ export class ErrandComponent implements OnInit {
     this.flutterwave.inlinePay(paymentData);
   }
   makePaymentCallback(response: PaymentSuccessResponse): void {
+    this.newBooking.paymentStatus = 'successful';
     this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking };
+    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
     this.bookingService.saveBooking(bookingData);
     console.log('Payment callback', response);
   }
   closedPaymentModal(): void {
+    this.newBooking.paymentStatus = 'cancelled';
     this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking };
+    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
     this.bookingService.saveBooking(bookingData);
     console.log('payment is closed');
   }
