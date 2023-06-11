@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BookingsService } from 'src/app/services/bookings.service';
 import { Auth } from '@angular/fire/auth';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
+import { serverTimestamp } from '@angular/fire/firestore';
 
 interface AvailableTime {
   id: string;
@@ -231,10 +232,7 @@ export class DeepCleaningComponent implements OnInit {
   }
 
   proceedToPay() {
-    let value = this.validateForm();
-    if (value) {
-      this.makePayment();
-    }
+    this.makePayment();
   }
 
   makePayment() {
@@ -258,16 +256,16 @@ export class DeepCleaningComponent implements OnInit {
     this.flutterwave.inlinePay(paymentData);
   }
   makePaymentCallback(response: PaymentSuccessResponse): void {
-    this.newBooking.paymentStatus = 'cancelled';
+    this.newBooking.paymentStatus = 'successful';
     this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking };
+    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
     this.bookingService.saveBooking(bookingData);
     console.log('Payment callback', response);
   }
   closedPaymentModal(): void {
     this.newBooking.paymentStatus = 'cancelled';
     this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking };
+    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
     this.bookingService.saveBooking(bookingData);
     console.log('payment is closed');
   }

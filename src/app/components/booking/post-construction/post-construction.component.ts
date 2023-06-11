@@ -6,6 +6,7 @@ import { BookingsService } from 'src/app/services/bookings.service';
 import { DatePickerComponent } from '../../date-picker/date-picker.component';
 import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
 import { Auth } from '@angular/fire/auth';
+import { serverTimestamp } from '@angular/fire/firestore';
 
 interface Room {
   price: string;
@@ -232,13 +233,17 @@ export class PostConstructionComponent implements OnInit {
     this.flutterwave.inlinePay(paymentData);
   }
   makePaymentCallback(response: PaymentSuccessResponse): void {
-    this.newBooking.paymentStatus = 'success';
+    this.newBooking.paymentStatus = 'successful';
     this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking };
+    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
     this.bookingService.saveBooking(bookingData);
     console.log('Payment callback', response);
   }
   closedPaymentModal(): void {
+    this.newBooking.paymentStatus = 'cancelled';
+    this.newBooking.userId = this.auth.currentUser?.uid;
+    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
+    this.bookingService.saveBooking(bookingData);
     console.log('payment is closed');
   }
 

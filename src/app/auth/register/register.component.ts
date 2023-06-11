@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { NewUser } from '../models/new-user.model';
 import {
   addDoc,
+  serverTimestamp,
   Firestore,
   collection,
   setDoc,
@@ -51,14 +52,14 @@ export class RegisterComponent implements OnInit {
     )
       .then((res) => {
         this.submitted = false;
-        let userInfo = { ...this.newUser, id: res.user.uid };
-        const dbInstance = collection(this.fs, 'clients');
+        let userInfo = { ...this.newUser, id: res.user.uid, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
+        const dbInstance = doc(this.fs, 'clients', res.user.uid);
         updateProfile(res.user, {
           displayName: this.newUser.firstname + ' ' + this.newUser.lastname,
         });
         sendEmailVerification(res.user);
         //setDoc(doc(dbInstance, 'clients'), userInfo, { merge: true});
-        addDoc(dbInstance, userInfo)
+        setDoc(dbInstance, userInfo)
           .then((res) => {
             this.auth.signOut();
             this.router.navigate(['/auth/registration-success']);

@@ -5,6 +5,8 @@ import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
 import { BookingsService } from 'src/app/services/bookings.service';
 import { DatePickerComponent } from '../../date-picker/date-picker.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { serverTimestamp } from '@angular/fire/firestore';
+import { Auth } from '@angular/fire/auth';
 
 interface Room {
   price: string;
@@ -53,6 +55,7 @@ export class FumigationComponent implements OnInit {
     private notifier: NotifierService,
     private bookingService: BookingsService,
     private router: Router,
+    private auth: Auth,
     private ar: ActivatedRoute
   ) {}
 
@@ -229,12 +232,16 @@ export class FumigationComponent implements OnInit {
     this.flutterwave.inlinePay(paymentData);
   }
   makePaymentCallback(response: PaymentSuccessResponse): void {
-    this.newBooking.paymentStatus = 'success';
-    let bookingData = { ...this.newBooking };
+    this.newBooking.paymentStatus = 'successful';
+    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
     this.bookingService.saveBooking(bookingData);
     console.log('Payment callback', response);
   }
   closedPaymentModal(): void {
+    this.newBooking.paymentStatus = 'cancelled';
+    this.newBooking.userId = this.auth.currentUser?.uid;
+    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
+    this.bookingService.saveBooking(bookingData);
     console.log('payment is closed');
   }
 

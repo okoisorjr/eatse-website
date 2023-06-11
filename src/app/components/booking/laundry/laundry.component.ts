@@ -11,6 +11,7 @@ import { DatePickerComponent } from '../../date-picker/date-picker.component';
 import { LaundryItems } from 'src/app/pages/bookings/model/laundry-items';
 import { NotifierService } from 'angular-notifier';
 import { BookingsService } from 'src/app/services/bookings.service';
+import { serverTimestamp } from '@angular/fire/firestore';
 
 interface AvailableTime {
   id: string;
@@ -197,16 +198,16 @@ export class LaundryComponent implements OnInit {
     this.flutterwave.inlinePay(paymentData);
   }
   makePaymentCallback(response: PaymentSuccessResponse): void {
-    this.newBooking.paymentStatus = 'cancelled';
+    this.newBooking.paymentStatus = 'successful';
     this.newBooking.userId = this.currentUser.uid;
-    let bookingData = { ...this.newBooking };
+    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
     this.bookingService.saveBooking(bookingData);
     console.log('Payment callback', response);
   }
   closedPaymentModal(): void {
     this.newBooking.paymentStatus = 'cancelled';
     this.newBooking.userId = this.currentUser.uid;
-    let bookingData = { ...this.newBooking };
+    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
     this.bookingService.saveBooking(bookingData);
     console.log('payment is closed');
   }

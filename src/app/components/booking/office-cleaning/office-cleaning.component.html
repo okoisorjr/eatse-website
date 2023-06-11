@@ -12,7 +12,7 @@
           name="officeLocation"
           type="text"
           placeholder="Office location"
-          [(ngModel)]="newBooking.officeLocation"
+          [(ngModel)]="newOfficeBooking.officeLocation"
         />
       </div>
       <div class="">
@@ -21,7 +21,7 @@
           name="officeEmail"
           type="text"
           placeholder="Email"
-          [(ngModel)]="newBooking.officeEmail"
+          [(ngModel)]="newOfficeBooking.officeEmail"
         />
       </div>
       <div class="">
@@ -30,7 +30,7 @@
           name="officePhone"
           type="text"
           placeholder="Phone number"
-          [(ngModel)]="newBooking.officeContact"
+          [(ngModel)]="newOfficeBooking.officeContact"
         />
       </div>
       <div class="">
@@ -39,6 +39,7 @@
           name="extraInfo"
           [rows]="12"
           placeholder="Enter additional information"
+          [(ngModel)]="newOfficeBooking.extraInformation"
         ></textarea>
       </div>
     </div>
@@ -66,16 +67,16 @@
   </button>
   <button
     [disabled]="
-      newBooking.dates.length === 0 ||
-      !newBooking.arrivalTime ||
-      !newBooking.period
+      !newOfficeBooking.officeLocation ||
+      !newOfficeBooking.officeEmail ||
+      !newOfficeBooking.officeContact
     "
     class="w-30 bg-[#008000] text-[#FFF] my-3 p-2 rounded-md"
     [ngClass]="{
       'bg-opacity-30':
-        newBooking.dates.length === 0 ||
-        !newBooking.arrivalTime ||
-        !newBooking.period
+      !newOfficeBooking.officeLocation ||
+      !newOfficeBooking.officeEmail ||
+      !newOfficeBooking.officeContact
     }"
     (click)="bookAppointment()"
   >

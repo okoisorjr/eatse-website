@@ -8,6 +8,7 @@ export interface ContactData{
   email: string;
   phone: string;
   message: string;
+  userId?: string;
 }
 
 @Injectable({
@@ -17,9 +18,9 @@ export class ContactEatseService {
 
   constructor(private fs: Firestore, private auth: Auth) { }
 
-  sendMessage(contactData: ContactData){
+  sendMessage(contactData: ContactData, userId: any){
     const contactsRef = collection(this.fs, 'contacts');
-    addDoc(contactsRef, contactData)
+    addDoc(contactsRef, {contactData, userId: userId})
     .then((res) => {
       console.log(res);
     })
