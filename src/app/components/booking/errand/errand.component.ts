@@ -32,7 +32,7 @@ export class ErrandComponent implements OnInit {
   dates: string[] = [];
   currentUser: any;
   customizations: any;
-  publicKey = 'FLWPUBK_TEST-b54f62bb20ff93d14f9e0b14163e1bd6-X';
+  publicKey = 'FLWPUBK-ec9db7d42d78c3e5587c8a1f6801cb4c-X';
 
   customerDetails!: any;
   meta!: any;
