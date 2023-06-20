@@ -1,5 +1,17 @@
-import { Component, OnInit, Output, Input, ViewChild, AfterViewInit, EventEmitter } from '@angular/core';
-import { Flutterwave, InlinePaymentOptions, PaymentSuccessResponse } from 'flutterwave-angular-v3';
+import {
+  Component,
+  OnInit,
+  Output,
+  Input,
+  ViewChild,
+  AfterViewInit,
+  EventEmitter,
+} from '@angular/core';
+import {
+  Flutterwave,
+  InlinePaymentOptions,
+  PaymentSuccessResponse,
+} from 'flutterwave-angular-v3';
 import { Room } from 'src/app/pages/bookings/model/room';
 import { DatePickerComponent } from '../../date-picker/date-picker.component';
 import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
@@ -19,10 +31,9 @@ interface AvailableTime {
 @Component({
   selector: 'app-deep-cleaning',
   templateUrl: './deep-cleaning.component.html',
-  styleUrls: ['./deep-cleaning.component.css']
+  styleUrls: ['./deep-cleaning.component.css'],
 })
 export class DeepCleaningComponent implements OnInit {
-
   @Output() updateBooking = new EventEmitter();
 
   @ViewChild(DatePickerComponent) resetButton!: DatePickerComponent;
@@ -38,7 +49,7 @@ export class DeepCleaningComponent implements OnInit {
   paymentStatus!: string;
   currentUser: any;
 
-  publicKey = 'FLWPUBK_TEST-b54f62bb20ff93d14f9e0b14163e1bd6-X';
+  publicKey = 'FLWPUBK-ec9db7d42d78c3e5587c8a1f6801cb4c-X';
   customizations: any;
   customerDetails: any;
   meta!: any;
@@ -54,7 +65,7 @@ export class DeepCleaningComponent implements OnInit {
     private router: Router
   ) {
     this.auth.onAuthStateChanged((credential) => {
-      if(credential){
+      if (credential) {
         this.currentUser = credential;
         this.customerDetails = {
           email: this.currentUser.email,
@@ -137,7 +148,7 @@ export class DeepCleaningComponent implements OnInit {
   }
 
   nextPhase() {
-    window.scrollTo({top: 0});
+    window.scrollTo({ top: 0 });
     if (
       this.newBooking.frequency === 'monthly' &&
       this.newBooking.dates.length <= 3 &&
@@ -258,14 +269,22 @@ export class DeepCleaningComponent implements OnInit {
   makePaymentCallback(response: PaymentSuccessResponse): void {
     this.newBooking.paymentStatus = 'successful';
     this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
+    let bookingData = {
+      ...this.newBooking,
+      createdAt: serverTimestamp(),
+      lastModified: serverTimestamp(),
+    };
     this.bookingService.saveBooking(bookingData);
     console.log('Payment callback', response);
   }
   closedPaymentModal(): void {
     this.newBooking.paymentStatus = 'cancelled';
     this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
+    let bookingData = {
+      ...this.newBooking,
+      createdAt: serverTimestamp(),
+      lastModified: serverTimestamp(),
+    };
     this.bookingService.saveBooking(bookingData);
     console.log('payment is closed');
   }
