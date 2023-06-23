@@ -7,6 +7,7 @@ import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
 import { BookingsService } from 'src/app/services/bookings.service';
 import { DatePickerComponent } from '../../date-picker/date-picker.component';
 import { serverTimestamp } from '@angular/fire/firestore';
+import { environment } from 'src/environments/environment';
 
 interface AvailableTime {
   id: string;
@@ -32,7 +33,7 @@ export class ErrandComponent implements OnInit {
   dates: string[] = [];
   currentUser: any;
   customizations: any;
-  publicKey = 'FLWPUBK-ec9db7d42d78c3e5587c8a1f6801cb4c-X';
+  publicKey = environment.flutterwavePublicKey;
 
   customerDetails!: any;
   meta!: any;

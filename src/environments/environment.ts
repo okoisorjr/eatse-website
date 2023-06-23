@@ -13,6 +13,7 @@ export const environment = {
     measurementId: "G-24592D18H2"
   },
   production: false,
+  flutterwavePublicKey: 'FLWPUBK-ec9db7d42d78c3e5587c8a1f6801cb4c-X'
 }; 
 
 /*

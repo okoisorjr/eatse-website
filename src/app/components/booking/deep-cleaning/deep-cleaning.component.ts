@@ -21,6 +21,7 @@ import { BookingsService } from 'src/app/services/bookings.service';
 import { Auth } from '@angular/fire/auth';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 import { serverTimestamp } from '@angular/fire/firestore';
+import { environment } from 'src/environments/environment';
 
 interface AvailableTime {
   id: string;
@@ -49,7 +50,7 @@ export class DeepCleaningComponent implements OnInit {
   paymentStatus!: string;
   currentUser: any;
 
-  publicKey = 'FLWPUBK-ec9db7d42d78c3e5587c8a1f6801cb4c-X';
+  publicKey = environment.flutterwavePublicKey;
   customizations: any;
   customerDetails: any;
   meta!: any;

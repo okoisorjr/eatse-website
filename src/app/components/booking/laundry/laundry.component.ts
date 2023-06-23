@@ -12,6 +12,7 @@ import { LaundryItems } from 'src/app/pages/bookings/model/laundry-items';
 import { NotifierService } from 'angular-notifier';
 import { BookingsService } from 'src/app/services/bookings.service';
 import { serverTimestamp } from '@angular/fire/firestore';
+import { environment } from 'src/environments/environment';
 
 interface AvailableTime {
   id: string;
@@ -38,7 +39,7 @@ export class LaundryComponent implements OnInit {
   currentUser: any;
   selectedLaundryItems: LaundryItems[] = [];
 
-  publicKey = 'FLWPUBK-ec9db7d42d78c3e5587c8a1f6801cb4c-X';
+  publicKey = environment.flutterwavePublicKey;
   customizations: any;
   customerDetails: any;
   meta!: any;
