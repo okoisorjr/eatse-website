@@ -7,6 +7,7 @@ import { DatePickerComponent } from '../../date-picker/date-picker.component';
 import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
 import { Auth } from '@angular/fire/auth';
 import { serverTimestamp } from '@angular/fire/firestore';
+import { environment } from 'src/environments/environment';
 
 interface Room {
   price: string;
@@ -39,7 +40,7 @@ export class PostConstructionComponent implements OnInit {
   rooms!: Room[];
   paymentStatus!: string;
 
-  publicKey = 'FLWPUBK-ec9db7d42d78c3e5587c8a1f6801cb4c-X';
+  publicKey = environment.flutterwavePublicKey;
 
   customerDetails!: any;
   meta!: any;

@@ -19,6 +19,7 @@ import { GlobalResourceService } from 'src/app/global-resource/global-resource.s
 import { Room } from 'src/app/pages/bookings/model/room';
 import { ActivatedRoute, Router } from '@angular/router';
 import { serverTimestamp } from '@angular/fire/firestore';
+import { environment } from 'src/environments/environment';
 
 interface AvailableTime {
   id: string;
@@ -48,7 +49,7 @@ export class HousekeepingComponent implements OnInit {
   paymentStatus!: string;
   currentUser: any;
 
-  publicKey = 'FLWPUBK-ec9db7d42d78c3e5587c8a1f6801cb4c-X';
+  publicKey = environment.flutterwavePublicKey;
   customizations: any;
   customerDetails: any;
   meta!: any;
@@ -61,7 +62,7 @@ export class HousekeepingComponent implements OnInit {
     private bookingService: BookingsService,
     private auth: Auth,
     private globalService: GlobalResourceService,
-    private router: Router
+    private router: Router,
   ) {
     this.currentUser = this.globalService.getCurrentUser();
     this.rooms = [

@@ -7,6 +7,7 @@ import { DatePickerComponent } from '../../date-picker/date-picker.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { serverTimestamp } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
+import { environment } from 'src/environments/environment';
 
 interface Room {
   price: string;
@@ -39,7 +40,7 @@ export class FumigationComponent implements OnInit {
   totalCost!: string;
   paymentStatus!: string;
 
-  publicKey = 'FLWPUBK-ec9db7d42d78c3e5587c8a1f6801cb4c-X';
+  publicKey = environment.flutterwavePublicKey;
 
   customerDetails!: any;
   meta!: any;
