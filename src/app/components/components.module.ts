@@ -26,6 +26,7 @@ import { FumigationComponent } from './booking/fumigation/fumigation.component';
 import { OfficeCleaningComponent } from './booking/office-cleaning/office-cleaning.component';
 import { PostConstructionComponent } from './booking/post-construction/post-construction.component';
 import { MoveInOutComponent } from './booking/move-in-out/move-in-out.component';
+import { EatseCaresComponent } from './eatse-cares/eatse-cares.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { MoveInOutComponent } from './booking/move-in-out/move-in-out.component'
     FumigationComponent,
     OfficeCleaningComponent,
     PostConstructionComponent,
-    MoveInOutComponent
+    MoveInOutComponent,
+    EatseCaresComponent
   ],
   imports: [CommonModule, ComponentsRoutingModule, NgbModule, FormsModule, FlutterwaveModule],
   exports: [
@@ -57,6 +59,7 @@ import { MoveInOutComponent } from './booking/move-in-out/move-in-out.component'
     HeroComponent,
     BookingProcessComponent,
     EatseServicesComponent,
+    EatseCaresComponent,
     FeaturesComponent,
     TestimonialsComponent,
     BannerComponent,
