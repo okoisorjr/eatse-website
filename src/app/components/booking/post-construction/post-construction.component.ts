@@ -102,11 +102,15 @@ export class PostConstructionComponent implements OnInit {
       { id: '1', time: '05:00', period: 'pm' },
     ];
     this.rooms = [
-      { price: '15000', roomType: 'Living room', count: 0 },
-      { price: '10000', roomType: 'Bedroom', count: 0 },
-      { price: '10000', roomType: 'Kitchen', count: 0 },
-      { price: '10000', roomType: 'Dinning area', count: 0 },
-      { price: '5000', roomType: 'Study', count: 0 },
+      { price: '25000', roomType: 'Living room', count: 0 },
+      { price: '15000', roomType: 'Bedroom', count: 0 },
+      { price: '15000', roomType: 'Kitchen', count: 0 },
+      { price: '15000', roomType: 'Dinning area', count: 0 },
+      { price: '15000', roomType: 'Gym', count: 0 },
+      { price: '15000', roomType: 'Cinema/Studio', count: 0 },
+      { price: '15000', roomType: 'Home Office', count: 0 },
+      { price: '10000', roomType: 'Study', count: 0 },
+      { price: '5000', roomType: 'Rest Room', count: 0 },
       { price: '5000', roomType: 'Store', count: 0 },
       { price: '5000', roomType: 'Outdoor / Balcony', count: 0 },
     ];

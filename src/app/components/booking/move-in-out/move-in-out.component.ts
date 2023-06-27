@@ -102,12 +102,13 @@ export class MoveInOutComponent implements OnInit {
       { id: '1', time: '05:00', period: 'pm' },
     ];
     this.rooms = [
-      { price: '5000', roomType: 'Living room / dining area', count: 0 },
-      { price: '5000', roomType: 'Bedroom', count: 0 },
-      { price: '5000', roomType: 'Kitchen', count: 0 },
-      { price: '2500', roomType: 'Study', count: 0 },
-      { price: '2000', roomType: 'Store', count: 0 },
-      { price: '2500', roomType: 'Outdoor / Balcony', count: 0 },
+      { price: '10000', roomType: 'Living room / dining area', count: 0 },
+      { price: '10000', roomType: 'Bedroom', count: 0 },
+      { price: '10000', roomType: 'Kitchen', count: 0 },
+      { price: '5000', roomType: 'Study', count: 0 },
+      { price: '3000', roomType: 'Rest room', count: 0 },
+      { price: '3000', roomType: 'Store', count: 0 },
+      { price: '3000', roomType: 'Outdoor / Balcony', count: 0 },
     ];
   }
 
@@ -232,17 +233,27 @@ export class MoveInOutComponent implements OnInit {
 
     this.flutterwave.inlinePay(paymentData);
   }
+
   makePaymentCallback(response: PaymentSuccessResponse): void {
     this.newBooking.paymentStatus = 'successful';
     this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
+    let bookingData = {
+      ...this.newBooking,
+      createdAt: serverTimestamp(),
+      lastModified: serverTimestamp(),
+    };
     this.bookingService.saveBooking(bookingData);
     console.log('Payment callback', response);
   }
+  
   closedPaymentModal(): void {
     this.newBooking.paymentStatus = 'cancelled';
     this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
+    let bookingData = {
+      ...this.newBooking,
+      createdAt: serverTimestamp(),
+      lastModified: serverTimestamp(),
+    };
     this.bookingService.saveBooking(bookingData);
     console.log('payment is closed');
   }

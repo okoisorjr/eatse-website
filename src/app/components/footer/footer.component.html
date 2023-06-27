@@ -101,12 +101,17 @@
       <p class="text-[#FFF] font-bold text-sm">More</p>
       <a
         routerLink="/our-policy"
-        class="text-[#FFF] text-xs my-2 cursor-pointer hover:text-[#008000]"
+        class="text-[#FFF] text-xs my-2 cursor-pointer hover:text-[#008000] block"
         >Privacy policy</a
       >
-      <p class="text-[#FFF] text-xs my-2 cursor-pointer hover:text-[#008000]">
+      <a
+        routerLink="/terms-and-conditions"
+        class="text-[#FFF] text-xs my-2 cursor-pointer hover:text-[#008000] block"
+        >Terms & Conditions </a
+      >
+      <a routerLink="/faq" class="text-[#FFF] text-xs my-2 cursor-pointer hover:text-[#008000] block">
         F.A.Q
-      </p>
+      </a>
     </div>
 
     <div class="col-span-2 lg:col-span-1 lg:px-auto">
@@ -127,7 +132,7 @@
 </div>
 <div class="border-t py-2 border-gray-700">
   <div class="container flex flex-row justify-between items-center">
-    <a routerLink="eatse"><img src="assets/logo.png" class="" /></a>
+    <a routerLink="/"><img src="assets/logo.png" class="" /></a>
     <p class="text-sm text-gray-500">&copy; Eatse 2023</p>
   </div>
 </div>
