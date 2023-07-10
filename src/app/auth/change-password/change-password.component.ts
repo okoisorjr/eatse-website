@@ -35,7 +35,7 @@ export class ChangePasswordComponent implements OnInit {
       this.error = 'Sorry, the passwords do not match!'
       this.submitted = false;
     }else{
-      confirmPasswordReset(this.auth, 'BTSNC4_jjUwOSJFM1YRdSioDeRnrOQzm5uOqm8BLyeAAAAGJQEW83A', this.newPassword).then((res) => {
+      confirmPasswordReset(this.auth, this.oobCode, this.newPassword).then((res) => {
         console.log(res);
         
       }).catch((error) => {
