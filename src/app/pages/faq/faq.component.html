@@ -4,14 +4,15 @@
     Frequently asked questions
   </p>
 </div>
-<div class="container">
+
+<div class="container my-5">
   <p-accordion>
-    <p-accordionTab style="margin: 10px">
+    <p-accordionTab>
       <ng-template pTemplate="header">
         <div
           class="flex gap-2 text-[#FFF] font-semibold text-xl w-full p-3 bg-[#111014] rounded-md"
         >
-          <i class="ri-arrow-down-s-line"></i>How does the service fee work?
+          How does the service fee work?
         </div>
       </ng-template>
       <ng-template pTemplate="content">
@@ -29,12 +30,12 @@
       </ng-template>
     </p-accordionTab>
 
-    <p-accordionTab style="margin: 10px">
+    <p-accordionTab>
       <ng-template pTemplate="header">
         <div
           class="flex gap-2 text-[#FFF] font-semibold text-xl w-full p-3 bg-[#111014] rounded-md"
         >
-          <i class="ri-arrow-down-s-line"></i>How do I contact Eatse?
+          How do I contact Eatse?
         </div>
       </ng-template>
       <ng-template pTemplate="content">
@@ -44,7 +45,7 @@
             will come with a Eatse Cleaning Kit containing the following items:
           </p>
           <span class="block text-gray-600">Cleaning Products</span>
-          <ul style="list-style: disc; color: #fff; margin-left:25px;">
+          <ul style="list-style: disc; color: #fff; margin-left: 25px">
             <li class="text-gray-600">Floor cleaner</li>
             <li class="text-gray-600">Toilet cleaner</li>
             <li class="text-gray-600">Multi-purpose cleaner</li>
@@ -53,7 +54,7 @@
             <li class="text-gray-600">Wood furniture polish</li>
           </ul>
           <span class="block text-gray-600">Cleaning Equipment</span>
-          <ul style="list-style: disc; color: #fff; margin-left:25px;">
+          <ul style="list-style: disc; color: #fff; margin-left: 25px">
             <li class="text-gray-600">Vacuum cleaner</li>
             <li class="text-gray-600">Mop Bucket & spinner</li>
             <li class="text-gray-600">Microfiber cloth</li>
@@ -68,12 +69,12 @@
       </ng-template>
     </p-accordionTab>
 
-    <p-accordionTab style="margin: 10px">
+    <p-accordionTab>
       <ng-template pTemplate="header">
         <div
           class="flex gap-2 text-[#FFF] font-semibold text-xl w-full p-3 bg-[#111014] rounded-md"
         >
-          <i class="ri-arrow-down-s-line"></i>Do you supply your own cleaning
+          Do you supply your own cleaning
           materials?
         </div>
       </ng-template>
@@ -84,7 +85,7 @@
             will come with a Eatse Cleaning Kit containing the following items:
           </p>
           <span class="block text-gray-600">Cleaning Products</span>
-          <ul style="list-style: disc; color: #fff; margin-left:25px;">
+          <ul style="list-style: disc; color: #fff; margin-left: 25px">
             <li class="text-gray-600">Floor cleaner</li>
             <li class="text-gray-600">Toilet cleaner</li>
             <li class="text-gray-600">Multi-purpose cleaner</li>
@@ -93,7 +94,7 @@
             <li class="text-gray-600">Wood furniture polish</li>
           </ul>
           <span class="block text-gray-600">Cleaning Equipment</span>
-          <ul style="list-style: disc; color: #fff; margin-left:25px;">
+          <ul style="list-style: disc; color: #fff; margin-left: 25px">
             <li class="text-gray-600">Vacuum cleaner</li>
             <li class="text-gray-600">Mop Bucket & spinner</li>
             <li class="text-gray-600">Microfiber cloth</li>
@@ -108,12 +109,12 @@
       </ng-template>
     </p-accordionTab>
 
-    <p-accordionTab style="margin: 10px">
+    <p-accordionTab>
       <ng-template pTemplate="header">
         <div
           class="flex gap-2 text-[#FFF] font-semibold text-xl w-full p-3 bg-[#111014] rounded-md"
         >
-          <i class="ri-arrow-down-s-line"></i>What is housekeeping?
+          What is housekeeping?
         </div>
       </ng-template>
       <ng-template pTemplate="content">
@@ -123,7 +124,7 @@
             will come with a Eatse Cleaning Kit containing the following items:
           </p>
           <span class="block text-gray-600">Cleaning Products</span>
-          <ul style="list-style: disc; color: #fff; margin-left:25px;">
+          <ul style="list-style: disc; color: #fff; margin-left: 25px">
             <li class="text-gray-600">Floor cleaner</li>
             <li class="text-gray-600">Toilet cleaner</li>
             <li class="text-gray-600">Multi-purpose cleaner</li>
@@ -132,7 +133,7 @@
             <li class="text-gray-600">Wood furniture polish</li>
           </ul>
           <span class="block text-gray-600">Cleaning Equipment</span>
-          <ul style="list-style: disc; color: #fff; margin-left:25px;">
+          <ul style="list-style: disc; color: #fff; margin-left: 25px">
             <li class="text-gray-600">Vacuum cleaner</li>
             <li class="text-gray-600">Mop Bucket & spinner</li>
             <li class="text-gray-600">Microfiber cloth</li>
@@ -149,3 +150,11 @@
   </p-accordion>
 </div>
 <app-footer></app-footer>
+
+<ng-template #accordionHeader>
+  <div
+    class="flex gap-2 text-[#FFF] font-semibold text-xl w-full p-3 bg-[#111014] rounded-md"
+  >
+    <i class="ri-arrow-down-s-line"></i>How does the service fee work?
+  </div>
+</ng-template>
