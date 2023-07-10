@@ -1,0 +1,11 @@
+:host .accordion .accordion-header:hover a{
+  text-decoration: none ;
+  background-color: #111014;
+}
+
+.ui-accordion .ui-accordion-header .ui-icon {
+  margin-top: -8px;
+  position: absolute;
+  right: 0.5em;
+  top: 50%;
+}

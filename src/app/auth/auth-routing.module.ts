@@ -6,6 +6,7 @@ import { RegisterSuccessComponent } from './register-success/register-success.co
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { EaserRegistrationComponent } from './easer-registration/easer-registration.component';
 import { EaserSuccessComponent } from './easer-success/easer-success.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/sign-in' },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'easer-success', component: EaserSuccessComponent },
   { path: 'registration-success', component: RegisterSuccessComponent },
   { path: 'reset-password', component: ForgotPasswordComponent },
+  { path: 'new-password', component: ChangePasswordComponent },
 ];
 
 @NgModule({

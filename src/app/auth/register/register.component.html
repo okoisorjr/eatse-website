@@ -54,6 +54,16 @@
 
       <div class="py-2">
         <input
+          name="referralCode"
+          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          placeholder="Referral Code"
+          [(ngModel)]="newUser.referralCode"
+          ngModel
+        />
+      </div>
+
+      <div class="py-2">
+        <input
           type="password"
           name="password"
           class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
@@ -79,7 +89,7 @@
         <p class="text-[#FFF] text-xs lg:text-sm">
           I have agreed to the
           <span class="text-[#008000]"
-            ><a class="hover:text-[#008000]" routerLink="/terms-of-service"
+            ><a class="hover:text-[#008000]" routerLink="/terms-and-conditions"
               >terms and condition
             </a>
             <a class="hover:text-[#008000]" routerLink="/our-policy">

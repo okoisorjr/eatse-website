@@ -52,7 +52,7 @@ export class RegisterComponent implements OnInit {
     )
       .then((res) => {
         this.submitted = false;
-        let userInfo = { ...this.newUser, id: res.user.uid, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
+        let userInfo = { ...this.newUser, id: res.user.uid, easerId: null, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
         const dbInstance = doc(this.fs, 'clients', res.user.uid);
         updateProfile(res.user, {
           displayName: this.newUser.firstname + ' ' + this.newUser.lastname,

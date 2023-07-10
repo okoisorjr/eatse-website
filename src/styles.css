@@ -36,6 +36,18 @@
   background-color: #008000;
 }
 
+#firstaccordion .ui-accordion-content{
+  background-color: #000 !important; 
+}
+
+.ui-accordion{
+  background-color: #000 !important;
+}
+
+.ui-accordion .ui-accordion-content {
+  background: #000 !important;
+}
+
 body{
   position: relative;
   background-image: url('assets/waves.png');

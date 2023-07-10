@@ -1,1 +1,25 @@
-<app-top-nav> </app-top-nav> <app-footer></app-footer>
+<app-top-nav> </app-top-nav>
+<div class="container p-2">
+  <div class="container my-4">
+    <p class="text-[#FFF] font-bold uppercase text-lg">
+      Terms of Service Agreement
+    </p>
+    <p class="text-[#FFF] text-sm">
+      This Terms of Service Agreement (the "Agreement") is a legal agreement
+      between you ("User") and Eatse Cleaning Services (the "Company"),
+      governing the use of the Company's mobile application (the "App") and the
+      services provided through the App (the "Services"). By accessing or using
+      the App or Services, User agrees to be bound by this Agreement. If User
+      does not agree to be bound by this Agreement, User may not access or use
+      the App or Services.
+    </p>
+  </div>
+
+  <div class="container my-4" *ngFor="let term of terms">
+    <p class="text-[#FFF] font-bold uppercase text-lg">
+      {{ term.title }}
+    </p>
+    <p class="text-[#FFF] text-sm">{{ term.term }}</p>
+  </div>
+</div>
+<app-footer></app-footer>
