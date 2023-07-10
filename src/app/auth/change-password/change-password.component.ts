@@ -20,8 +20,8 @@ export class ChangePasswordComponent implements OnInit {
 
   ngOnInit(): void {
     this.ar.queryParams.forEach((param: any) => {
-      
-      console.log(param);
+      this.oobCode = param.oobCode;
+      //console.log(param);
     })
   }
 
@@ -35,8 +35,14 @@ export class ChangePasswordComponent implements OnInit {
       this.error = 'Sorry, the passwords do not match!'
       this.submitted = false;
     }else{
-      let res = await confirmPasswordReset(this.auth, this.oobCode, this.newPassword);
-      console.log(res);
+      confirmPasswordReset(this.auth, 'BTSNC4_jjUwOSJFM1YRdSioDeRnrOQzm5uOqm8BLyeAAAAGJQEW83A', this.newPassword).then((res) => {
+        console.log(res);
+        
+      }).catch((error) => {
+        if(error.code === 'auth/invalid-action-code'){
+          this.error = 'Invalid password reset link!';
+        }
+      });
       this.submitted = false;
     }
   }
