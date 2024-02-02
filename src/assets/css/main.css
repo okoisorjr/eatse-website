@@ -6,17 +6,7 @@
   background-color: #000 !important;
 }
 
-.custom-select{
-  background-color: #111014;
-  color: #FFF;
-}
-
-.ng-select.custom-select {
-  border:0px;
-  min-height: 0px;
-  border-radius: 0;
-}
-.ng-select.custom-select .ng-select-container  {            
-  min-height: 100px;
-  border-radius: 5;
+.image-slider{
+  height: 200px; 
+  width: 280px;
 }

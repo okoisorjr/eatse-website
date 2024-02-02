@@ -1,19 +1,19 @@
 <div class="my-5">
   <div
-    class="grid lg:grid md:grid sm:grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-2 gap-y-3 gap-3"
+    class="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 lg:gap-2 gap-y-3 gap-3"
   >
     <div
       *ngFor="let service of services"
       (click)="routeToService(service.name)"
-      class="p-6 w-72 bg-[#111014] lg:w-64 md:w-72 sm:w-48 mx-auto lg:bg-[#111014] rounded-xl flex items-center justify-center cursor-pointer"
+      class="p-3 w-72 bg-[#111014] lg:w-full md:w-full sm:w-fit mx-auto lg:bg-[#111014] rounded-xl flex items-center justify-center cursor-pointer"
     >
       <div class="flex flex-col items-center justify-center cursor-pointer">
         <img
           src="{{ service.photoURL }}"
-          class="w-18 sm:w-18 md:w-12 lg:w-20 my-3"
+          class="w-18 lg:w-20 my-3"
         />
         <h5
-          class="text-[#FFF] text-xs font-bold text-center md:text-[#FFF] lg:text-sm"
+          class="text-[#FFF] text-lg font-bold text-center md:text-[#FFF]"
         >
           {{ service.title }}
         </h5>

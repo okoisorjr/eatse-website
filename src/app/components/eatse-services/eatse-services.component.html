@@ -6,21 +6,19 @@
     >
       What do we offer our customers?
     </h1>
-    <p class="text-center text-white text-xs my-4">
+    <p class="text-center text-white text-sm my-4">
       Eatse offers a wide variety of services to suit our customers needs.
     </p>
   </div>
 
   <div class="hidden lg:block md:block">
-    <div
-      class="grid lg:grid md:grid sm:hidden md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-2 gap-y-3 gap-3"
-    >
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 lg:gap-2 gap-y-3 gap-3">
       <div
         (mouseenter)="mouseEnter($event, service)"
         (mouseleave)="mouseLeave($event, service)"
         *ngFor="let service of services"
         (click)="routeToService(service.name)"
-        class="transition ease-in-out p-6 w-72 bg-[#111014] lg:w-64 md:w-72 mx-auto lg:bg-[#111014] rounded-xl flex items-center justify-center cursor-pointer hover:border-[#008000] hover:border duration-1000"
+        class="transition ease-in-out p-3 w-72 bg-[#111014] lg:w-full md:w-full mx-auto lg:bg-[#111014] rounded-xl flex items-center justify-center cursor-pointer hover:border-[#008000] hover:border duration-1000"
       >
         <div>
           <div
@@ -29,10 +27,10 @@
           >
             <img
               src="{{ service.photoURL }}"
-              class="w-18 sm:w-18 md:w-12 lg:w-20 my-3"
+              class="w-18 lg:w-20 my-3"
             />
             <h5
-              class="text-[#FFF] text-xs font-bold text-center md:text-[#FFF] lg:text-sm"
+              class="text-[#FFF] text-lg font-bold text-center md:text-[#FFF]"
             >
               {{ service.title | titlecase }}
             </h5>
@@ -41,7 +39,10 @@
             </p>
           </div>
           <div *ngIf="service.hover">
-            <p [@show_text]="service.hover" class="text-xs text-gray-600 text-center font-bold">
+            <p
+              [@show_text]="service.hover"
+              class="text-lg lg:text-sm text-gray-600 text-center font-bold"
+            >
               {{ service.description.substring(0, 250) + "..." }}
             </p>
           </div>
