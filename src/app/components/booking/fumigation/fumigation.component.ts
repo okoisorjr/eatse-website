@@ -5,20 +5,19 @@ import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
 import { BookingsService } from 'src/app/services/bookings.service';
 import { DatePickerComponent } from '../../date-picker/date-picker.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { serverTimestamp } from '@angular/fire/firestore';
-import { Auth } from '@angular/fire/auth';
 import { environment } from 'src/environments/environment';
+import { NewOffice } from 'src/app/pages/bookings/model/new-office.model';
+import { ProfileService } from 'src/app/services/profile.service';
+import { AuthService } from 'src/app/auth/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { BuildingTypes } from 'src/app/shared/building-types';
+import { AvailableTimes } from 'src/app/shared/available-times';
 
 interface Room {
   price: string;
   roomType: string;
   count: number;
-}
-
-interface AvailableTime {
-  id: string;
-  time: string;
-  period: string;
 }
 
 @Component({
@@ -29,14 +28,18 @@ interface AvailableTime {
 export class FumigationComponent implements OnInit {
   @ViewChild(DatePickerComponent) resetButton!: DatePickerComponent;
 
+  currentUser: any;
   newBooking: NewBooking = new NewBooking();
-  step: number = 1;
+  newOffice: NewOffice = new NewOffice();
+  step: number = 0;
   buildingTypes: string[] = [];
   selectedBuilding: string = '';
   frequencies: string[] = [];
-  times: AvailableTime[] = [];
+  times: string[] = [];
+  addresses: any[] = [];
+  selectedAddress: any;
+  rooms!: any[];
 
-  rooms!: Room[];
   totalCost!: string;
   paymentStatus!: string;
 
@@ -56,8 +59,10 @@ export class FumigationComponent implements OnInit {
     private notifier: NotifierService,
     private bookingService: BookingsService,
     private router: Router,
-    private auth: Auth,
-    private ar: ActivatedRoute
+    private ar: ActivatedRoute,
+    private profileService: ProfileService,
+    private authService: AuthService,
+    private modalService: NgbModal
   ) {}
 
   ngAfterViewInit() {
@@ -65,50 +70,31 @@ export class FumigationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.currentUser = this.authService.getCurrentUser();
     this.newBooking.service = this.ar.snapshot.params['id'];
     this.newBooking.frequency = 'one-time';
-    if (this.newBooking.service === 'office-cleaning') {
-      this.newBooking.buildingType = 'Office';
-    } else {
-      this.newBooking.buildingType = 'House';
-    }
-    this.buildingTypes = ['House', 'Office'];
+    this.newBooking.cost = 3500;
+    //this.buildingTypes = Object.values(BuildingTypes);
+    this.newBooking.buildingType = this.buildingTypes[0];
+
+    this.profileService.fetchClientAddresses(this.currentUser.id).subscribe(
+      (value) => {
+        if (value) {
+          this.addresses = value;
+        }
+      },
+      (error: HttpErrorResponse) => {
+        this.notifier.notify('error', `${error.error.message}`);
+      }
+    );
+    this.bookingService
+      .fetchRoomsAndPrices(this.newBooking.service)
+      .subscribe((value) => {
+        this.rooms = value;
+      });
     this.newBooking.dates = [];
     this.frequencies = ['one-time', /*'weekly'*/ 'monthly', 'custom']; //weekly removed temporarily
-    this.times = [
-      { id: '1', time: '06:00', period: 'am' },
-      { id: '1', time: '07:00', period: 'am' },
-      { id: '1', time: '08:00', period: 'am' },
-      { id: '1', time: '09:00', period: 'am' },
-      { id: '1', time: '10:00', period: 'am' },
-      { id: '1', time: '11:00', period: 'am' },
-      { id: '1', time: '12:00', period: 'pm' },
-      { id: '1', time: '01:00', period: 'pm' },
-      { id: '1', time: '02:00', period: 'pm' },
-      { id: '1', time: '03:00', period: 'pm' },
-      { id: '1', time: '04:00', period: 'pm' },
-      { id: '1', time: '05:00', period: 'pm' },
-    ];
-    if (this.newBooking.service === 'post construction cleaning') {
-      this.rooms = [
-        { price: '15000', roomType: 'Living room', count: 0 },
-        { price: '10000', roomType: 'Bedroom', count: 0 },
-        { price: '10000', roomType: 'Kitchen', count: 0 },
-        { price: '10000', roomType: 'Dinning area', count: 0 },
-        { price: '5000', roomType: 'Study', count: 0 },
-        { price: '5000', roomType: 'Store', count: 0 },
-        { price: '5000', roomType: 'Outdoor / Balcony', count: 0 },
-      ];
-    } else if (this.newBooking.service === 'move-in-out-cleaning') {
-      this.rooms = [
-        { price: '5000', roomType: 'Living room / dining area', count: 0 },
-        { price: '5000', roomType: 'Bedroom', count: 0 },
-        { price: '5000', roomType: 'Kitchen', count: 0 },
-        { price: '2500', roomType: 'Study', count: 0 },
-        { price: '2000', roomType: 'Store', count: 0 },
-        { price: '2500', roomType: 'Outdoor / Balcony', count: 0 },
-      ];
-    }
+    this.times = Object.values(AvailableTimes);
   }
 
   gotoBooking() {
@@ -126,9 +112,9 @@ export class FumigationComponent implements OnInit {
     this.resetButton.resetSelectedDates();
   }
 
-  setArrivalTime(time: AvailableTime) {
-    this.newBooking.arrivalTime = time.time;
-    this.newBooking.period = time.period;
+  setArrivalTime(time: string) {
+    this.newBooking.arrivalTime = time;
+    //this.newBooking.period = time.period;
   }
 
   setDate(date: any) {
@@ -137,7 +123,45 @@ export class FumigationComponent implements OnInit {
     if (this.dates.length > 0) {
       this.newBooking.dates = this.dates;
     } */
-    this.newBooking.dates = date;
+    this.newBooking.dates = date.selectedDays;
+    this.newBooking.days = date.selectedDates;
+    console.log(this.newBooking);
+  }
+
+  selectAddress(address: any) {
+    this.selectedAddress = address;
+    this.newBooking.address = address._id;
+    this.modalService.dismissAll();
+  }
+
+  resetAddress() {
+    this.newBooking.address = '';
+  }
+
+  openSelectAddressModal(addressSelectionModal: any) {
+    this.modalService.open(addressSelectionModal, {
+      centered: true,
+      size: 'md',
+    });
+  }
+
+  next() {
+    window.scrollTo({ top: 0 });
+    if (this.newBooking.buildingType == 'House') {
+      this.step = 1;
+    } else if (this.newBooking.buildingType == 'Office') {
+      this.step = 2;
+    }
+  }
+
+  prev() {
+    if (this.newBooking.buildingType == 'House' && this.step == 1) {
+      this.step = 0;
+    }else if (this.newBooking.buildingType == 'Office' && this.step == 2) {
+      this.step = 0;
+    } else if (this.newBooking.buildingType == 'House' && this.step == 2) {
+      this.step = 1;
+    }
   }
 
   nextPhase() {
@@ -209,7 +233,14 @@ export class FumigationComponent implements OnInit {
 
   proceedToPay() {
     let value = this.validateForm();
+
     if (value) {
+      this.newBooking.client = this.currentUser.id;
+      console.log(this.newBooking);
+
+      this.bookingService.saveBooking(this.newBooking).subscribe((value) => {
+        console.log(value);
+      });
       this.makePayment();
     }
   }
@@ -234,15 +265,10 @@ export class FumigationComponent implements OnInit {
   }
   makePaymentCallback(response: PaymentSuccessResponse): void {
     this.newBooking.paymentStatus = 'successful';
-    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
-    this.bookingService.saveBooking(bookingData);
     console.log('Payment callback', response);
   }
   closedPaymentModal(): void {
     this.newBooking.paymentStatus = 'cancelled';
-    this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
-    this.bookingService.saveBooking(bookingData);
     console.log('payment is closed');
   }
 

@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  firebaseConfig: {
+  /* firebaseConfig: {
     apiKey: "AIzaSyDC6MsRZ9MSigRSCi17lPvnfsx9-_ueAsc",
     authDomain: "eatse-4dbd3.firebaseapp.com",
     projectId: "eatse-4dbd3",
@@ -11,10 +11,12 @@ export const environment = {
     messagingSenderId: "768781202854",
     appId: "1:768781202854:web:90029a8d89808179ea4b67",
     measurementId: "G-24592D18H2"
-  },
+  },*/
   production: false,
-  flutterwavePublicKey: 'FLWPUBK-ec9db7d42d78c3e5587c8a1f6801cb4c-X'
-}; 
+  developmentIP: 'http://localhost:5000',
+  //developmentIP: 'http://23.21.3.245:5000',
+  flutterwavePublicKey: 'FLWPUBK-ec9db7d42d78c3e5587c8a1f6801cb4c-X',
+};
 
 /*
  * For easier debugging in development mode, you can import the following file

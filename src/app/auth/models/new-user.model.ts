@@ -4,5 +4,5 @@ export class NewUser {
   email!: string;
   phone!: string;
   password!: string;
-  referralCode?: string;
+  role?: string;
 }

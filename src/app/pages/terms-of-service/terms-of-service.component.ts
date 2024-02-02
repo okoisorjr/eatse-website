@@ -13,7 +13,7 @@ export class TermsOfServiceComponent implements OnInit {
   constructor(private termsAndConditionsService: TermsAndConditionsService) {}
 
   ngOnInit(): void {
-    this.termsAndConditionsService
+    /* this.termsAndConditionsService
       .fetchTermsOfService()
       .then((value) => {
         this.terms = value;
@@ -21,6 +21,6 @@ export class TermsOfServiceComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
-      });
+      }); */
   }
 }

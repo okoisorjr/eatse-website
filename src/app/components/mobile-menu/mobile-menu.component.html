@@ -44,14 +44,14 @@
       >About us</a
     >
     <button
-      *ngIf="!currentUser"
+      *ngIf="currentUser == undefined"
       (click)="gotoSignUp()"
       class="btn bg-[#111014] text-white hover:bg-[#111014] rounded-sm border-[#EAEAEA]-100"
     >
       Sign up
     </button>
     <button
-      *ngIf="!currentUser"
+      *ngIf="currentUser == undefined"
       (click)="gotoLogin()"
       class="btn bg-[#111014] text-white hover:bg-[#111014] rounded-sm border-[#EAEAEA]-100"
     >
@@ -67,17 +67,15 @@
           class="p-2 w-10 rounded-[50%] bg-[#008000] text-[#FFF] font-semibold text-center"
           type="button"
         >
-          {{
-            currentUser.displayName
-              ? currentUser.displayName[0].toUpperCase()
-              : currentUser.email[0].toUpperCase()
-          }}
+          {{ currentUser.firstname[0].toUpperCase() }}
         </div>
         <span class="text-[#FFF] font-bold text-center text-lg">{{
-          currentUser.displayName ? currentUser.displayName : currentUser.email
+          currentUser.firstname + " " + currentUser.lastname
         }}</span>
       </div>
-      <i (click)="logOut()" class="material-icons text-[#FFF] cursor-pointer">logout</i>
+      <i (click)="logOut()" class="material-icons text-[#FFF] cursor-pointer"
+        >logout</i
+      >
     </div>
   </div>
 </div>

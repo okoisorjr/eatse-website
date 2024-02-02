@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService, CurrentUser } from 'src/app/auth/auth.service';
-import { UserAccount } from 'src/app/auth/models/user-account.model';
-import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
-import { Auth } from '@angular/fire/auth';
+import { AuthService } from 'src/app/auth/auth.service';
+import { User } from 'src/app/auth/model/user';
 
 @Component({
   selector: 'app-top-nav',
@@ -14,25 +12,15 @@ export class TopNavComponent implements OnInit {
   isMobileDevice!: boolean;
   displayDropdown: boolean = false;
   mobileMenuActive: boolean = false;
-  currentUser!: any;
+  currentUser: User;
+  showBookingMenu: boolean = false;
 
-  constructor(
-    private router: Router,
-    private auth: Auth,
-  ) {
-    this.auth.onAuthStateChanged((credential) => {
-      if(credential){
-        this.currentUser = credential;
-      }
-    })
+  constructor(private router: Router, private authService: AuthService) {
+    this.currentUser = this.authService.currentUser;
   }
 
   ngOnInit(): void {
-    this.auth.onAuthStateChanged((credential) => {
-      if (credential) {
-        this.currentUser = credential;
-      }
-    });
+    this.router.url.includes('active')
     window.addEventListener('resize', () => {
       let screenSize = window.innerWidth;
 
@@ -46,13 +34,11 @@ export class TopNavComponent implements OnInit {
   }
 
   logout() {
-    this.auth.signOut();
     console.log('signed out!');
-    this.router.navigateByUrl('/auth/sign-in', {skipLocationChange: true});
+    this.router.navigateByUrl('/auth/sign-in', { skipLocationChange: true });
   }
 
-  signOut(){
-    this.auth.signOut();
+  signOut() {
     this.router.navigate(['auth', 'sign-in']);
   }
 

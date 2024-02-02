@@ -1,0 +1,783 @@
+<div class="grid grid-cols-3 gap-5 py-16">
+  <div class="lg:col-span-1 md:col-span-1 col-span-3">
+    <ul
+      class="w-full text-sm font-medium text-gray-500 bg-[#090909] rounded-md"
+    >
+      <li
+        *ngFor="let link of links; let i = index"
+        class="w-full px-4 py-3 border-gray-200 rounded-t-lg cursor-pointer"
+        [ngClass]="{
+          'border-t': link.name === 'Logout',
+          'rounded-t-none': link.name === 'Logout' || link.name !== 'Profile',
+          'bg-[#585858]': link.name === currentDisplay,
+          'text-white': link.name === currentDisplay,
+          'rounded-b': link.name === 'Logout'
+        }"
+        (click)="updateView(link.name)"
+      >
+        <i class="material-icons mr-2 fs-12 me-2 align-middle text-[#FFFFFF]">{{
+          link.icon
+        }}</i
+        >{{ link.name }}
+      </li>
+      <li
+        class="w-full px-4 py-3 border-gray-200 rounded-t-lg cursor-pointer rounded-b"
+        (click)="logout()"
+      >
+        <i class="material-icons mr-2 fs-12 me-2 align-middle text-[#FFFFFF]">
+          logout</i
+        >Logout
+      </li>
+    </ul>
+  </div>
+  <div class="lg:col-span-2 md:col-span-2 col-span-3">
+    <!-- Profile Settings-->
+    <div
+      *ngIf="currentDisplay === 'Profile'"
+      class="w-full p-12 bg-[#090909] rounded-md shadow dark:bg-[#090909]"
+    >
+      <h6 class="mb-2 text-xl font-bold tracking-tight text-white">
+        Edit Profile
+      </h6>
+
+      <input
+        name="profile_pic"
+        type="file"
+        #profile_pic
+        (change)="onFileSelected($event)"
+        hidden
+      />
+      <div
+        *ngIf="currentUser.profile_pic"
+        class="cursor-pointer flex justify-center items-center my-5"
+        (click)="profile_pic.click()"
+      >
+        <img class="rounded-full w-20 h-20 bg-opacity-50 bg-[#222]" [src]="currentUser.profile_pic" />
+        <span (click)="profile_pic.click()" class="self-end"
+          ><i class="ri-camera-line text-[#FFF] font-bold text-xl"></i
+        ></span>
+      </div>
+      <div
+        *ngIf="!currentUser.profile_pic"
+        (click)="profile_pic.click()"
+        class="cursor-pointer w-10 rounded-full"
+      ></div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-2 md:col-span-1 lg:col-span-1">
+          <label class="my-2 text-gray-500" for="">Firstname</label>
+          <input
+            type="text"
+            name="firstname"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter your firsname"
+            [(ngModel)]="currentUser.firstname"
+            ngModel
+          />
+        </div>
+        <div class="col-span-2 md:col-span-1 lg:col-span-1">
+          <label class="my-2 text-gray-500" for="">Lastname (surname)</label>
+          <input
+            type="text"
+            name="lastname"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter your lastname"
+            [(ngModel)]="currentUser.lastname"
+            ngModel
+          />
+        </div>
+        <div class="col-span-2 md:col-span-1 lg:col-span-1">
+          <label class="my-2 text-gray-500" for="">Email</label>
+          <input
+            type="text"
+            name="email"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter your email"
+            [(ngModel)]="currentUser.email"
+            ngModel
+          />
+        </div>
+        <div class="col-span-2 md:col-span-1 lg:col-span-1">
+          <label class="my-2 text-gray-500" for="">Phone</label>
+          <input
+            type="tel"
+            name="phone"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter your phone number"
+            [(ngModel)]="currentUser.phone"
+            ngModel
+          />
+        </div>
+        <div class="col-span-2">
+          <div class="flex justify-between my-2">
+            <label class="text-gray-500">Addresse(s)</label>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <ng-container *ngFor="let address of addresses; let i = index">
+              <div
+                class="col-span-2 md:col-span-1 lg:col-span-1 w-full p-6 bg-[#111014] rounded-md"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="25px"
+                  height="25px"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M5 9.77746V16.2C5 17.8802 5 18.7203 5.32698 19.362C5.6146 19.9265 6.07354 20.3854 6.63803 20.673C7.27976 21 8.11984 21 9.8 21H14.2C15.8802 21 16.7202 21 17.362 20.673C17.9265 20.3854 18.3854 19.9265 18.673 19.362C19 18.7203 19 17.8802 19 16.2V5.00002M21 12L15.5668 5.96399C14.3311 4.59122 13.7133 3.90484 12.9856 3.65144C12.3466 3.42888 11.651 3.42893 11.0119 3.65159C10.2843 3.90509 9.66661 4.59157 8.43114 5.96452L3 12M14 21V15H10V21"
+                    stroke="#FFF"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <h5
+                  class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white"
+                >
+                  {{ address.country }}
+                </h5>
+
+                <p class="mb-3 font-normal text-gray-500 dark:text-gray-400">
+                  {{ address.state + ", " + address.city }}
+                </p>
+                <div class="flex justify-between">
+                  <a
+                    (click)="openEditAddressModal(address, editAddressModal)"
+                    class="inline-flex items-center text-[#008000] cursor-pointer hover:text-[#008000] hover:underline"
+                    [ngbPopover]="address.street"
+                    popoverTitle="Address"
+                    triggers="mouseenter:mouseleave"
+                  >
+                    {{
+                      address.street.length > 20
+                        ? address.street.substring(0, 20) + "..."
+                        : address.street
+                    }}
+                    <svg
+                      class="w-3 h-3 ml-2.5 feather feather-edit"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 18 18"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                      />
+                      <path
+                        d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                      />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </ng-container>
+            <div
+              (click)="openAddressModal(addressModal)"
+              class="col-span-2 md:col-span-1 lg:col-span-1 w-full p-6 flex flex-col justify-center items-center bg-[#111014] cursor-pointer rounded-md"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="svg-icon"
+                style="
+                  width: 100px;
+                  height: 100px;
+                  vertical-align: middle;
+                  fill: #008000;
+                  overflow: hidden;
+                "
+                viewBox="0 0 1024 1024"
+                version="1.1"
+              >
+                <path
+                  d="M366.9 675.3c0.5 0 1.1 0 1.6-0.1l166.8-21.7c6.8-0.9 11.7-7.2 10.8-14s-7.1-11.7-14-10.8l-166.8 21.7c-6.8 0.9-11.7 7.2-10.8 14 0.8 6.3 6.2 10.9 12.4 10.9zM484.9 739.8l-159.2 18.1c-6.9 0.8-11.8 7-11 13.8 0.7 6.4 6.1 11.1 12.4 11.1 0.5 0 0.9 0 1.4-0.1l159.2-18.1c6.9-0.8 11.8-7 11-13.8s-7-11.8-13.8-11zM321.9 567c-0.9-6.8-7.2-11.6-14.1-10.7l-48.4 6.7c-6.8 0.9-11.6 7.2-10.7 14.1 0.9 6.3 6.2 10.8 12.4 10.8 0.6 0 1.1 0 1.7-0.1l48.4-6.7c6.9-0.9 11.6-7.2 10.7-14.1zM374.9 572.2c0.6 0 1.1 0 1.7-0.1L479.4 558c6.8-0.9 11.6-7.2 10.7-14.1-0.9-6.8-7.2-11.6-14.1-10.7l-102.8 14.1c-6.8 0.9-11.6 7.2-10.7 14.1 0.9 6.3 6.2 10.8 12.4 10.8z"
+                />
+                <path
+                  d="M951.9 465.1c10.2-3.8 18-13 19.4-24.5s-3.9-22.3-12.9-28.4L651 202.2l-10.9-57.5c-1.3-6.7-5.2-12.6-11-16.4-5.7-3.7-12.8-4.9-19.4-3.3L496 152.4c-6.6 1.6-12.2 5.8-15.7 11.6-3.4 5.8-4.4 12.8-2.6 19.3l5.8 21L346.8 225c-7.7 1.2-15.4 3.9-22.5 8.2-7.1 4.4-12.9 10-17.5 16.4L87.9 558l-29.1 41c-8 11.3-6 27.9 5.9 34.9 20.7 12.2 50.2-15.8 68.8 24.1l100.3 219.6c3.4 7.4 9 13.8 16.5 18.1 7.5 4.3 15.9 5.9 24 5.1l360.9-36.9 238.1-129.2c5.5-3 10.3-7.2 14-12.7s5.9-11.6 6.6-17.8l26.8-227.4 31.2-11.7z m-356-285.3L617 291.3l-70.1-45.1-14.1-51.2 63.1-15.2z m-99 73.1l4.3 15.8c1.6 5.9 5.4 11.1 10.6 14.4l127 81.7c4.1 2.6 8.8 4 13.5 4 4.9 0 9.8-1.4 14-4.3 8.3-5.6 12.4-15.6 10.6-25.4l-12.8-67.5L867 408.9c6 4.1 9.6 11.3 8.7 18.9-0.9 7.7-6.1 13.8-12.9 16.4l-111.7 41.6c-7.4 2.7-15.5 3.8-23.8 2.7-8.3-1.1-15.9-4.1-22.3-8.6L401.4 267.4l95.5-14.5z m-183.8 74.3c7.4-10.4 18.7-18 32.2-20.3s26.8 1 37.2 8.3l26.1 18.3-112.9 18.2 17.4-24.5z m-63.5 464.5l19.8-2.2c6.9-0.8 11.8-7 11-13.8s-7-11.8-13.8-11l-27.9 3.2-32.7-71.6 86.5-11.3c6.8-0.9 11.7-7.2 10.8-14-0.9-6.8-7.1-11.7-14-10.8l-94.1 12.2-32.4-71 22.8-3.1c6.8-0.9 11.6-7.2 10.7-14.1-0.9-6.8-7.2-11.6-14.1-10.7l-30.2 4.1-6.5-14.3 48.1-67.7 80.3-12c6.8-1 11.5-7.4 10.5-14.2-1-6.8-7.4-11.5-14.2-10.5l-56.5 8.4 61.9-87.2 162.6-26.2 94.1 65.9-194 29c-6.8 1-11.5 7.4-10.5 14.2 0.9 6.2 6.3 10.7 12.3 10.7 0.6 0 1.2 0 1.9-0.1l220.1-32.9 76.5 53.6-1.8 16.8-80.5 11.1c-6.8 0.9-11.6 7.2-10.7 14.1 0.9 6.3 6.2 10.8 12.4 10.8 0.6 0 1.1 0 1.7-0.1l74.3-10.2-8.6 79.8-30.6 4c-6.8 0.9-11.7 7.2-10.8 14 0.8 6.3 6.2 10.9 12.4 10.9 0.5 0 1.1 0 1.6-0.1l24.6-3.2-8.9 83-68.1 7.7c-6.9 0.8-11.8 7-11 13.8 0.7 6.4 6.1 11.1 12.4 11.1 0.5 0 0.9 0 1.4-0.1l62.5-7.1-7.1 66.1-327.5 33.5-26.7-58.5zM864.9 523l-70.1 29.2c-6.4 2.7-9.4 10-6.7 16.3 2 4.8 8.2 9.1 16.3 6.7l57.1-23.8-7.5 63.9-106.2 50.9c-6.2 3-8.8 10.5-5.9 16.7 2.1 4.5 6.6 7.1 11.3 7.1 1.8 0 3.7-0.4 5.4-1.2l91.9-44.1-5.7 48.3-188.4 102.4 17.8-165.9 51.6-21.5c6.4-2.7 9.4-10 6.7-16.3-2.7-6.4-10-9.4-16.3-6.7l-38.9 16.2c1.9-25.9 11.2-39.1 42-50.2L868 496.1l-3.1 26.9z"
+                />
+              </svg>
+              <button
+                class="btn btn-ghost btn-sm text-[#008000] bg-transparent hover:bg-[#111014] hover:text-[#008000]"
+              >
+                <i class="material-icons me-2 align-middle text-[#008000]"
+                  >add</i
+                >Add address
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Change Password Settings-->
+    <div
+      *ngIf="currentDisplay === 'Change password'"
+      class="max-w-full p-12 bg-[#090909] rounded-md shadow dark:bg-[#090909]"
+    >
+      <h6 class="mb-4 text-xl font-bold tracking-tight text-white">
+        Change password
+      </h6>
+      <form
+        #changePasswordForm="ngForm"
+        (ngSubmit)="updatePassword(changePasswordForm)"
+      >
+        <div class="col-span-2">
+          <label class="my-2 text-gray-500" for="">Current password</label>
+          <input
+            type="password"
+            name="oldPassword"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter old password"
+            [(ngModel)]="currentUser.email"
+            ngModel
+          />
+        </div>
+
+        <div class="col-span-2">
+          <label class="my-2 text-gray-500" for="">New password</label>
+          <input
+            type="password"
+            name="newPassword"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter new password"
+            [(ngModel)]="currentUser.email"
+            ngModel
+          />
+        </div>
+
+        <div class="col-span-2">
+          <label class="my-2 text-gray-500" for="">Confirm password</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Confirm password"
+            [(ngModel)]="currentUser.email"
+            ngModel
+          />
+        </div>
+
+        <div class="col-span-2 flex justify-center">
+          <button
+            type="submit"
+            class="w-44 btn my-3 bg-[#008000] hover:text-[#FFF] text-xl text-[#FFF] hover:bg-[#008000]"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Booking History view-->
+    <div
+      *ngIf="currentDisplay === 'Booking history'"
+      class="max-w-full p-12 bg-[#090909] rounded-md shadow dark:bg-[#090909]"
+    >
+      <h6 class="mb-2 text-xl font-bold tracking-tight text-white">
+        Booking history
+      </h6>
+
+      <div *ngIf="bookings.length === 0">
+        <div class="flex flex-col justify-center items-center my-25">
+          <div class="py-10">
+            <img
+              src="assets/booking-calendar.png"
+              style="width: 100px; height: 100px"
+            />
+          </div>
+          <p class="text-[#FFF] text-center text-sm">
+            No booking yet. Click the button below to book a service.
+          </p>
+          <button (click)="gotoBooking()" class="ui-green-btn my-3">
+            Book now
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-3 my-5">
+        <div
+          *ngFor="let booking of bookings"
+          class="block w-full bg-[#121214] rounded-lg shadow"
+        >
+          <div class="p-3">
+            <div class="flex items-center justify-between">
+              <p class="text-[#FFF] text-lg font-semibold">
+                {{ booking.service | titlecase }}
+              </p>
+              <div
+                class="p-3 flex flex-row justify-between items-center gap-3 border-b-gray-700"
+              >
+                <p class="text-[#FFF] text-md">
+                  ₦
+                  {{ booking.cost }}
+                </p>
+                <div class="flex flex-row gap-2 items-center">
+                  <div class="w-2 h-2 bg-[#008000] rounded-full"></div>
+                  <p class="text-[#FFF]">{{ booking.frequency }}</p>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="booking.service !== 'errand'">
+              <p class="text-[#FFF] text-md">
+                {{ booking.address.street + " " + booking.address.city }}
+                <span> {{ booking.address.state }}</span>
+              </p>
+            </div>
+            <div *ngIf="booking.service === 'errand'">
+              <p class="text-[#FFF] text-md">
+                {{
+                  booking.deliveryAddress.street +
+                    " " +
+                    booking.deliveryAddress.city +
+                    " " +
+                    booking.deliveryAddress.country
+                }}
+                <span> {{ booking.deliveryAddress.state }}</span>
+              </p>
+            </div>
+          </div>
+          <div class="flex justify-between border-t-2 border-[#1C1B1F]">
+            <p class="text-[#FFF] text-lg font-semibold p-3 gap-3">
+              Date: {{ booking.startingDate | date }}
+            </p>
+            <p class="text-[#FFF] text-lg font-semibold p-3">
+              Arrival Time:
+              <span>
+                {{
+                  booking.arrivalTime ? booking.arrivalTime : booking.pickupTime
+                }}</span
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Booking View-->
+    <div
+      *ngIf="currentDisplay === 'Active booking'"
+      class="max-w-full p-12 bg-[#090909] rounded-md shadow dark:bg-[#090909]"
+    >
+      <h6 class="mb-2 text-xl font-bold tracking-tight text-white">
+        Active bookings
+      </h6>
+
+      <div *ngIf="activeBookings && activeBookings.length === 0">
+        <div class="flex flex-col justify-center items-center my-25">
+          <div class="py-10">
+            <img
+              src="assets/booking-calendar.png"
+              style="width: 100px; height: 100px"
+            />
+          </div>
+          <p
+            *ngIf="activeBookings.length === 0"
+            class="text-[#FFF] text-center text-sm"
+          >
+            You currently have no active booking. Click the button below to book
+            a service.
+          </p>
+          <button (click)="gotoBooking()" class="ui-green-btn my-3">
+            Book now
+          </button>
+        </div>
+      </div>
+
+      <div
+        *ngIf="activeBookings && activeBookings.length > 0 && easer"
+        class="grid grid-cols-1 gap-3 my-5"
+      >
+        <ng-container *ngFor="let activeBooking of activeBookings">
+          <div class="flex flex-col md:flex-row lg:flex-row xl:flex-row">
+            <div
+              class="block w-full p-6 bg-[#121214] rounded-lg rounded-b-none md:rounded-r-none lg:rounded-r-none shadow"
+            >
+              <div class="flex items-center justify-between">
+                <p
+                  class="text-[#FFF] text-sm md:text-sm lg:text-lg font-semibold"
+                >
+                  {{ activeBooking.service | titlecase }}
+                </p>
+                <div
+                  class="p-3 flex flex-row justify-between items-center gap-3 border-b-gray-700"
+                >
+                  <p
+                    class="hidden md:block lg:block text-[#FFF] text-sm md:text-sm lg:text-lg"
+                  >
+                    ₦
+                    {{
+                      activeBooking.servicePrice
+                        ? activeBooking.servicePrice
+                        : activeBooking.cost
+                    }}
+                  </p>
+                  <div class="flex flex-row gap-2 items-center">
+                    <div class="w-2 h-2 bg-[#008000] rounded-full"></div>
+                    <p class="text-[#FFF] text-sm md:text-sm lg:text-lg">
+                      {{ activeBooking.frequency }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div
+                *ngIf="activeBooking.service !== 'errand'"
+                class="border-bottom mb-2 border-[#1C1B1F]"
+              >
+                <p class="text-[#FFF] text-sm md:text-sm lg:text-lg">
+                  {{ activeBooking.address.street }},
+                  {{ activeBooking.address.city }}
+                  <span> {{ activeBooking.address.state }}</span>
+                </p>
+              </div>
+              <div
+                *ngIf="activeBooking.service === 'errand'"
+                class="border-bottom mb-2 border-[#1C1B1F]"
+              >
+                <p class="text-[#FFF] text-md">
+                  {{ activeBooking.deliveryAddress.street }},
+                  {{ activeBooking.deliveryAddress.city }}
+                  <span> {{ activeBooking.deliveryAddress.state }}</span>
+                </p>
+              </div>
+              <div class="flex justify-between">
+                <p class="text-[#FFF] text-sm font-semibold">
+                  <i class="ri-calendar-event-line"></i> Booking Date:
+                  {{ activeBooking.startingDate | date }}
+                </p>
+                <p class="text-[#FFF] text-sm font-semibold">
+                  <i class="ri-time-line"></i>
+                  {{
+                    activeBooking.service !== "laundry"
+                      ? "Arrival Time:"
+                      : "Pickup/Delivery Time:"
+                  }}
+                  <span>
+                    {{
+                      activeBooking.arrivalTime
+                        ? activeBooking.arrivalTime
+                        : activeBooking.pickupTime
+                    }}</span
+                  >
+                </p>
+              </div>
+            </div>
+            <div
+              class="hidden md:block lg:block flex-shrink-0 bg-[#212123] rounded-r-lg shadow"
+            >
+              <div class="flex flex-col gap-2 px-3 items-center justify-center">
+                <i
+                  *ngIf="easer"
+                  id="dropdownMenuButton2"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  class="ri-user-line fs-2 text-white cursor-pointer self-center"
+                ></i>
+                <ul
+                  *ngIf="easer"
+                  class="dropdown-menu dropdown-menu-dark"
+                  aria-labelledby="dropdownMenuButton2"
+                >
+                  <li>
+                    <span class="text-sm text-[#FFF] font-semibold px-2"
+                      >Name: {{ easer.firstname + " " + easer.lastname }}</span
+                    >
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+                  <li>
+                    <span class="text-sm text-[#FFF] font-semibold px-2"
+                      >Easer ID: {{ easer.id }}</span
+                    >
+                  </li>
+                </ul>
+
+                <i
+                  id="dropdownMenuButton3"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  class="ri-edit-box-line fs-2 text-white cursor-pointer self-center"
+                ></i>
+                <ul
+                  class="dropdown-menu dropdown-menu-dark"
+                  aria-labelledby="dropdownMenuButton3"
+                >
+                  <li>
+                    <span class="text-sm text-[#FFF] font-semibold px-2"
+                      >Request Easer Change</span
+                    >
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+                  <li>
+                    <span class="text-sm text-[#FFF] font-semibold px-2"
+                      >Request DateTime Adjustment</span
+                    >
+                  </li>
+                </ul>
+
+                <i
+                  (click)="
+                    openCancelBookingConfirmationModal(
+                      cancelBookingConfirmationModal,
+                      activeBooking
+                    )
+                  "
+                  class="ri-close-line fs-2 text-[#ff0000] self-center rounded cursor-pointer"
+                ></i>
+              </div>
+            </div>
+            <div
+              class="block md:hidden lg:hidden xl:hidden bg-[#212123] rounded-b-lg shadow"
+            >
+              <div
+                class="flex flex-row gap-2 px-3 items-center justify-between"
+              >
+                <i
+                  id="dropdownMenuButton2"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  class="ri-user-line fs-2 text-white cursor-pointer self-center"
+                ></i>
+                <ul
+                  class="dropdown-menu dropdown-menu-dark"
+                  aria-labelledby="dropdownMenuButton2"
+                >
+                  <li>
+                    <span class="text-sm text-[#FFF] font-semibold px-2"
+                      >Name: {{ easer.firstname + " " + easer.lastname }}</span
+                    >
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+                  <li>
+                    <span class="text-sm text-[#FFF] font-semibold px-2"
+                      >Easer ID: {{ easer.id }}</span
+                    >
+                  </li>
+                </ul>
+
+                <i
+                  id="dropdownMenuButton3"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  class="ri-edit-box-line fs-2 text-white cursor-pointer self-center"
+                ></i>
+                <ul
+                  class="dropdown-menu dropdown-menu-dark"
+                  aria-labelledby="dropdownMenuButton3"
+                >
+                  <li>
+                    <span class="text-sm text-[#FFF] font-semibold px-2"
+                      >Request Easer Change</span
+                    >
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+                  <li>
+                    <span class="text-sm text-[#FFF] font-semibold px-2"
+                      >Request DateTime Adjustment</span
+                    >
+                  </li>
+                </ul>
+
+                <i
+                  (click)="
+                    openCancelBookingConfirmationModal(
+                      cancelBookingConfirmationModal,
+                      activeBooking
+                    )
+                  "
+                  class="ri-close-line fs-2 text-[#ff0000] self-center rounded cursor-pointer"
+                ></i>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- Notifications View -->
+    <ng-container *ngIf="currentDisplay === 'Notifications'">
+      <h6 class="mb-2 text-xl font-bold tracking-tight text-white">
+        Notifications ({{ notifications && notifications.length }})
+      </h6>
+
+      <div
+        *ngFor="let notification of notifications; let i = index"
+        class="col-span-1 w-full p-12 flex flex-col my-3 bg-[#111014] cursor-pointer rounded-md"
+      >
+        <h6 class="mb-4 text-lg font-semibold tracking-tight text-white">
+          {{ notification.title }}
+        </h6>
+
+        <p class="text-[#FFF] text-lg">{{ notification.notice }}</p>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #addressModal let-modal>
+  <div class="col-span-1 w-full p-6 bg-[#090909] rounded-md bg-opacity-100">
+    <form #addressForm="ngForm" (ngSubmit)="saveAddress(addressForm)">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-1">
+          <label class="my-2 text-gray-500" for=""
+            >Country <span class="text-red-700">*</span></label
+          >
+          <input
+            type="text"
+            name="country"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter country of residence"
+            [(ngModel)]="newAddress.country"
+            ngModel
+          />
+        </div>
+        <div class="col-span-1">
+          <label class="my-2 text-gray-500" for=""
+            >State <span class="text-red-700">*</span></label
+          >
+          <input
+            type="text"
+            name="state"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter state of residence"
+            [(ngModel)]="newAddress.state"
+            ngModel
+          />
+        </div>
+        <div class="col-span-1">
+          <label class="my-2 text-gray-500" for=""
+            >City <span class="text-red-700">*</span></label
+          >
+          <input
+            type="text"
+            name="city"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter city of residence"
+            [(ngModel)]="newAddress.city"
+            ngModel
+          />
+        </div>
+        <div class="col-span-1">
+          <label class="my-2 text-gray-500" for="">Zipcode</label>
+          <input
+            type="text"
+            name="zip_code"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter zip code"
+            [(ngModel)]="newAddress.zip_code"
+            ngModel
+          />
+        </div>
+        <div class="col-span-2">
+          <label class="my-2 text-gray-500" for=""
+            >Street and building number
+            <span class="text-red-700">*</span></label
+          >
+          <input
+            type="text"
+            name="street"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter street name and building no"
+            [(ngModel)]="newAddress.street"
+            ngModel
+          />
+        </div>
+        <div class="col-span-2 flex justify-center">
+          <button class="btn w-50 bg-[#008000] text-white hover:bg-[#008000]">
+            Save
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #editAddressModal let-modal>
+  <div class="col-span-1 w-full p-12 bg-[#090909] rounded-md">
+    <form #editAddressForm="ngForm" (ngSubmit)="updateAddress(editAddressForm)">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-1">
+          <label class="my-2 text-gray-500" for=""
+            >Country <span class="text-red-700">*</span></label
+          >
+          <input
+            type="text"
+            name="country"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter country of residence"
+            [(ngModel)]="editAddress.country"
+            ngModel
+          />
+        </div>
+        <div class="col-span-1">
+          <label class="my-2 text-gray-500" for=""
+            >State <span class="text-red-700">*</span></label
+          >
+          <input
+            type="text"
+            name="state"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter state of residence"
+            [(ngModel)]="editAddress.state"
+            ngModel
+          />
+        </div>
+        <div class="col-span-1">
+          <label class="my-2 text-gray-500" for=""
+            >City <span class="text-red-700">*</span></label
+          >
+          <input
+            type="text"
+            name="city"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter city of residence"
+            [(ngModel)]="editAddress.city"
+            ngModel
+          />
+        </div>
+        <div class="col-span-1">
+          <label class="my-2 text-gray-500" for="">Zipcode</label>
+          <input
+            type="text"
+            name="zip_code"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter zip code"
+            [(ngModel)]="editAddress.zip_code"
+            ngModel
+          />
+        </div>
+        <div class="col-span-2">
+          <label class="my-2 text-gray-500" for=""
+            >Street and building number
+            <span class="text-red-700">*</span></label
+          >
+          <input
+            type="text"
+            name="street"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter street name and building no"
+            [(ngModel)]="editAddress.street"
+            ngModel
+          />
+        </div>
+        <div class="col-span-2 flex justify-center">
+          <button class="btn w-50 bg-[#008000] text-white hover:bg-[#008000]">
+            Update
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #cancelBookingConfirmationModal let-modal></ng-template>

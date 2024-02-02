@@ -1,11 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-
-interface Service {
-  image: string;
-  service: string;
-  description: string;
-}
+import { Services } from 'src/app/global-resource/global-resource.service';
+import { EatseServicesService } from 'src/app/services/eatse-services.service';
 
 @Component({
   selector: 'app-service-booking',
@@ -16,63 +13,27 @@ export class ServiceBookingComponent implements OnInit {
   @Input() incoming!: string;
   @Output() sendClick = new EventEmitter();
 
-  services: Service[] = [];
-  constructor(private router: Router) {}
+  services: Services[] = [];
+  constructor(
+    private router: Router,
+    private eatseServices: EatseServicesService
+  ) {}
 
   ngOnInit(): void {
-    console.log(this.incoming)
-    this.services = [
-      {
-        image: 'assets/housekeeping-img.png',
-        service: 'housekeeping',
-        description:
-          'Our lovely housekeepers will help clean and organize your house.',
+    this.eatseServices.fetchServices().subscribe(
+      (value) => {
+        this.services = value;
       },
-      {
-        image: 'assets/deep-cleaning-img.png',
-        service: 'deep cleaning',
-        description: '',
-      },
-      {
-        image: 'assets/move-in-out-img.png',
-        service: 'move-in-out-cleaning',
-        description: '',
-      },
-      {
-        image: 'assets/post-construction-img.png',
-        service: 'post construction cleaning',
-        description:
-          'This service offers a thorough clean up of the building after construction.',
-      },
-      {
-        image: 'assets/office-cleaning-img.png',
-        service: 'office-cleaning',
-        description:
-          'Lets help you clean and organize your office while you focus on your work.',
-      },
-      {
-        image: 'assets/laundry-img.png',
-        service: 'laundry',
-        description: '',
-      },
-      {
-        image: 'assets/errand-img.png',
-        service: 'errands',
-        description: '',
-      },
-      {
-        image: 'assets/fumigation-img.png',
-        service: 'fumigation',
-        description: '',
-      },
-    ];
+      (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    );
   }
 
   routeToService(service: string) {
     if (this.incoming === 'booking') {
       this.sendClick.emit(service);
-    }
-    else{
+    } else {
       this.router.navigate(['services', service]);
     }
   }

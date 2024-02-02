@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, getDocsFromServer, orderBy, query } from '@angular/fire/firestore';
 
 export interface Policy{
   index?: string
@@ -14,16 +13,16 @@ export class PrivacyPolicyService {
 
   policies: Policy[] = [];
 
-  constructor(private fs: Firestore) { }
+  constructor() { }
 
   async fetchPolicies(): Promise<Policy[]> {
     this.policies = [];
-    const policiesRef = collection(this.fs, 'policies');
+    /* const policiesRef = collection(this.fs, 'policies');
     const q = query(policiesRef, orderBy('index'));
     let policiesDoc = await getDocsFromServer(q);
     policiesDoc.forEach((doc) => {
       this.policies.push(doc.data());
-    })
+    }) */
     
     return this.policies;
   }

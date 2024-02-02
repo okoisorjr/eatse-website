@@ -1,54 +1,46 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BookingData, BookingsService } from 'src/app/services/bookings.service';
+import { AuthService } from 'src/app/auth/auth.service';
+import { User } from 'src/app/auth/model/user';
+import { BookingsService } from 'src/app/services/bookings.service';
 
 @Component({
   selector: 'app-booking-history',
   templateUrl: './booking-history.component.html',
-  styleUrls: ['./booking-history.component.css']
+  styleUrls: ['./booking-history.component.css'],
 })
 export class BookingHistoryComponent implements OnInit {
-
-  bookings: BookingData[] = [];
+  bookings: any[] = [];
   activeRoute: string = '';
   currentUser: any;
 
-  constructor(private router: Router, private auth: Auth, private ar: ActivatedRoute, private bookingService: BookingsService) { 
-    this.auth.onAuthStateChanged((credential) => {
-      if(credential){
-        this.currentUser = credential;
-      }
-    })
-  }
+  constructor(
+    private router: Router,
+    private auth: AuthService,
+    private ar: ActivatedRoute,
+    private bookingService: BookingsService
+  ) {}
 
   ngOnInit(): void {
-    //this.currentUser = this.auth.currentUser;
-    this.ar.url.subscribe((param) => {
-      if(param[0].path === 'active'){
-        this.activeRoute = param[0].path;
-      }
-    });
-    this.bookingService.getBookings()
-    .then((res) => {
-      /* res.filter((booking) => {
-        if(booking.userId === this.currentUser.uid)
-        this.bookings.push(booking);
-      }); */
-      this.bookings = res;
-      console.log(this.bookings);
-    })
-    .catch((error) => {
-      console.log(error);
-    })
+    this.currentUser = this.auth.currentUser;
+
+    if (this.currentUser)
+      this.bookingService.getAllBookings(this.currentUser.id).subscribe(
+        (value) => {
+          this.bookings = value;
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error);
+        }
+      );
   }
 
-  gotoBooking(){
-    if(this.auth.currentUser){
+  gotoBooking() {
+    if (this.auth.currentUser) {
       this.router.navigate(['/booking']);
-    }else{
+    } else {
       this.router.navigate(['/auth/sign-in']);
     }
   }
-
 }

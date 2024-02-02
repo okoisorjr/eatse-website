@@ -1,0 +1,208 @@
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from 'src/app/auth/auth.service';
+import {
+  ClientEaser,
+  UserAccount,
+} from 'src/app/auth/models/user-account.model';
+import { ProfileService } from 'src/app/services/profile.service';
+import { AddressData } from './address-data';
+import { NotifierService } from 'angular-notifier';
+import { BookingsService } from 'src/app/services/bookings.service';
+import { Router } from '@angular/router';
+import { ClientService } from 'src/app/services/client.service';
+
+@Component({
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.css'],
+})
+export class ProfileComponent implements OnInit {
+  currentDisplay: string = 'Profile';
+  links: any[] = [];
+  currentUser: any;
+  addresses: AddressData[] = [];
+  notifications: any[] = [];
+  bookings: any[] = [];
+  easers: ClientEaser[] = [];
+  easer: ClientEaser = new ClientEaser();
+  activeBookings: any[] = [];
+  newAddress: AddressData = new AddressData();
+  editAddress: AddressData = new AddressData();
+  selectedBooking!: any;
+  filename!: string;
+
+  constructor(
+    private authService: AuthService,
+    private modalService: NgbModal,
+    private notifier: NotifierService,
+    private profileService: ProfileService,
+    private bookingService: BookingsService,
+    private clientService: ClientService,
+    private router: Router
+  ) {
+    this.currentUser = this.authService.getCurrentUser();
+  }
+
+  getLoggedInAccount() {
+    this.authService.getLoggedInAccount(this.currentUser.id);
+  }
+
+  ngOnInit(): void {
+    this.profileService.fetchClientAddresses(this.currentUser.id).subscribe(
+      (value) => {
+        this.addresses = value;
+        console.log(value);
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.error.message);
+      }
+    );
+
+    // Side menu links
+    this.links = [
+      { name: 'Profile', icon: 'person' },
+      { name: 'Change password', icon: 'lock' },
+      { name: 'Active booking', icon: 'event_note' },
+      { name: 'Booking history', icon: 'history' },
+      { name: 'Notifications', icon: 'notifications' },
+    ];
+  }
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+
+    if (file) {
+      this.filename = file.name;
+
+      const formData = new FormData();
+
+      formData.append('file', file);
+
+      this.clientService
+        .uploadProfilePic(this.currentUser.id, formData)
+        .subscribe(
+          (value) => {
+            this.authService.currentUser.profile_pic = value.id;
+            this.authService.currentUser = this.getLoggedInAccount();
+          },
+          (error: HttpErrorResponse) => {
+            console.log(error);
+          }
+        );
+    }
+    console.log(event);
+  }
+
+  openAddressModal(addressModal: any) {
+    this.modalService.open(addressModal, { centered: true, size: 'md' });
+  }
+
+  openEditAddressModal(selectedAddress: AddressData, editAddressModal: any) {
+    this.editAddress = selectedAddress;
+    this.modalService.open(editAddressModal, { centered: true, size: 'md' });
+  }
+
+  openCancelBookingConfirmationModal(
+    cancelBookingConfirmationModal: any,
+    booking: any
+  ) {
+    this.selectedBooking = booking;
+    this.modalService.open(cancelBookingConfirmationModal, {
+      centered: true,
+      size: 'md',
+    });
+    console.log(this.selectedBooking);
+  }
+
+  updateView(name: string) {
+    this.currentDisplay = name;
+    if (name == 'Active booking') {
+      // Fetch client assigned easer
+      this.profileService
+        .fetchClientEaser(this.currentUser.id)
+        .subscribe((value) => {
+          this.easers = value;
+          this.easer = value[0];
+          console.log(this.easer);
+        });
+
+      // Fetch all users active bookings
+      this.bookingService.getAllActiveBookings(this.currentUser.id).subscribe(
+        (value) => {
+          this.activeBookings = value;
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error);
+        }
+      );
+    } else if (name == 'Booking history') {
+      // Fetch all users bookings both active and Inactive
+      this.bookingService.getAllBookings(this.currentUser.id).subscribe(
+        (value) => {
+          if (value) {
+            this.bookings = value;
+          }
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error);
+        }
+      );
+    } else if (name == 'Notifications') {
+      this.profileService
+        // Fetch all notifications
+        .fetchClientNotifications(this.currentUser.role)
+        .subscribe(
+          (value) => {
+            this.notifications = value;
+          },
+          (error: HttpErrorResponse) => {
+            console.log(error.error.message);
+          }
+        );
+    }
+  }
+
+  saveAddress(addressForm: any) {
+    this.newAddress.user = this.currentUser.id;
+    this.profileService.createAddress(this.newAddress).subscribe(
+      (value) => {
+        console.log(value._id);
+        this.modalService.dismissAll();
+        this.ngOnInit();
+        this.notifier.notify('success', `${value}`);
+      },
+      (error: HttpErrorResponse) => {
+        this.notifier.notify('error', `${error.error.message}`);
+        console.log(error.error.message);
+      }
+    );
+  }
+
+  updateAddress(editAddressForm: any) {
+    this.profileService
+      .updateAddress(this.editAddress._id, this.editAddress)
+      .subscribe(
+        (value) => {
+          this.notifier.notify('success', `${value._id}`);
+          this.ngOnInit();
+          this.modalService.dismissAll();
+        },
+        (error: HttpErrorResponse) => {
+          this.notifier.notify('error', `${error.error.message}`);
+          /* console.log(error.error.message); */
+        }
+      );
+  }
+
+  updatePassword(changePasswordForm?: any) {}
+
+  gotoBooking() {
+    this.router.navigate(['/booking']);
+  }
+
+  deactivateBooking() {}
+
+  logout() {}
+}

@@ -1,0 +1,57 @@
+<div class="container">
+  <div class="pt-2">
+    <p class="text-lg md:text-xl lg:text-2xl font-bold text-white text-center">
+      Select Building Type
+    </p>
+  </div>
+  <div class="grid grid-cols-2 py-12 gap-5">
+    <ng-container *ngFor="let buildingType of buildingTypes">
+      <div
+        class="flex flex-col col-span-2 md:col-span-1 lg:col-span-1 cursor-pointer"
+        (click)="selectBuildingType(buildingType.type)"
+      >
+        <div class="w-full">
+          <img
+            [src]="buildingType.img"
+            class="w-full rounded-b-none rounded-t-lg"
+          />
+        </div>
+        <div
+          class="bg-[#008000] text-[#FFF] text-center font-semibold text-xl p-2 rounded-b-lg"
+        >
+          <span
+            ><i
+              [ngClass]="{
+                'ri-checkbox-blank-circle-line':
+                  booking.buildingType !== buildingType.type,
+                'ri-checkbox-circle-fill':
+                  booking.buildingType === buildingType.type
+              }"
+              class="text-[#FFF]"
+            ></i>
+            {{ buildingType.type }}</span
+          >
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="flex items-center justify-center gap-5 my-3">
+    <button
+      class="w-40 bg-[#111014] text-[#FFF] p-2 rounded-md"
+      (click)="gotoBooking()"
+    >
+      Previous
+    </button>
+    <button
+      [disabled]="!booking.buildingType"
+      class="w-40 bg-[#008000] text-[#FFF] p-2 rounded-md"
+      [ngClass]="{
+        'bg-opacity-30':
+          !booking.buildingType
+      }"
+      (click)="next()"
+    >
+      Next
+    </button>
+  </div>
+</div>

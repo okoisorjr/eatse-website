@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Auth, confirmPasswordReset, sendPasswordResetEmail } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-forgot-password',
@@ -13,13 +12,13 @@ export class ForgotPasswordComponent implements OnInit {
     url: `https://eatse.ng/?email=${this.email}`
   }
   
-  constructor(private auth: Auth) { }
+  constructor() { }
 
   ngOnInit(): void {
   }
 
   async sendPasswordResetLink(form: any){
-    let result = await sendPasswordResetEmail(this.auth, this.email, this.actionCodeSettings);
-    console.log(result);
+    /* let result = await sendPasswordResetEmail(this.auth, this.email, this.actionCodeSettings);
+    console.log(result); */
   }
 }

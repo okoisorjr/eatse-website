@@ -1,102 +1,69 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { mergeMap, map } from 'rxjs/operators';
 import { NewUser } from './models/new-user.model';
-import {
-  addDoc,
-  Firestore,
-  collection,
-  doc,
-  collectionData,
-  DocumentData,
-  where,
-} from '@angular/fire/firestore';
-import {
-  Auth,
-  User,
-  UserCredential,
-  authState,
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-  signInWithEmailAndPassword,
-  updateProfile,
-} from '@angular/fire/auth';
-import { GlobalResourceService } from '../global-resource/global-resource.service';
 import { Router } from '@angular/router';
-
-export interface CurrentUser {
-  uid: string;
-  email: string;
-  firstname: string;
-  lastname: string;
-  phone: string;
-}
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { User } from './model/user';
+import { ResourceCreated } from '../global-resource/models/resource-created.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(
-    private auth: Auth,
-    private user: GlobalResourceService,
-    private fs: Firestore,
-    private router: Router
-  ) {}
+  currentUser: any;
 
-  async registerUser(newUser: NewUser) {
-    /* let user = await createUserWithEmailAndPassword(
-      this.auth,
-      newUser.email,
-      newUser.password
+  constructor(private router: Router, private http: HttpClient) {}
+
+  getCurrentUser(): User {
+    return this.currentUser;
+  }
+
+  createNewClientAccount(newUser: NewUser): Observable<ResourceCreated> {
+    return this.http.post<ResourceCreated>(
+      `${environment.developmentIP}/auth/client-registration`,
+      newUser
     );
-    if (user) {
-      sendEmailVerification(user.user);
-      updateProfile(user.user, {
-        displayName: newUser.firstname + ' ' + newUser.lastname,
-      });
-      this.auth.signOut();
-      this.router.navigate(['auth', 'registration-success']);
-      location.reload();
-    }
-    else{
-      console.log('account creation failed', error)
-    } */
-    createUserWithEmailAndPassword(this.auth, newUser.email, newUser.password)
-      .then((res) => {
-        updateProfile(res.user, {
-          displayName: newUser.firstname + ' ' + newUser.lastname,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        return error;
-      });
   }
 
-  signInUser(email: string, password: string) {
-    signInWithEmailAndPassword(this.auth, email, password)
-      .then((res) => {
-        this.user.currentUser = res;
-        if (res.user.emailVerified === false) {
-          sendEmailVerification(res.user);
-        }
-        return res.user;
-      })
-      .catch((error) => {
-        console.log(error);
-        return error;
-      });
+  getAccessToken() {
+    return localStorage.getItem('access_token');
   }
 
-  signOut() {
-    this.auth.signOut();
-    this.router.navigate(['/auth/sign-in']);
-    location.reload();
+  getRefreshToken() {
+    return localStorage.getItem('refresh_token');
   }
 
-  getClient(): Observable<DocumentData> {
-    const clientRef = collection(this.fs, 'clients');
-    return collectionData(clientRef, {
-      idField: 'id',
-    }) as Observable<DocumentData>;
+  saveTokens(access_token: string, refresh_token: string) {
+    localStorage.setItem('access_token', access_token);
+    localStorage.setItem('refresh_token', refresh_token);
+  }
+
+  loginClient(newUser: any): Observable<any> {
+    return this.http.post<any>(
+      `${environment.developmentIP}/auth/client`,
+      newUser
+    );
+  }
+
+  getLoggedInAccount(id: string): Observable<any> {
+    return this.http.get<any>(`${environment.developmentIP}/clients/${id}`);
+  }
+
+  verifyClientEmail(token: ResourceCreated): Observable<any> {
+    return this.http.post<any>(
+      `${environment.developmentIP}/auth/verify-client-email/${token.id}`,
+      token
+    );
+  }
+
+  refreshToken(): Observable<any> {
+    return this.http.post<any>(
+      `${
+        environment.developmentIP
+      }/auth/refresh-token/${this.getRefreshToken()}`,
+      {}
+    );
   }
 }

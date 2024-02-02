@@ -1,19 +1,17 @@
-<app-top-nav></app-top-nav>
 <div
   *ngIf="service"
-  class="container grid grid-cols-1 md:grid-cols-3 my-4 gap-4 bg-contain bg-[url('/assets/wave2.png')]"
+  class="grid grid-cols-1 md:grid-cols-3 my-4 gap-4 bg-contain bg-[url('/assets/wave2.png')]"
 >
   <div
     class="p-16 w-100 col-span-1 bg-[#111014] lg:w-64 md:w-72 sm:w-48 mx-auto lg:bg-[#111014] rounded-xl flex items-center justify-center"
   >
-    <img src="{{service.imgPath}}" class="w-full mx-auto" />
+    <img src="{{service.photoURL}}" class="w-full mx-auto" />
   </div>
   <div class="col-span-2 flex justify-center flex-col">
-    <p class="text-lg font-bold my-3 text-[#FFF]">{{service.service | titlecase}}</p>
+    <p class="text-lg font-bold my-3 text-[#FFF]">{{service.title | titlecase}}</p>
     <p class="text-sm text-[#FFF]">
       {{service.description}}
     </p>
-    <button (click)="routeToBooking(service.service)" class="ui-green-btn my-3">Book now</button>
+    <button (click)="routeToBooking(service.name)" class="ui-green-btn my-3">Book now</button>
   </div>
 </div>
-<app-footer></app-footer>

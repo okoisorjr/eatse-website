@@ -12,9 +12,10 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { EaserRegistrationComponent } from './easer-registration/easer-registration.component';
 import { EaserSuccessComponent } from './easer-success/easer-success.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { EmailVerificationComponent } from './email-verification/email-verification.component';
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent, RegisterSuccessComponent, ForgotPasswordComponent, EaserRegistrationComponent, EaserSuccessComponent, ChangePasswordComponent],
+  declarations: [LoginComponent, RegisterComponent, RegisterSuccessComponent, ForgotPasswordComponent, EaserRegistrationComponent, EaserSuccessComponent, ChangePasswordComponent, EmailVerificationComponent],
   imports: [
     CommonModule,
     AuthRoutingModule,

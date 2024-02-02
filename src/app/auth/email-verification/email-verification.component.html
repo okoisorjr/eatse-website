@@ -1,0 +1,24 @@
+<!-- <app-top-nav></app-top-nav> -->
+<div
+  class="container grid grid-cols-1 lg:grid-cols md:grid-cols-2 lg:grid-cols-2"
+>
+  <div class="col-span-1 py-36 flex flex-col items-center">
+    <img src="assets/eatse/congrats.png" class="w-24" />
+    <p class="text-[#FFF] text-lg text-center font-bold my-2">
+      Congratulations!
+    </p>
+    <p class="text-gray-500 text-lg text-center">
+      Your account has been verified successfully
+      <i class="material-icons mr-2 fs-12 me-2 align-middle text-[#008000]"
+        >verified</i
+      >
+    </p>
+    <a routerLink="/auth/sign-in" class="hover:text-[#008000] text-[#008000]"
+      >Login here</a
+    >
+  </div>
+  <div class="col-span-1 hidden md:block lg:block">
+    <img src="assets/hero-img-sign-up.png" class="w-full" />
+  </div>
+</div>
+<app-footer></app-footer>

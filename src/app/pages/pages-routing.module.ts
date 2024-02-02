@@ -6,6 +6,8 @@ import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.componen
 import { GoalsComponent } from './goals/goals.component';
 import { FaqComponent } from './faq/faq.component';
 import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
+import { AuthGuard } from '../core/guards/auth.guard';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   {
@@ -17,6 +19,7 @@ const routes: Routes = [
     path: 'booking',
     loadChildren: () =>
       import('./bookings/bookings.module').then((m) => m.BookingsModule),
+    /* canActivate: [AuthGuard] */
   },
   {
     path: 'about',
@@ -29,6 +32,7 @@ const routes: Routes = [
       import('./eatse-services/eatse-services.module').then(
         (m) => m.EatseServicesModule
       ),
+    /* canActivate: [AuthGuard] */
   },
   {
     path: 'contact',
@@ -44,16 +48,20 @@ const routes: Routes = [
   },
   {
     path: 'page-construction',
-    component: PageConstructionComponent
+    component: PageConstructionComponent,
   },
   {
     path: 'goals',
-    component: GoalsComponent
+    component: GoalsComponent,
   },
   {
     path: 'terms-and-conditions',
     component: TermsOfServiceComponent,
-  }
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
+  },
 ];
 
 @NgModule({

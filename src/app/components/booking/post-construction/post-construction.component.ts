@@ -5,20 +5,18 @@ import { Flutterwave, PaymentSuccessResponse } from 'flutterwave-angular-v3';
 import { BookingsService } from 'src/app/services/bookings.service';
 import { DatePickerComponent } from '../../date-picker/date-picker.component';
 import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
-import { Auth } from '@angular/fire/auth';
-import { serverTimestamp } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
+import { NewOffice } from 'src/app/pages/bookings/model/new-office.model';
+import { AvailableTimes } from 'src/app/shared/available-times';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ProfileService } from 'src/app/services/profile.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from 'src/app/auth/auth.service';
 
 interface Room {
   price: string;
   roomType: string;
   count: number;
-}
-
-interface AvailableTime {
-  id: string;
-  time: string;
-  period: string;
 }
 
 @Component({
@@ -30,14 +28,17 @@ export class PostConstructionComponent implements OnInit {
   @ViewChild(DatePickerComponent) resetButton!: DatePickerComponent;
 
   newBooking: NewBooking = new NewBooking();
-  step: number = 1;
+  newOffice: NewOffice = new NewOffice();
+  step: number = 0;
   buildingTypes: string[] = [];
   selectedBuilding: string = '';
   frequencies: string[] = [];
-  times: AvailableTime[] = [];
+  times: string[] = [];
   currentUser: any;
+  addresses: any[] = [];
+  selectedAddress: any;
 
-  rooms!: Room[];
+  rooms: any[] = [];
   paymentStatus!: string;
 
   publicKey = environment.flutterwavePublicKey;
@@ -57,63 +58,41 @@ export class PostConstructionComponent implements OnInit {
     private bookingService: BookingsService,
     private router: Router,
     private ar: ActivatedRoute,
-    private auth: Auth
-  ) {
-    this.auth.onAuthStateChanged((credential) => {
-      if (credential) {
-        this.currentUser = credential;
-        this.customerDetails = {
-          email: this.currentUser.email,
-          customerName: this.currentUser.displayName,
-          userId: this.currentUser.uid,
-        };
-      }
-    });
-  }
+    private modalService: NgbModal,
+    private profileService: ProfileService,
+    private authService: AuthService
+  ) {}
 
   ngAfterViewInit() {
     this.resetButton.resetSelectedDates();
   }
 
   ngOnInit(): void {
+    this.currentUser = this.authService.getCurrentUser();
     this.newBooking.service = this.ar.snapshot.params['id'];
     this.newBooking.frequency = 'one-time';
-    if (this.newBooking.service === 'office-cleaning') {
-      this.newBooking.buildingType = 'Office';
-    } else {
-      this.newBooking.buildingType = 'House';
-    }
+
     this.buildingTypes = ['House', 'Office'];
     this.newBooking.dates = [];
     this.newBooking.cost = 0;
     this.frequencies = ['one-time', /*'weekly'*/ 'monthly', 'custom']; //weekly removed temporarily
-    this.times = [
-      { id: '1', time: '06:00', period: 'am' },
-      { id: '1', time: '07:00', period: 'am' },
-      { id: '1', time: '08:00', period: 'am' },
-      { id: '1', time: '09:00', period: 'am' },
-      { id: '1', time: '10:00', period: 'am' },
-      { id: '1', time: '11:00', period: 'am' },
-      { id: '1', time: '12:00', period: 'pm' },
-      { id: '1', time: '01:00', period: 'pm' },
-      { id: '1', time: '02:00', period: 'pm' },
-      { id: '1', time: '03:00', period: 'pm' },
-      { id: '1', time: '04:00', period: 'pm' },
-      { id: '1', time: '05:00', period: 'pm' },
-    ];
-    this.rooms = [
-      { price: '25000', roomType: 'Living room', count: 0 },
-      { price: '15000', roomType: 'Bedroom', count: 0 },
-      { price: '15000', roomType: 'Kitchen', count: 0 },
-      { price: '15000', roomType: 'Dinning area', count: 0 },
-      { price: '15000', roomType: 'Gym', count: 0 },
-      { price: '15000', roomType: 'Cinema/Studio', count: 0 },
-      { price: '15000', roomType: 'Home Office', count: 0 },
-      { price: '10000', roomType: 'Study', count: 0 },
-      { price: '5000', roomType: 'Rest Room', count: 0 },
-      { price: '5000', roomType: 'Store', count: 0 },
-      { price: '5000', roomType: 'Outdoor / Balcony', count: 0 },
-    ];
+    this.times = Object.values(AvailableTimes);
+    this.profileService.fetchClientAddresses(this.currentUser.id).subscribe(
+      (value) => {
+        if (value) {
+          this.addresses = value;
+        }
+      },
+      (error: HttpErrorResponse) => {
+        this.notifier.notify('error', `${error.error.message}`);
+      }
+    );
+    this.bookingService
+      .fetchRoomsAndPrices(this.newBooking.service)
+      .subscribe((value) => {
+        this.rooms = value;
+        //console.log(`rooms and prices for ${this.newBooking.service}`, value);
+      });
   }
 
   gotoBooking() {
@@ -131,9 +110,8 @@ export class PostConstructionComponent implements OnInit {
     this.resetButton.resetSelectedDates();
   }
 
-  setArrivalTime(time: AvailableTime) {
-    this.newBooking.arrivalTime = time.time;
-    this.newBooking.period = time.period;
+  setArrivalTime(time: string) {
+    this.newBooking.arrivalTime = time;
   }
 
   setDate(date: any) {
@@ -142,7 +120,43 @@ export class PostConstructionComponent implements OnInit {
     if (this.dates.length > 0) {
       this.newBooking.dates = this.dates;
     } */
-    this.newBooking.dates = date;
+    this.newBooking.dates = date.selectedDays;
+    this.newBooking.days = date.selectedDates;
+    console.log(this.newBooking);
+  }
+
+  selectAddress(address: any) {
+    this.selectedAddress = address;
+    this.newBooking.address = address._id;
+    this.modalService.dismissAll();
+  }
+
+  resetAddress() {
+    this.newBooking.address = '';
+  }
+
+  openSelectAddressModal(addressSelectionModal: any) {
+    this.modalService.open(addressSelectionModal, {
+      centered: true,
+      size: 'md',
+    });
+  }
+
+  next() {
+    window.scrollTo({ top: 0 });
+    if (this.newBooking.buildingType == 'House') {
+      this.step = 1;
+    } else if (this.newBooking.buildingType == 'Office') {
+      this.step = 2;
+    }
+  }
+
+  prev() {
+    if (this.newBooking.buildingType == 'Office' && this.step == 2) {
+      this.step = 0;
+    } else if (this.newBooking.buildingType == 'House' && this.step == 2) {
+      this.step = 1;
+    }
   }
 
   nextPhase() {
@@ -177,21 +191,25 @@ export class PostConstructionComponent implements OnInit {
 
   selectBuilding(building: string) {
     this.newBooking.buildingType = building;
-    this.newBooking.rooms = [];
+    this.newBooking.rooms = 0;
   }
 
-  decreaseRoomSize(room: Room) {
-    if (room.count === 0) {
+  decreaseRoomSize(room: any) {
+    room.count--;
+    this.newBooking.rooms--;
+    this.newBooking.cost -= room.price;
+    /* if (room.count === 0) {
       return this.notifier.notify('error', "sorry, can't go below 0");
     }
     room.count--;
-    this.newBooking.cost - Number(room.price);
+    this.newBooking.cost - Number(room.price); */
     console.log(this.newBooking);
   }
 
-  increaseRoomSize(room: Room) {
+  increaseRoomSize(room: any) {
     room.count++;
-    this.newBooking.cost += Number(room.price);
+    this.newBooking.rooms++;
+    this.newBooking.cost += room.price;
   }
 
   validateForm() {
@@ -214,6 +232,23 @@ export class PostConstructionComponent implements OnInit {
 
   proceedToPay() {
     let value = this.validateForm();
+    this.newBooking.client = this.currentUser.id;
+    this.rooms.forEach((room) => {
+      if (room.count > 0) {
+        this.newBooking.house_setting.push(room);
+      }
+    });
+    console.log(this.newBooking);
+    this.bookingService.saveBooking(this.newBooking).subscribe(
+      (value) => {
+        if (value) {
+          console.log('booking saved: ', value);
+        }
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    );
     if (value) {
       this.makePayment();
     }
@@ -239,16 +274,10 @@ export class PostConstructionComponent implements OnInit {
   }
   makePaymentCallback(response: PaymentSuccessResponse): void {
     this.newBooking.paymentStatus = 'successful';
-    this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
-    this.bookingService.saveBooking(bookingData);
     console.log('Payment callback', response);
   }
   closedPaymentModal(): void {
     this.newBooking.paymentStatus = 'cancelled';
-    this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
-    this.bookingService.saveBooking(bookingData);
     console.log('payment is closed');
   }
 

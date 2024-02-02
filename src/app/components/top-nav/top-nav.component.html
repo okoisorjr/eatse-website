@@ -18,7 +18,10 @@
     </div>
 
     <!-- View for a not signed in user-->
-    <div *ngIf="!currentUser" class="hidden md:block lg:block xl:block flex-2">
+    <div
+      *ngIf="!currentUser || currentUser === undefined"
+      class="hidden md:block lg:block xl:block flex-2"
+    >
       <div class="flex flex-row gap-3 items-center">
         <a routerLink="/auth/sign-up" style="cursor: pointer" class="text-white"
           >Sign up</a
@@ -42,22 +45,18 @@
         aria-expanded="false"
         style="border-radius: 50%; background-color: #008000; color: #fff"
       >
-        {{
-          currentUser.displayName
-            ? currentUser.displayName[0].toUpperCase()
-            : currentUser.email[0].toUpperCase()
-        }}
+        {{ currentUser.firstname[0].toUpperCase() }}
       </button>
       <ul
         class="dropdown-menu dropdown-menu-dark"
         aria-labelledby="dropdownMenuButton2"
       >
         <li>
-          <a class="dropdown-item cursor-pointer">{{
-            currentUser.displayName
-              ? currentUser.displayName
-              : currentUser.email
-          }}</a>
+          <a class="dropdown-item cursor-pointer" routerLink="/profile">{{
+            currentUser && currentUser.firstname + " " + currentUser.lastname
+          }} <i *ngIf="currentUser.verified" class="material-icons mr-2 fs-12 me-2 align-middle text-[#008000]"
+          >verified</i
+        ></a>
         </li>
         <li>
           <hr class="dropdown-divider" />
@@ -129,6 +128,22 @@
         </g>
       </svg>
     </div>
+  </div>
+</div>
+<div *ngIf="showBookingMenu" class="border-y-2 border-gray-600">
+  <div class="flex flex-row justify-center items-center gap-5 p-4">
+    <a routerLink="/booking/active"
+      ><div class="flex flex-col items-center justify-center cursor-pointer">
+        <i class="material-icons text-[#FFF]">event</i>
+        <p class="text-[#FFF]">Active bookings</p>
+      </div></a
+    >
+    <a routerLink="/booking/history"
+      ><div class="flex flex-col items-center justify-center cursor-pointer">
+        <i class="material-icons text-[#FFF]">history</i>
+        <p class="text-[#FFF]">Booking history</p>
+      </div></a
+    >
   </div>
 </div>
 <app-mobile-menu
