@@ -15,6 +15,6 @@ export class ApplicationPageComponent implements OnInit {
   ngOnInit(): void {}
 
   submitApplication(applicationForm: any) {
-    this.careerService.apply()
+    //this.careerService.apply()
   }
 }
