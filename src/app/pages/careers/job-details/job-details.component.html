@@ -1,1 +1,73 @@
-<p>job-details works!</p>
+<div class="py-10 container">
+  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+    <div class="col-span-1">
+      <div class="py-10">
+        <p class="text-xl font-bold text-white my-4">Roles</p>
+        <ng-container *ngFor="let role of roles">
+          <a
+            routerLink="/careers/role/{{ role.link }}"
+            (click)="updateActiveRole(role.role)"
+            class="block text-sm font-normal hover:text-[#008000] text-white my-4"
+            [ngClass]="{
+              'bg-[#111014] p-2 w-fit rounded-md': role.role === activeRole
+            }"
+            >{{ role.role }}</a
+          >
+        </ng-container>
+      </div>
+    </div>
+    <div class="col-span-1 md:col-span-2 lg:col-span-3">
+      <p class="text-white text-start text-3xl">
+        {{ activeRole | uppercase }}
+      </p>
+      <div class="py-5">
+        <p class="text-gray-500">
+          <span class="font-semibold">About the role:</span><br /><span
+            >A business developer is a professional who is responsible for
+            identifying, developing, and executing new business opportunities
+            for a company. They work with a variety of stakeholders, including
+            sales, marketing, product development, and executive leadership, to
+            identify and assess new market opportunities, develop and execute
+            sales strategies, and close deals.</span
+          >
+        </p>
+        <br />
+        <p class="text-gray-500 uppercase">location: <span>Remote</span></p>
+        <br />
+        <p class="text-gray-500 uppercase">type: <span>Full-time</span></p>
+        <br />
+        <p class="text-gray-500 uppercase">
+          department: <span>Marketing</span>
+        </p>
+        <br />
+        <p class="text-gray-500 uppercase">
+          compensation: <span>35k - 50k</span>
+        </p>
+        <br />
+        <p class="text-gray-500">
+          Business developers typically have a strong understanding of the
+          company's products or services, as well as the industry in which they
+          operate. They are also skilled in sales, marketing, and negotiation.
+          In addition, business developers must be able to think strategically
+          and creatively, and to build relationships with key stakeholders.
+        </p>
+        <br />
+
+        <p class="text-gray-500">
+          <span class="font-semibold">Your Impact:</span>
+        </p>
+        <ul>
+          <li></li>
+        </ul>
+      </div>
+      <div>
+        <button
+          (click)="apply()"
+          class="bg-[#008000] text-[#FFF] p-2 w-100 rounded-md shadow-md"
+        >
+          Apply Now
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
