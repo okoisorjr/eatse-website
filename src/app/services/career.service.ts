@@ -15,4 +15,11 @@ export class CareerService {
       application
     );
   }
+
+  uploadResume(file: FormData): Observable<any> {
+    return this.http.post<any>(
+      `${environment.developmentIP}/apply/upload-cv`,
+      file
+    );
+  }
 }

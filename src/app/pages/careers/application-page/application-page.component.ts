@@ -9,28 +9,33 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./application-page.component.css'],
 })
 export class ApplicationPageComponent implements OnInit {
-  file!: File;
   filename!: string;
   formData!: FormData;
   application: NewApplication = new NewApplication();
+  uploading: boolean = false;
 
   constructor(private careerService: CareerService) {}
 
   onFileSelected(event: any) {
-    this.file = event.target.files[0];
+    const file = event.target.files[0];
 
-    if (this.file) {
-      this.filename = this.file.name;
+    if (file) {
+      this.uploading = true;
+      this.filename = file.name;
 
       const formData = new FormData();
 
-      formData.append('file', this.file);
+      formData.append('file', file);
 
-      this.formData = formData;
-
-      console.log('document to be uploaded:', this.formData);
+      this.careerService.uploadResume(formData).subscribe((value) => {
+        this.application.file = value.img_URL;
+        console.log(this.application.file);
+        this.uploading = false;
+      }, (error: HttpErrorResponse) => {
+        console.log(error);
+        this.uploading = false;
+      })
     }
-    console.log('selected file: ', event);
   }
 
   ngOnInit(): void {}
