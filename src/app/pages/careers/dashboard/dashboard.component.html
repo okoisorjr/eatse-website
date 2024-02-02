@@ -1,1 +1,143 @@
-<p>dashboard works!</p>
+<div class="py-16 container">
+  <div class="px-16 mx-auto">
+    <p class="text-center text-[#FFF] text-3xl mb-4 font-semibold">
+      Work with us
+    </p>
+    <p class="text-start text-gray-500 text-sm">
+      The world is full of problems, but it's also full of solutions. And we're
+      here to build something great to help the world, something that will make
+      a difference, something that will change lives. So if you're ready to do
+      something great, then we welcome you with open arms. Together, we can make
+      a difference.
+    </p>
+  </div>
+</div>
+
+<div class="w-100">
+  <p-carousel
+    [value]="images"
+    [numVisible]="4"
+    [numScroll]="1"
+    [circular]="true"
+    [autoplayInterval]="3000"
+    [responsiveOptions]="responsiveOptions"
+  >
+    <ng-template let-image pTemplate="item">
+      <img [src]="image.img" style="height: 200px; width: 290px" />
+    </ng-template>
+  </p-carousel>
+</div>
+
+<div class="container">
+  <div class="grid grid-cols-1 py-25 lg:grid-cols-2">
+    <div class="flex flex-col justify-center py-20 mx-auto">
+      <p
+        class="text-3xl md:text-center lg:text-start text-white sm:text-4xl lg:text-3xl"
+      >
+        Comfort do your best work.
+      </p>
+      <p
+        class="text-sm lg:text-start text-gray-500 py-3 lg:text-sm md:text-center md:w-50"
+      >
+        We know comfort at work is important for productivity and well-being
+        that’s why we offer flexible work arrangements so that you can work from
+        home or the office, depending on your needs.
+      </p>
+    </div>
+
+    <div class="flex flex-row items-center justify-center gap-3">
+      <img src="assets/eatse/img_5.png" style="width: 280px; height: 200px" />
+      <img src="assets/eatse/img_6.png" style="width: 150px; height: 200px" />
+    </div>
+  </div>
+</div>
+
+<div class="hidden md:block lg:block container">
+  <div class="grid grid-cols-1 py-25 lg:grid-cols-2">
+    <div class="flex flex-row items-center justify-center gap-3">
+      <img src="assets/eatse/img_7.png" style="width: 150px; height: 200px" />
+      <img src="assets/eatse/img_8.png" style="width: 280px; height: 200px" />
+    </div>
+
+    <div class="flex flex-col justify-center py-20 mx-auto">
+      <p
+        class="text-3xl lg:text-start text-white sm:text-4xl lg:text-3xl md:text-center"
+      >
+        Let your creativity fly
+      </p>
+      <p
+        class="text-sm lg:text-start text-gray-500 py-3 lg:text-sm md:text-center md:w-50"
+      >
+        At Eatse we celebrate creativity, we’ve made sure there are no barriers
+        to your creativity, always open to new ideas, reward creativity.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="block md:hidden lg:hidden container">
+  <div class="grid grid-cols-1 py-25 lg:grid-cols-2">
+    <div class="flex flex-col justify-center py-20 mx-auto">
+      <p
+        class="text-3xl lg:text-start text-white sm:text-4xl lg:text-3xl md:text-center"
+      >
+        Let your creativity fly
+      </p>
+      <p
+        class="text-sm lg:text-start text-gray-500 py-3 lg:text-sm md:text-center md:w-50"
+      >
+        At Eatse we celebrate creativity, we’ve made sure there are no barriers
+        to your creativity, always open to new ideas, reward creativity.
+      </p>
+    </div>
+
+    <div class="flex flex-row items-center justify-center gap-3">
+      <img src="assets/eatse/img_7.png" style="width: 150px; height: 200px" />
+      <img src="assets/eatse/img_8.png" style="width: 280px; height: 200px" />
+    </div>
+  </div>
+</div>
+
+<div class="py-10 container">
+  <p class="text-center text-3xl text-[#FFF] pb-5">
+    Compensations and benefits
+  </p>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+    <ng-container *ngFor="let benefit of benefits; let i = index">
+      <div class="flex flex-col items-center justify-center py-3">
+        <img
+          [src]="benefit.img"
+          style="width: 70px; height: 70px"
+          class="mb-2"
+        />
+        <p class="text-center text-white text-lg py-2">{{ benefit.title }}</p>
+        <p class="w-50 text-center text-gray-500 text-sm">{{ benefit.desc }}</p>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<div class="pb-10 container">
+  <p class="text-center text-3xl text-[#FFF] py-4">Open Roles</p>
+  <ng-container *ngFor="let role of roles">
+    <a routerLink="/careers/role/{{ role.link }}">
+      <div
+        class="flex flex-row my-2 justify-between text-[#FFF] font-semibold text-xl w-full p-3 bg-[#111014] rounded-md"
+      >
+        {{ role.role }}
+        <a
+          routerLink="/careers/role/{{ role.link }}"
+          class="hidden md:block lg:block text-sm lg:text-lg font-normal hover:text-[#008000]"
+          ><span>More details</span
+          ><i class="ri-arrow-right-s-line items-center mx-2"></i
+        ></a>
+        <a
+          routerLink="/careers/role/{{ role.link }}"
+          class="block md:hidden lg:hidden text-sm lg:text-lg font-normal hover:text-[#008000]"
+          ><i class="ri-arrow-right-s-line items-center mx-2"></i
+        ></a>
+      </div>
+    </a>
+  </ng-container>
+</div>
+<app-footer></app-footer>
