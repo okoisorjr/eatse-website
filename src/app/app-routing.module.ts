@@ -2,18 +2,19 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { AppGuard } from './core/guards/app.guard';
+import { PageLayoutComponent } from './layout/page-layout/page-layout.component';
 
 const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
-    /* canActivate: [AuthGuard], */
+    canActivate: [AppGuard],
   },
   {
     path: '',
+    component: PageLayoutComponent,
     loadChildren: () =>
       import('./pages/pages.module').then((m) => m.PagesModule),
-      /* canActivate: [AppGuard], */
   },
   {
     path: '**',
@@ -23,7 +24,9 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled'})],
+  imports: [
+    RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

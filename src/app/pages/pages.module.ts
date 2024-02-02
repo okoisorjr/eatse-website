@@ -3,6 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ComponentsModule } from '../components/components.module';
 import { FormsModule } from '@angular/forms';
 import { AccordionModule } from 'primeng/accordion';
+import {
+  NgbModule,
+  NgbModalModule,
+  NgbPopoverModule,
+  NgbDropdownModule,
+} from '@ng-bootstrap/ng-bootstrap';
+import { BookingsModule } from './bookings/bookings.module';
 
 import { PagesRoutingModule } from './pages-routing.module';
 import { ContactComponent } from './contact/contact.component';
@@ -10,7 +17,7 @@ import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.componen
 import { GoalsComponent } from './goals/goals.component';
 import { FaqComponent } from './faq/faq.component';
 import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
-
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -18,14 +25,20 @@ import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.com
     PrivacyPolicyComponent,
     GoalsComponent,
     FaqComponent,
-    TermsOfServiceComponent
+    TermsOfServiceComponent,
+    ProfileComponent,
   ],
   imports: [
     CommonModule,
     PagesRoutingModule,
     ComponentsModule,
     FormsModule,
-    AccordionModule
-  ]
+    AccordionModule,
+    NgbModalModule,
+    NgbModule,
+    NgbPopoverModule,
+    BookingsModule,
+    NgbDropdownModule,
+  ],
 })
-export class PagesModule { }
+export class PagesModule {}

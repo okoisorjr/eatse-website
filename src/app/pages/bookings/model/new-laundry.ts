@@ -1,11 +1,16 @@
 import { LaundryItems } from "./laundry-items";
 
 export class NewLaundry {
-  pickupAddress!: string;
-  cost: string = '0' ;
+  address!: string;
+  cost: number = 0 ;
   items: LaundryItems[] = [];
-  deliveryAddress!: string;
-  extraInformation!: string;
+  totalItems!: number;
+  message!: string;
   service!: string;
   frequency?: string;
+  pickupTime!: string;
+  dates!: number[];
+  days!: string[];
+  client!: string;
+  paymentStatus?: string; 
 }

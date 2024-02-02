@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
-import { AuthService, CurrentUser } from '../auth.service';
-import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
+import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
-import { Auth } from '@angular/fire/auth';
 import { LoginDetails } from '../models/login-details.model';
 import { signInWithEmailAndPassword } from '@angular/fire/auth';
+import { HttpErrorResponse } from '@angular/common/http';
+import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
+import { mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -19,9 +20,8 @@ export class LoginComponent implements OnInit {
   submitted: boolean = false;
 
   constructor(
-    private userService: GlobalResourceService,
-    private auth: Auth,
     private authService: AuthService,
+    private globalService: GlobalResourceService,
     private router: Router
   ) {}
 
@@ -30,43 +30,20 @@ export class LoginComponent implements OnInit {
   login(form: any) {
     this.error = '';
     this.submitted = true;
-    console.log(this.submitted);
-    if (this.loginDetails.email === ' ' && this.loginDetails.password === ' ') {
-      this.submitted = false;
-      this.error = 'Please enter your email address and password!';
-    } else if (this.loginDetails.email === ' ') {
-      this.submitted = false;
-      this.error = 'Please enter your email address!';
-    } else if (this.loginDetails.password === ' ') {
-      this.submitted = false;
-      this.error = 'Please enter your password!';
-    } else {
-      signInWithEmailAndPassword(
-        this.auth,
-        this.loginDetails.email,
-        this.loginDetails.password
-      )
-      .then((res) => {
+    this.authService.loginClient(this.loginDetails).subscribe(
+      (value) => {
+        if (value) {
+          this.authService.currentUser = value.user;
+          this.authService.saveTokens(value.access_token, value.refresh_token);
+          //localStorage.setItem('access_token', value.access_token);
+          //localStorage.setItem('refresh_token', value.refresh_token);
+        }
+        this.router.navigate(['/']);
+      },
+      (error: HttpErrorResponse) => {
         this.submitted = false;
-        this.userService.currentUser = res;
-        console.log(this.userService.getPreviousUrl());
-        this.router.navigate(['/'])
-      })
-      .catch((error) => {
-        this.submitted = false;
-        if(error.code === 'auth/user-disabled'){
-          this.error = 'Account Inactive!';
-        }
-        else if(error.code === 'auth/user-not-found'){
-          this.error = 'This Account Does Not Exist!';
-        }
-        else if(error.code === 'auth/wrong-password'){
-          this.error = 'Invalid Login Credentials!';
-        }
-        else if(error.code === 'auth/invalid-email'){
-          this.error = 'Invalid Email Address!';
-        }
-      });
-    }
+        this.error = error.error.message;
+      }
+    );
   }
 }

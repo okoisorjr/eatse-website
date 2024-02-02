@@ -1,9 +1,12 @@
 export class NewErrand {
   service!: string;
-  errand!: string;
+  arrivalTime!: string;
+  errandType!: string;
   frequency!: string;
   storeLocation!: string;
   deliveryAddress!: string;
   shoppingItems!: string;
-  cost: string = '0';
+  cost!: number;
+  dates!: number[];
+  days!: string[];
 }

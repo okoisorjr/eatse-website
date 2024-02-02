@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserAccount } from 'src/app/auth/models/user-account.model';
-import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
+import { User } from 'src/app/auth/model/user';
 import { NewBooking } from '../model/new-booking';
-import { CurrentUser } from 'src/app/auth/auth.service';
-import { Auth } from '@angular/fire/auth';
+import { AuthService } from 'src/app/auth/auth.service';
+import { BookingsService } from 'src/app/services/bookings.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-list-bookings',
@@ -12,21 +12,31 @@ import { Auth } from '@angular/fire/auth';
   styleUrls: ['./list-bookings.component.css'],
 })
 export class ListBookingsComponent implements OnInit {
-  //currentUser!: UserAccount;
   newBooking: NewBooking = new NewBooking();
   currentPage: string = 'booking';
   selectedService!: string;
-  currentUser: any;
+  currentUser!: any;
   step: number = 0;
   frequency: string = 'one-time';
 
-  constructor(private user: GlobalResourceService, private router: Router, private auth: Auth) {
-
-  }
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private bookingService: BookingsService
+  ) {}
 
   ngOnInit(): void {
-    this.currentUser = this.auth.currentUser;
-    this.newBooking.frequency = 'one-time';
+    this.currentUser = this.authService.getCurrentUser();
+    /* if (this.currentUser)
+      this.bookingService.getBookings(this.currentUser.id).subscribe(
+        (value) => {
+          
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error);
+        }
+      );
+    this.newBooking.frequency = 'one-time'; */
   }
 
   gotoBooking() {
@@ -37,17 +47,17 @@ export class ListBookingsComponent implements OnInit {
     if (!this.currentUser) {
       this.router.navigate(['/auth/sign-in']);
     } else {
-      if (service === 'housekeeping') {
+      if (service === 'house-keeping') {
         this.selectedService = service;
         this.router.navigate(['/booking/' + service]);
         this.newBooking.service = service;
         this.step++;
-      } else if (service === 'deep cleaning') {
+      } else if (service === 'deep-cleaning') {
         this.selectedService = service;
         this.router.navigate(['/booking/' + service]);
         this.newBooking.service = service;
         this.step++;
-      } else if (service === 'post construction cleaning') {
+      } else if (service === 'post-construction-cleaning') {
         this.selectedService = service;
         this.router.navigate(['/booking/' + service]);
         this.newBooking.service = service;
@@ -63,24 +73,23 @@ export class ListBookingsComponent implements OnInit {
         this.router.navigate(['/booking/' + service]);
         this.newBooking.service = service;
         this.step++;
-      } else if(service === 'office-cleaning'){
+      } else if (service === 'office-cleaning') {
         this.selectedService = service;
         this.router.navigate(['/booking/' + service]);
         this.newBooking.service = service;
         this.step += 2;
         console.log(this.newBooking.service);
-      } else if( service === 'fumigation'){
+      } else if (service === 'fumigation') {
         this.selectedService = service;
         this.router.navigate(['/booking/' + service]);
         this.newBooking.service = service;
         this.step++;
-      } else if( service === 'move-in-out-cleaning'){
+      } else if (service === 'move-in-move-out') {
         this.selectedService = service;
         this.router.navigate(['/booking/' + service]);
         this.newBooking.service = service;
         this.step++;
       }
-
     }
   }
 
@@ -101,7 +110,7 @@ export class ListBookingsComponent implements OnInit {
     this.step++;
   }
 
-  back(booking: any){
+  back(booking: any) {
     this.newBooking = booking;
     console.log(this.newBooking);
     this.step--;

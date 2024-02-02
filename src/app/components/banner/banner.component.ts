@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-banner',
@@ -10,15 +10,12 @@ import { Router } from '@angular/router';
 export class BannerComponent implements OnInit {
   currentUser: any;
 
-  constructor(private auth: Auth, private router: Router) {
-    this.auth.onAuthStateChanged((credential) => {
-      if (credential) {
-        this.currentUser = credential;
-      }
-    });
+  constructor(private router: Router, private authService: AuthService) {
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.currentUser = this.authService.getCurrentUser();
+  }
 
   gotoRegister(){
     this.router.navigate(['/auth/sign-up']);

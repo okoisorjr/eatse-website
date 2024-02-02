@@ -14,18 +14,16 @@ import {
   PaymentSuccessResponse,
 } from 'flutterwave-angular-v3';
 import { BookingsService } from 'src/app/services/bookings.service';
-import { Auth } from '@angular/fire/auth';
-import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 import { Room } from 'src/app/pages/bookings/model/room';
 import { ActivatedRoute, Router } from '@angular/router';
-import { serverTimestamp } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
-
-interface AvailableTime {
-  id: string;
-  time: string;
-  period: string;
-}
+import { User } from 'src/app/auth/model/user';
+import { AuthService } from 'src/app/auth/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ProfileService } from 'src/app/services/profile.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { BuildingTypes } from 'src/app/shared/building-types';
+import { AvailableTimes } from 'src/app/shared/available-times';
 
 @Component({
   selector: 'app-housekeeping',
@@ -39,15 +37,17 @@ export class HousekeepingComponent implements OnInit {
 
   step: number = 1;
   newBooking: NewBooking = new NewBooking();
-  times: AvailableTime[] = [];
+  times: string[] = [];
   frequencies: string[] = [];
   dates: string[] = [];
   nextButtonEnabled: boolean = true;
 
-  rooms!: Room[];
+  rooms!: any[];
   totalCost!: string;
   paymentStatus!: string;
-  currentUser: any;
+  currentUser!: User;
+  addresses: any[] = [];
+  selectedAddress: any;
 
   publicKey = environment.flutterwavePublicKey;
   customizations: any;
@@ -60,47 +60,41 @@ export class HousekeepingComponent implements OnInit {
     private ar: ActivatedRoute,
     private flutterwave: Flutterwave,
     private bookingService: BookingsService,
-    private auth: Auth,
-    private globalService: GlobalResourceService,
     private router: Router,
-  ) {
-    this.currentUser = this.globalService.getCurrentUser();
-    this.rooms = [
-      { price: 500, roomType: 'Living rooms / dining area', count: 0 },
-      { price: 2000, roomType: 'Bedrooms', count: 0 },
-      { price: 1000, roomType: 'Kitchen', count: 0 },
-      { price: 1000, roomType: 'Toilets', count: 0 },
-      { price: 500, roomType: 'Study', count: 0 },
-      { price: 500, roomType: 'Store', count: 0 },
-      { price: 500, roomType: 'Outdoor / balcony', count: 0 },
-    ];
-  }
+    private authService: AuthService,
+    private profileService: ProfileService,
+    private modalService: NgbModal
+  ) {}
 
   ngAfterViewInit() {
     this.resetButton.resetSelectedDates();
   }
 
   ngOnInit(): void {
+    this.currentUser = this.authService.getCurrentUser();
     this.newBooking.service = this.ar.snapshot.params['id'];
+    this.newBooking.buildingType = BuildingTypes.HOUSE;
     this.newBooking.frequency = 'one-time';
     this.newBooking.dates = [];
+    this.profileService.fetchClientAddresses(this.currentUser.id).subscribe(
+      (value) => {
+        if (value) {
+          this.addresses = value;
+        }
+      },
+      (error: HttpErrorResponse) => {
+        this.notifier.notify('error', `${error.error.message}`);
+      }
+    );
+    this.bookingService
+      .fetchRoomsAndPrices(this.newBooking.service)
+      .subscribe((value) => {
+        this.rooms = value;
+        //console.log(`rooms and prices for ${this.newBooking.service}`, value);
+      });
     this.frequencies = ['one-time', /*'weekly'*/ 'monthly', 'custom']; //weekly removed temporarily
-    this.times = [
-      { id: '1', time: '06:00', period: 'am' },
-      { id: '1', time: '07:00', period: 'am' },
-      { id: '1', time: '08:00', period: 'am' },
-      { id: '1', time: '09:00', period: 'am' },
-      { id: '1', time: '10:00', period: 'am' },
-      { id: '1', time: '11:00', period: 'am' },
-      { id: '1', time: '12:00', period: 'pm' },
-      { id: '1', time: '01:00', period: 'pm' },
-      { id: '1', time: '02:00', period: 'pm' },
-      { id: '1', time: '03:00', period: 'pm' },
-      { id: '1', time: '04:00', period: 'pm' },
-      { id: '1', time: '05:00', period: 'pm' },
-    ];
+    this.times = Object.values(AvailableTimes);
 
-    this.currentUser = this.auth.currentUser;
     this.newBooking.cost = 0;
     this.newBooking.discountedPrice = 0;
     this.customizations = {
@@ -109,15 +103,13 @@ export class HousekeepingComponent implements OnInit {
       logo: 'https://firebasestorage.googleapis.com/v0/b/eatse-4dbd3.appspot.com/o/service-images%2Fbrand-logo.jpg?alt=media&token=9ba32825-4020-4d8d-ae29-76ffc41a35a5',
     };
     this.customerDetails = {
-      name: this.currentUser.displayName
-        ? this.currentUser.displayName
-        : this.currentUser.email,
+      name: this.currentUser.firstname + ' ' + this.currentUser.lastname,
       email: this.currentUser.email,
-      userId: this.currentUser.uid,
+      userId: this.currentUser.id,
     };
     this.meta = {
       service: this.newBooking.service,
-      rooms: this.newBooking.rooms.length,
+      rooms: this.newBooking.rooms,
       serviceFrequency: this.newBooking.frequency,
       counsumer_id: '7898',
       consumer_mac: 'kjs9s8ss7dd',
@@ -136,19 +128,40 @@ export class HousekeepingComponent implements OnInit {
     }
   }
 
+  selectAddress(address: any) {
+    this.selectedAddress = address;
+    this.newBooking.address = address._id;
+    this.modalService.dismissAll();
+  }
+
+  resetAddress() {
+    this.newBooking.address = '';
+  }
+
+  openSelectAddressModal(addressSelectionModal: any) {
+    this.modalService.open(addressSelectionModal, {
+      centered: true,
+      size: 'md',
+    });
+  }
+
   selectFrequency(frequency: any) {
     this.newBooking.frequency = frequency;
-    this.newBooking.dates = [];
-    this.resetButton.resetSelectedDates();
+    if (frequency == 'one-time') {
+      this.resetButton.resetSelectedDates();
+    }
+    /* this.newBooking.dates = [];
+    this.newBooking.days = []; */
+    //
     let val = this.validateFields();
     if (val) {
       this.nextButtonEnabled = true;
     }
   }
 
-  setArrivalTime(time: AvailableTime) {
-    this.newBooking.arrivalTime = time.time;
-    this.newBooking.period = time.period;
+  setArrivalTime(time: string) {
+    this.newBooking.arrivalTime = time;
+    //this.newBooking.period = time.period;
     let val = this.validateFields();
     if (val) {
       this.nextButtonEnabled = true;
@@ -161,7 +174,9 @@ export class HousekeepingComponent implements OnInit {
     if (this.dates.length > 0) {
       this.newBooking.dates = this.dates;
     } */
-    this.newBooking.dates = date;
+    this.newBooking.dates = date.selectedDays;
+    this.newBooking.days = date.selectedDates;
+    console.log(this.newBooking);
   }
 
   nextPhase() {
@@ -206,6 +221,7 @@ export class HousekeepingComponent implements OnInit {
 
   decreaseRoomSize(room: Room) {
     room.count--;
+    this.newBooking.rooms--;
     this.newBooking.cost -= room.price;
     if (this.newBooking.percentageDiscount) {
       this.newBooking.discountedPrice =
@@ -217,8 +233,9 @@ export class HousekeepingComponent implements OnInit {
 
   increaseRoomSize(room: Room) {
     room.count++;
+    this.newBooking.rooms++;
     this.newBooking.cost += room.price;
-    this.newBooking.rooms.push(room);
+    //this.newBooking.rooms.push(room);
     if (this.newBooking.percentageDiscount) {
       this.newBooking.discountedPrice =
         this.newBooking.cost - this.calculatePercentage(); // calcluate the discount from the initial service cost
@@ -231,11 +248,38 @@ export class HousekeepingComponent implements OnInit {
     this.router.navigate(['/booking']);
   }
 
+  previous() {
+    this.step = 0;
+  }
+
   back() {
     this.step--;
   }
 
   proceedToPay() {
+    this.newBooking.client = this.currentUser.id;
+    //this.newBooking.easer = this.currentUser.
+    this.newBooking.startingDate = new Date();
+    this.newBooking.expiryDate =
+      this.newBooking.frequency === 'one-time'
+        ? new Date().setDate(new Date().getDate() + 1)
+        : new Date().setMonth(new Date().getMonth() + 1);
+    this.rooms.forEach((room) => {
+      if (room.count > 0) {
+        this.newBooking.house_setting.push(room);
+      }
+    });
+    console.log(this.newBooking);
+    this.bookingService.saveBooking(this.newBooking).subscribe(
+      (value) => {
+        if (value) {
+          console.log('booking saved: ', value);
+        }
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    );
     this.makePayment();
   }
 
@@ -261,16 +305,12 @@ export class HousekeepingComponent implements OnInit {
   }
   makePaymentCallback(response: PaymentSuccessResponse): void {
     this.newBooking.paymentStatus = 'successful';
-    this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
-    this.bookingService.saveBooking(bookingData);
+
     console.log('Payment callback', response);
   }
   closedPaymentModal(): void {
     this.newBooking.paymentStatus = 'cancelled';
-    this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
-    this.bookingService.saveBooking(bookingData);
+
     console.log('payment is closed');
   }
 

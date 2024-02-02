@@ -9,6 +9,7 @@ import { FeaturesComponent } from './features/features.component';
 import { FooterComponent } from './footer/footer.component';
 import { TestimonialsComponent } from './testimonials/testimonials.component';
 import { FlutterwaveModule } from 'flutterwave-angular-v3';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import { ComponentsRoutingModule } from './components-routing.module';
 import { MobileMenuComponent } from './mobile-menu/mobile-menu.component';
@@ -27,6 +28,7 @@ import { OfficeCleaningComponent } from './booking/office-cleaning/office-cleani
 import { PostConstructionComponent } from './booking/post-construction/post-construction.component';
 import { MoveInOutComponent } from './booking/move-in-out/move-in-out.component';
 import { EatseCaresComponent } from './eatse-cares/eatse-cares.component';
+import { BuildingTypeComponent } from './building-type/building-type.component';
 
 @NgModule({
   declarations: [
@@ -51,9 +53,10 @@ import { EatseCaresComponent } from './eatse-cares/eatse-cares.component';
     OfficeCleaningComponent,
     PostConstructionComponent,
     MoveInOutComponent,
-    EatseCaresComponent
+    EatseCaresComponent,
+    BuildingTypeComponent
   ],
-  imports: [CommonModule, ComponentsRoutingModule, NgbModule, FormsModule, FlutterwaveModule],
+  imports: [CommonModule, ComponentsRoutingModule, NgbModule, FormsModule, FlutterwaveModule, NgSelectModule],
   exports: [
     TopNavComponent,
     HeroComponent,

@@ -1,46 +1,56 @@
 import { Component, OnInit } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
-import { getDownloadURL, getStorage, ref } from '@angular/fire/storage';
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  NavigationStart,
+  Router,
+} from '@angular/router';
+import { AuthService } from 'src/app/auth/auth.service';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
+import { EatseServicesService } from 'src/app/services/eatse-services.service';
 
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
-  styleUrls: ['./service.component.css']
+  styleUrls: ['./service.component.css'],
 })
 export class ServiceComponent implements OnInit {
-
   serviceName!: string;
   service: any;
   selectedService: any;
+  currentUser: any;
 
-  constructor(private router: Router, private ar: ActivatedRoute, private globalService: GlobalResourceService, private auth: Auth) { }
+  constructor(
+    private router: Router,
+    private ar: ActivatedRoute,
+    private auth: AuthService,
+    private eatseServices: EatseServicesService
+  ) {
+    this.currentUser = this.auth.getCurrentUser();
+  }
 
   ngOnInit(): void {
-    this.router.events.subscribe((event) => {
-      if(event instanceof NavigationEnd){
+    /* this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
         this.ngOnInit();
       }
-    })
-    this.serviceName = this.ar.snapshot.params['id'];
-    const storage = getStorage();
-    this.globalService.getSingleService(this.serviceName).then((doc) => {
-      /* let pathRef = ref(storage, `service-images/${doc.imgPath}`);
-      getDownloadURL(pathRef).then((url) => {
-        doc.imgPath = url;
-        this.service = doc;
-      }); */
-      this.service = doc;
+    }); */
+
+    this.ar.params.subscribe((routeParams) => {
+      //this.loadUserDetail(routeParams.id);
+      this.eatseServices
+        .fetchSingleService(routeParams['id'])
+        .subscribe((value) => {
+          this.service = value;
+        });
     });
   }
 
-  routeToBooking(service: string){
-    if(this.auth.currentUser){
+  routeToBooking(service: string) {
+    if (this.currentUser) {
       this.router.navigate(['/booking/' + service]);
-    }else{
+    } else {
       this.router.navigate(['auth', 'sign-in']);
     }
-    
   }
 }

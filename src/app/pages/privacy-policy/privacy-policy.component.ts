@@ -13,13 +13,13 @@ export class PrivacyPolicyComponent implements OnInit {
   constructor(private policyService: PrivacyPolicyService) { }
 
   ngOnInit(): void {
-    this.policyService.fetchPolicies().then((value) => {
+    /* this.policyService.fetchPolicies().then((value) => {
       this.policies = value;
       console.log(this.policies);
     })
     .catch((error) => {
       console.log(error);
-    })
+    }) */
   }
 
 }

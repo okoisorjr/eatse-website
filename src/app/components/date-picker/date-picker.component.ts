@@ -1,6 +1,8 @@
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
 import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
+import { NewErrand } from 'src/app/pages/bookings/model/new-errand.model';
+import { NewLaundry } from 'src/app/pages/bookings/model/new-laundry';
 
 @Component({
   selector: 'app-date-picker',
@@ -10,6 +12,8 @@ import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
 export class DatePickerComponent implements OnInit {
   @Input() frequency!: string;
   @Input() booking!: NewBooking;
+  @Input() laundry!: NewLaundry;
+  @Input() errand!: NewErrand;
   @Output() setDates = new EventEmitter();
 
   MONTH_NAMES = [
@@ -35,20 +39,34 @@ export class DatePickerComponent implements OnInit {
   no_of_days = [] as number[];
   blankdays = [] as number[];
   selectedDays: any[] = [];
+  selectedDates: number[] = [];
 
   constructor(private notifier: NotifierService) {}
 
   ngOnInit(): void {
     this.initDate();
     this.getNoOfDays();
-    if(this.booking.dates){
+    if (this.booking && this.booking.dates) {
       this.selectedDays = this.booking.dates;
+    } else if (this.laundry && this.laundry.dates) {
+      this.selectedDays = this.laundry.dates;
     }
-    
   }
 
-  resetSelectedDates(){
-    this.booking.dates = [];
+  resetSelectedDates() {
+    if (this.booking) {
+      this.booking.dates = [];
+      this.booking.days = [];
+    } else if (this.laundry) {
+      this.laundry.dates = [];
+      this.laundry.days = [];
+    } else if (this.errand) {
+      this.errand.dates = [];
+      this.errand.days = [];
+    }
+
+    this.selectedDates = [];
+    this.selectedDays = [];
     this.ngOnInit();
   }
 
@@ -64,8 +82,8 @@ export class DatePickerComponent implements OnInit {
   }
 
   isSelectedDay(date: any) {
-    const d = new Date(this.year, this.month, date)
-    return this.selectedDays.includes(d.toDateString()) ? true : false;
+    const d = new Date(this.year, this.month, date);
+    return this.selectedDates.includes(date) ? true : false;
   }
 
   isToday(date: any) {
@@ -84,29 +102,60 @@ export class DatePickerComponent implements OnInit {
   selectDate(date: any) {
     const today = new Date().getDate();
     const currentMonth = new Date().getMonth();
-    let selectedDate = new Date(this.year, this.month, date);
+    let selectedDate = new Date(this.year, this.month, date).setHours(
+      0,
+      0,
+      0,
+      0
+    );
+    //let selectedDate = new Date(new Date().setDate(date)).setHours(0,0,0,0);
+    //let selectedDate = Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), date, 0, 0, 0, 0);
+    let selectedDay = new Date(selectedDate).toLocaleString();
+    //console.log(selectedDay.toLocaleString());
     if (this.month <= currentMonth && date < today) {
       return this.notifier.notify(
         'error',
         "sorry, you can't pick a day in the past!"
       );
-    }
-    else if(this.selectedDays.includes(selectedDate.toDateString())){
-      console.log(this.selectedDays);
-      this.selectedDays.splice(this.selectedDays.indexOf(selectedDate.toDateString()), 1);
+    } else if (this.selectedDates.includes(date)) {
+      this.selectedDays.splice(this.selectedDates.indexOf(date), 1);
+      this.selectedDates.splice(this.selectedDates.indexOf(date), 1);
       let temp = [];
-      for(let i = 0; i<this.selectedDays.length; i++){
+      for (let i = 0; i < this.selectedDays.length; i++) {
         temp.push(this.selectedDays[i]);
-      } 
+      }
       this.selectedDays = temp;
       console.log(this.selectedDays);
+      console.log(this.selectedDates);
       return;
+    } else if (
+      (this.booking &&
+        this.booking.frequency === 'one-time' &&
+        this.selectedDays.length > 0) ||
+      (this.laundry &&
+        this.laundry.frequency === 'one-time' &&
+        this.selectedDays.length > 0) ||
+      (this.errand &&
+        this.errand.frequency === 'one-time' &&
+        this.selectedDays.length > 0)
+    ) {
+      return this.notifier.notify(
+        'error',
+        'This is a one time service, you can pick only one day!'
+      );
     }
-    else if(this.booking.frequency === 'one-time' && this.selectedDays.length > 0){
-      return this.notifier.notify('error', 'This is a one time service, you can pick only one day!')
-    }
-    this.selectedDays.push(selectedDate.toDateString());
-    this.setDates.emit(this.selectedDays);
+    this.selectedDays.push(selectedDay);
+    this.selectedDates.push(date);
+    console.log(
+      'selected days:',
+      this.selectedDays,
+      'selected dates: ',
+      this.selectedDates
+    );
+    this.setDates.emit({
+      selectedDays: this.selectedDays,
+      selectedDates: this.selectedDates,
+    });
   }
 
   /* getDateValue(date: any) {

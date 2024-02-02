@@ -1,17 +1,11 @@
 import { Injectable } from '@angular/core';
 import { LaundryItems } from '../pages/bookings/model/laundry-items';
 import { Room } from '../pages/bookings/model/room';
-import {
-  Firestore,
-  query,
-  addDoc,
-  collection,
-  getDocsFromServer,
-  orderBy,
-  where,
-} from '@angular/fire/firestore';
-import { Auth } from '@angular/fire/auth';
-import { GlobalResourceService } from '../global-resource/global-resource.service';
+import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { NewBooking } from '../pages/bookings/model/new-booking';
+import { NewLaundry } from '../pages/bookings/model/new-laundry';
 
 export interface BookingData {
   service?: string;
@@ -47,34 +41,43 @@ export interface BookingData {
 export class BookingsService {
   booking_list: BookingData[] = [];
 
-  constructor(
-    private fs: Firestore,
-    private auth: Auth,
-    private userService: GlobalResourceService
-  ) {}
+  constructor(private http: HttpClient) {}
 
-  saveBooking(bookingData: BookingData) {
-    const bookingRef = collection(this.fs, 'bookings');
-    addDoc(bookingRef, bookingData)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  saveBooking(bookingData: NewBooking): Observable<any> {
+    return this.http.post<any>(
+      `${environment.developmentIP}/booking/new-booking`,
+      bookingData
+    );
   }
 
-  async getBookings(): Promise<BookingData[]> {
-    this.booking_list = [];
-    if (this.auth.currentUser) {
-      const bookingRef = collection(this.fs, 'bookings');
-      const q = query(bookingRef, where('userId', '==', this.auth.currentUser.uid));
-      let booking_data = await getDocsFromServer(q);
-      booking_data.forEach((document) => {
-        this.booking_list.push(document.data());
-      });
-    }
-    console.log(this.booking_list);
-    return this.booking_list;
+  saveLaundry(newLaundry: NewLaundry): Observable<any> {
+    return this.http.post<any>(
+      `${environment.developmentIP}/laundry`,
+      newLaundry
+    );
+  }
+
+  getAllBookings(user_id: string): Observable<any> {
+    return this.http.get<any>(
+      `${environment.developmentIP}/combined-bookings/${user_id}`
+    );
+  }
+
+  getAllActiveBookings(user_id: string): Observable<any> {
+    return this.http.get<any>(
+      `${environment.developmentIP}/combined-bookings/active/${user_id}`
+    );
+  }
+
+  fetchRoomsAndPrices(service: string): Observable<any> {
+    return this.http.get<any>(
+      `${environment.developmentIP}/room-prices/${service}`
+    );
+  }
+
+  fetchLaundryItems(): Observable<LaundryItems[]> {
+    return this.http.get<LaundryItems[]>(
+      `${environment.developmentIP}/laundry-items`
+    );
   }
 }

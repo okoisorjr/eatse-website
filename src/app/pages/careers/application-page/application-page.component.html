@@ -1,0 +1,106 @@
+<div class="max-w-3xl self-center container">
+  <p class="text-white text-center text-xl lg:text-3xl">
+    Submit your application
+  </p>
+  <form
+    #applicationForm="ngForm"
+    class=""
+    (ngSubmit)="submitApplication(applicationForm)"
+  >
+    <div class="mb-3">
+      <label for="fullname" class="text-white text-sm"
+        >Full name <span class="text-red-700">*</span></label
+      >
+      <input
+        type="text"
+        name="fullname"
+        placeholder="Type name here..."
+        class="mt-1 p-2 focus:border-[#008000] block w-full shadow-sm sm:text-sm rounded-md bg-[#111014] border-none"
+        ngModel
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="text-white text-sm"
+        >Email <span class="text-red-700">*</span></label
+      >
+      <input
+        type="email"
+        name="email"
+        placeholder="example@email.com"
+        class="mt-1 p-2 focus:border-[#008000] block w-full shadow-sm sm:text-sm rounded-md bg-[#111014] border-none"
+        ngModel
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="phone" class="text-white text-sm"
+        >Phone <span class="text-red-700">*</span></label
+      >
+      <input
+        type="tel"
+        name="phone"
+        placeholder="+234 8000000000"
+        class="mt-1 p-2 focus:border-[#008000] block w-full shadow-sm sm:text-sm rounded-md bg-[#111014] border-none"
+        ngModel
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="resume" class="text-white text-sm"
+        >Resume/CV <span class="text-red-700">*</span></label
+      >
+      <input #resume_input type="file" hidden name="resume" ngModel />
+      <button
+        type="button"
+        (click)="resume_input.click()"
+        class="mt-1 p-2 font-semibold block w-full shadow-sm text-[#008000] sm:text-sm rounded-md bg-[#111014] border-none"
+      >Upload file<i class="ri-attachment-2"></i></button>
+    </div>
+
+    <div class="mb-3">
+      <label for="portfolio" class="text-white text-sm">Portfolio URL</label>
+      <input
+        type="text"
+        name="portfolio"
+        placeholder="www.portfolio.com"
+        class="mt-1 p-2 focus:border-[#008000] block w-full shadow-sm sm:text-sm rounded-md bg-[#111014] border-none"
+        ngModel
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="linkedIn" class="text-white text-sm block"
+        >LinkedIn URL</label
+      >
+      <input
+        type="text"
+        name="linkedIn"
+        placeholder="www.linked-in-profile.com"
+        class="mt-1 p-2 focus:border-[#008000] block w-full shadow-sm sm:text-sm rounded-md bg-[#111014] border-none"
+        ngModel
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="other" class="text-white text-sm">Other Website</label>
+      <input
+        type="text"
+        name="others"
+        placeholder="www.site-url.com"
+        class="mt-1 p-2 focus:border-[#008000] block w-full shadow-sm sm:text-sm rounded-md bg-[#111014] border-none"
+        ngModel
+      />
+    </div>
+
+    <div class="mb-3">
+      <button
+        type="submit"
+        class="bg-[#008000] text-[#FFF] p-2 w-100 rounded-md shadow-md"
+      >
+        Submit application
+      </button>
+    </div>
+  </form>
+</div>
+<app-footer></app-footer>

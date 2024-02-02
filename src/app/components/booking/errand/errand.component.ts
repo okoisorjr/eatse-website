@@ -1,33 +1,27 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { Flutterwave, PaymentSuccessResponse } from 'flutterwave-angular-v3';
 import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
 import { BookingsService } from 'src/app/services/bookings.service';
 import { DatePickerComponent } from '../../date-picker/date-picker.component';
-import { serverTimestamp } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
-
-interface AvailableTime {
-  id: string;
-  time: string;
-  period: string;
-}
+import { NewErrand } from 'src/app/pages/bookings/model/new-errand.model';
+import { AvailableTimes } from 'src/app/shared/available-times';
 
 @Component({
   selector: 'app-errand',
   templateUrl: './errand.component.html',
-  styleUrls: ['./errand.component.css']
+  styleUrls: ['./errand.component.css'],
 })
 export class ErrandComponent implements OnInit {
-
   @ViewChild(DatePickerComponent) resetButton!: DatePickerComponent;
 
   step: number = 1;
   newBooking: NewBooking = new NewBooking();
+  newErrand: NewErrand = new NewErrand();
   frequencies: string[] = [];
-  times: AvailableTime[] = [];
+  times: string[] = [];
   selectedErrand!: string;
   errands: string[] = [];
   dates: string[] = [];
@@ -42,45 +36,20 @@ export class ErrandComponent implements OnInit {
     private flutterwave: Flutterwave,
     private ar: ActivatedRoute,
     private notifier: NotifierService,
-    private auth: Auth,
     private bookingService: BookingsService,
     private router: Router
-  ) {
-    this.auth.onAuthStateChanged((credential) => {
-      if(credential){
-        this.currentUser = credential;
-        this.customerDetails = {
-          email: this.currentUser.email,
-          customerName: this.currentUser.displayName,
-          userId: this.currentUser.uid,
-        };
-      }
-    })
-  }
+  ) {}
 
   ngOnInit(): void {
     //this.currentUser = this.auth.currentUser;
-    this.newBooking.service = this.ar.snapshot.params['id'];
-    this.newBooking.frequency = 'one-time';
-    this.newBooking.dates = [];
+    this.newErrand.service = this.ar.snapshot.params['id'];
+    this.newErrand.frequency = 'one-time';
+    this.newErrand.dates = [];
     this.errands = ['Shopping', 'Pick up and delivery'];
     this.frequencies = ['one-time', /*'weekly'*/ 'monthly', 'custom'];
-    this.times = [
-      { id: '1', time: '06:00', period: 'am' },
-      { id: '1', time: '07:00', period: 'am' },
-      { id: '1', time: '08:00', period: 'am' },
-      { id: '1', time: '09:00', period: 'am' },
-      { id: '1', time: '10:00', period: 'am' },
-      { id: '1', time: '11:00', period: 'am' },
-      { id: '1', time: '12:00', period: 'pm' },
-      { id: '1', time: '01:00', period: 'pm' },
-      { id: '1', time: '02:00', period: 'pm' },
-      { id: '1', time: '03:00', period: 'pm' },
-      { id: '1', time: '04:00', period: 'pm' },
-      { id: '1', time: '05:00', period: 'pm' },
-    ];
-    this.newBooking.errandType = 'Shopping';
-    this.newBooking.cost = 2500
+    this.times = Object.values(AvailableTimes);
+    this.newErrand.errandType = 'Shopping';
+    this.newBooking.cost = 2500;
     this.customizations = {
       title: 'Eatse Global Resources Ltd.',
       description: `Payment for the ${this.newBooking.service} service`,
@@ -89,14 +58,14 @@ export class ErrandComponent implements OnInit {
   }
 
   selectFrequency(frequency: any) {
-    this.newBooking.frequency = frequency;
-    this.newBooking.dates = [];
+    this.newErrand.frequency = frequency;
+    this.newErrand.dates = [];
     this.resetButton.resetSelectedDates();
   }
 
-  setArrivalTime(time: AvailableTime) {
-    this.newBooking.arrivalTime = time.time;
-    this.newBooking.period = time.period;
+  setArrivalTime(time: string) {
+    this.newErrand.arrivalTime = time;
+    //this.newBooking.period = time.period;
   }
 
   setDate(date: any) {
@@ -105,7 +74,10 @@ export class ErrandComponent implements OnInit {
     if (this.dates.length > 0) {
       this.newBooking.dates = this.dates;
     } */
-    this.newBooking.dates = date;
+    this.newErrand.dates = date.selectedDays;
+    this.newErrand.days = date.selectedDates;
+    this.newErrand.cost = 2500 * this.newErrand.days.length;
+    console.log(this.newErrand);
   }
 
   validateForm() {
@@ -140,7 +112,7 @@ export class ErrandComponent implements OnInit {
     this.step--;
   }
 
-  nextPhase(){
+  nextPhase() {
     this.step++;
   }
 
@@ -152,7 +124,7 @@ export class ErrandComponent implements OnInit {
   }
 
   selectErrand(errand: string) {
-    this.newBooking.errandType = errand;
+    this.newErrand.errandType = errand;
   }
 
   makePayment() {
@@ -175,16 +147,12 @@ export class ErrandComponent implements OnInit {
   }
   makePaymentCallback(response: PaymentSuccessResponse): void {
     this.newBooking.paymentStatus = 'successful';
-    this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
-    this.bookingService.saveBooking(bookingData);
+
     console.log('Payment callback', response);
   }
   closedPaymentModal(): void {
     this.newBooking.paymentStatus = 'cancelled';
-    this.newBooking.userId = this.auth.currentUser?.uid;
-    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
-    this.bookingService.saveBooking(bookingData);
+
     console.log('payment is closed');
   }
 

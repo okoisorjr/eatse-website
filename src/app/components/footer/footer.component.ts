@@ -1,24 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
-import { GlobalResourceService, Services } from 'src/app/global-resource/global-resource.service';
+import { EatseServicesService } from 'src/app/services/eatse-services.service';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.css']
+  styleUrls: ['./footer.component.css'],
 })
 export class FooterComponent implements OnInit {
-
   currentUser: any;
   services: any[] = [];
 
-  constructor(private auth: Auth, private globalService: GlobalResourceService) { }
+  constructor(private eatseServices: EatseServicesService) {}
 
   ngOnInit(): void {
-    this.currentUser = this.auth.currentUser;
-     this.globalService.fetchFooterServices().then((doc) => {
-      this.services = doc;
+    this.eatseServices.fetchServices().subscribe((value) => {
+      value.forEach((service) => {
+        if (service.category === 'cleaning') {
+          this.services.push(service);
+        }
+      });
     });
   }
-
 }

@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NewBooking } from 'src/app/pages/bookings/model/new-booking';
-
-interface Testimonials {
-  name: string;
-  testimony: string;
-}
+import { TestimoniesService } from 'src/app/services/testimonies.service';
 
 @Component({
   selector: 'app-testimonials',
@@ -12,12 +8,12 @@ interface Testimonials {
   styleUrls: ['./testimonials.component.css'],
 })
 export class TestimonialsComponent implements OnInit {
-  constructor() {}
+  constructor(private feedbacksService: TestimoniesService) {}
 
-  testimonials!: Testimonials[];
+  testimonials: any[] = [];
 
   ngOnInit(): void {
-    this.testimonials = [
+    /* this.testimonials = [
       {
         name: 'Chidiaka',
         testimony: `I am so glad I found Eatse! They are my go to cleaning service, they
@@ -42,6 +38,10 @@ export class TestimonialsComponent implements OnInit {
       services are so affordable. I would recommend Eatse to every
       household.`,
       },
-    ];
+    ]; */
+    this.feedbacksService.fetchTestimonies().subscribe((value) => {
+      this.testimonials = value;
+      console.log(this.testimonials);
+    });
   }
 }

@@ -22,6 +22,7 @@ import { ServiceBookingPageComponent } from './service-booking-page/service-book
     CommonModule,
     BookingsRoutingModule,
     ComponentsModule
-  ]
+  ],
+  exports: [BookingHistoryComponent, ActiveBookingComponent]
 })
 export class BookingsModule { }

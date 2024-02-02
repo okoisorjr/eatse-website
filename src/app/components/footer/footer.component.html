@@ -179,10 +179,10 @@
       <p class="text-[#FFF] font-bold text-sm">Services</p>
       <ng-container *ngFor="let service of services">
         <a
-          routerLink="/services/{{ service.service }}"
+          routerLink="/services/{{ service.name }}"
           class="text-[#FFF] hover:text-[#008000] text-xs my-2"
           style="display: block"
-          >{{ service.service | titlecase }}</a
+          >{{ service.title | titlecase }}</a
         >
       </ng-container>
     </div>
@@ -207,6 +207,18 @@
         class="text-[#FFF] cursor-pointer hover:text-[#008000] text-xs my-2"
         style="display: block"
         >Get in touch</a
+      >
+      <a
+        routerLink="/careers"
+        class="text-[#FFF] cursor-pointer hover:text-[#008000] text-xs my-2"
+        style="display: block"
+        >Careers</a
+      >
+      <a
+        routerLink="/blogs"
+        class="text-[#FFF] cursor-pointer hover:text-[#008000] text-xs my-2"
+        style="display: block"
+        >Blogs</a
       >
     </div>
 

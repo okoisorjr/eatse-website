@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   Flutterwave,
@@ -11,14 +10,13 @@ import { DatePickerComponent } from '../../date-picker/date-picker.component';
 import { LaundryItems } from 'src/app/pages/bookings/model/laundry-items';
 import { NotifierService } from 'angular-notifier';
 import { BookingsService } from 'src/app/services/bookings.service';
-import { serverTimestamp } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
-
-interface AvailableTime {
-  id: string;
-  time: string;
-  period: string;
-}
+import { NewLaundry } from 'src/app/pages/bookings/model/new-laundry';
+import { AvailableTimes } from 'src/app/shared/available-times';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ProfileService } from 'src/app/services/profile.service';
+import { AuthService } from 'src/app/auth/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-laundry',
@@ -27,16 +25,18 @@ interface AvailableTime {
 })
 export class LaundryComponent implements OnInit {
   step: number = 1;
-  newBooking: NewBooking = new NewBooking();
-  times: AvailableTime[] = [];
+  newLaundry: NewLaundry = new NewLaundry();
+  times: string[] = [];
   frequencies: string[] = [];
   dates: string[] = [];
   nextButtonEnabled: boolean = true;
+  addresses: any[] = [];
+  selectedAddress: any;
 
   laundryItems: LaundryItems[] = [];
   totalCost!: number;
   paymentStatus!: string;
-  currentUser: any;
+  currentUser!: any;
   selectedLaundryItems: LaundryItems[] = [];
 
   publicKey = environment.flutterwavePublicKey;
@@ -49,24 +49,15 @@ export class LaundryComponent implements OnInit {
 
   constructor(
     private ar: ActivatedRoute,
-    private auth: Auth,
+    
     private notifier: NotifierService,
     private bookingService: BookingsService,
     private flutterwave: Flutterwave,
-    private router: Router
+    private router: Router,
+    private modalService: NgbModal,
+    private profileService: ProfileService,
+    private authService: AuthService
   ) {
-    this.auth.onAuthStateChanged((credentials) => {
-      if (credentials) {
-        this.currentUser = credentials;
-        this.customerDetails = {
-          name: this.currentUser.displayName
-            ? this.currentUser.displayName
-            : this.currentUser.email,
-          email: this.currentUser.email,
-          userId: this.currentUser.uid,
-        };
-      }
-    });
   }
 
   ngAfterViewInit() {
@@ -74,63 +65,68 @@ export class LaundryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.newBooking.service = this.ar.snapshot.params['id'];
-    this.newBooking.frequency = 'one-time';
-    this.newBooking.dates = [];
+    this.currentUser = this.authService.getCurrentUser();
+    this.newLaundry.service = this.ar.snapshot.params['id'];
+    this.newLaundry.totalItems = 0;
+    this.newLaundry.frequency = 'one-time';
+    this.newLaundry.dates = [];
     this.frequencies = ['one-time', /*'weekly'*/ 'monthly', 'custom']; //weekly removed temporarily
-    this.times = [
-      { id: '1', time: '06:00', period: 'am' },
-      { id: '1', time: '07:00', period: 'am' },
-      { id: '1', time: '08:00', period: 'am' },
-      { id: '1', time: '09:00', period: 'am' },
-      { id: '1', time: '10:00', period: 'am' },
-      { id: '1', time: '11:00', period: 'am' },
-      { id: '1', time: '12:00', period: 'pm' },
-      { id: '1', time: '01:00', period: 'pm' },
-      { id: '1', time: '02:00', period: 'pm' },
-      { id: '1', time: '03:00', period: 'pm' },
-      { id: '1', time: '04:00', period: 'pm' },
-      { id: '1', time: '05:00', period: 'pm' },
-    ];
-    this.laundryItems = [
-      { items: 'Shirts/blouse/tops', count: 0, price: '300', totalPrice: 0 },
-      { items: 'Shorts/skirts/bottoms', count: 0, price: '300', totalPrice: 0 },
-      { items: 'Suits/coats', count: 0, price: '500', totalPrice: 0 },
-      {
-        items: 'Sweaters/joggers/outer-wears',
-        count: 0,
-        price: '400',
-        totalPrice: 0,
+    this.times = Object.values(AvailableTimes);
+    this.profileService.fetchClientAddresses(this.currentUser.id).subscribe(
+      (value) => {
+        if (value) {
+          this.addresses = value;
+        }
       },
-      { items: 'Dresses/gowns/kimonos', count: 0, price: '300', totalPrice: 0 },
-      { items: 'Curtains/bed-sheets', count: 0, price: '500', totalPrice: 0 },
-      { items: 'Others', count: 0, price: '200', totalPrice: 0 },
-    ];
-    this.newBooking.cost = 0;
-    this.newBooking.discountedPrice = 0;
+      (error: HttpErrorResponse) => {
+        this.notifier.notify('error', `${error.error.message}`);
+      }
+    );
+    this.bookingService.fetchLaundryItems().subscribe((value) => {
+      this.laundryItems = value;
+      console.log(this.laundryItems);
+    })
+    
+    this.newLaundry.cost = 0;
     this.customizations = {
       title: 'Eatse Global Resources Ltd.',
-      description: `Payment for the ${this.newBooking.service} service`,
+      description: `Payment for the ${this.newLaundry.service} service`,
       logo: 'https://firebasestorage.googleapis.com/v0/b/eatse-4dbd3.appspot.com/o/service-images%2Fbrand-logo.jpg?alt=media&token=9ba32825-4020-4d8d-ae29-76ffc41a35a5',
     };
     this.meta = {
-      service: this.newBooking.service,
-      rooms: this.newBooking.rooms.length,
-      serviceFrequency: this.newBooking.frequency,
+      service: this.newLaundry.service,
+      serviceFrequency: this.newLaundry.frequency,
       counsumer_id: '7898',
       consumer_mac: 'kjs9s8ss7dd',
     };
   }
 
   selectFrequency(frequency: any) {
-    this.newBooking.frequency = frequency;
-    this.newBooking.dates = [];
+    this.newLaundry.frequency = frequency;
+    this.newLaundry.dates = [];
     this.resetButton.resetSelectedDates();
   }
 
-  setArrivalTime(time: AvailableTime) {
-    this.newBooking.arrivalTime = time.time;
-    this.newBooking.period = time.period;
+  selectAddress(address: any) {
+    this.selectedAddress = address;
+    this.newLaundry.address = address._id;
+    this.modalService.dismissAll();
+  }
+
+  resetAddress() {
+    this.newLaundry.address = '';
+  }
+
+  openSelectAddressModal(addressSelectionModal: any) {
+    this.modalService.open(addressSelectionModal, {
+      centered: true,
+      size: 'md',
+    });
+  }
+
+  setArrivalTime(time: string) {
+    this.newLaundry.pickupTime = time;
+    //this.newBooking.period = time.period;
   }
 
   setDate(date: any) {
@@ -139,7 +135,9 @@ export class LaundryComponent implements OnInit {
     if (this.dates.length > 0) {
       this.newBooking.dates = this.dates;
     } */
-    this.newBooking.dates = date;
+    this.newLaundry.dates = date.selectedDays;
+    this.newLaundry.days = date.selectedDates;
+    console.log(this.newLaundry);
   }
 
   nextPhase() {
@@ -149,23 +147,27 @@ export class LaundryComponent implements OnInit {
 
   increaseItemCount(item: LaundryItems) {
     item.count++;
-    this.newBooking.cost += Number(item.price);
-    if (this.newBooking.items.includes(item)) {
-      this.newBooking.items[this.newBooking.items.indexOf(item)] = item;
+    this.newLaundry.totalItems += 1;
+    item.total_price = item.total_price + item.price;
+    this.newLaundry.cost += Number(item.price);
+    if (this.newLaundry.items.includes(item)) {
+      this.newLaundry.items[this.newLaundry.items.indexOf(item)] = item;
     } else {
-      this.newBooking.items.push(item);
+      this.newLaundry.items.push(item);
     }
 
-    console.log(this.newBooking);
+    console.log(this.newLaundry);
   }
 
   decreaseItemCount(item: LaundryItems) {
     item.count--;
-    this.newBooking.cost -= Number(item.price);
-    if (item.count == 0 && this.newBooking.items.includes(item)) {
-      this.newBooking.items.splice(this.newBooking.items.indexOf(item), 1);
+    this.newLaundry.totalItems -= 1;
+    item.total_price = item.total_price - item.price;
+    this.newLaundry.cost -= Number(item.price);
+    if (item.count == 0 && this.newLaundry.items.includes(item)) {
+      this.newLaundry.items.splice(this.newLaundry.items.indexOf(item), 1);
     }
-    console.log(this.newBooking.items);
+    console.log(this.newLaundry.items);
   }
 
   gotoBooking() {
@@ -177,6 +179,10 @@ export class LaundryComponent implements OnInit {
   }
 
   proceedToPay() {
+    console.log(this.newLaundry);
+    this.bookingService.saveLaundry(this.newLaundry).subscribe((value) => {
+      console.log(value);
+    })
     this.makePayment();
   }
 
@@ -184,7 +190,7 @@ export class LaundryComponent implements OnInit {
     let paymentData = {
       public_key: this.publicKey,
       tx_ref: this.generateReference(),
-      amount: this.newBooking.cost,
+      amount: this.newLaundry.cost,
       currency: 'NGN',
       payment_options: 'card,ussd',
       redirect_url: '',
@@ -199,17 +205,15 @@ export class LaundryComponent implements OnInit {
     this.flutterwave.inlinePay(paymentData);
   }
   makePaymentCallback(response: PaymentSuccessResponse): void {
-    this.newBooking.paymentStatus = 'successful';
-    this.newBooking.userId = this.currentUser.uid;
-    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
-    this.bookingService.saveBooking(bookingData);
+    this.newLaundry.paymentStatus = 'successful';
+    this.newLaundry.client = this.currentUser.id;
+    
+    
     console.log('Payment callback', response);
   }
   closedPaymentModal(): void {
-    this.newBooking.paymentStatus = 'cancelled';
-    this.newBooking.userId = this.currentUser.uid;
-    let bookingData = { ...this.newBooking, createdAt: serverTimestamp(), lastModified: serverTimestamp() };
-    this.bookingService.saveBooking(bookingData);
+    this.newLaundry.paymentStatus = 'cancelled';
+    this.newLaundry.client = this.currentUser.id;
     console.log('payment is closed');
   }
 

@@ -1,6 +1,6 @@
 export class LaundryItems {
-  items!: string;
+  item!: string;
   count!: number;
-  price!: string;
-  totalPrice!: number;
+  price!: number;
+  total_price!: number;
 }

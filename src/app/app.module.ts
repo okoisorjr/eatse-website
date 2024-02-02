@@ -4,18 +4,15 @@ import { PagesModule } from './pages/pages.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
-import { FlutterwaveModule } from "flutterwave-angular-v3"
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FlutterwaveModule } from 'flutterwave-angular-v3';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LayoutModule } from './layout/layout.module';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
-import { environment } from '../environments/environment';
-import { provideAnalytics,getAnalytics,ScreenTrackingService,UserTrackingService } from '@angular/fire/analytics';
-import { provideAuth,getAuth } from '@angular/fire/auth';
-import { provideFirestore,getFirestore } from '@angular/fire/firestore';
-import { providePerformance,getPerformance } from '@angular/fire/performance';
-import { provideStorage,getStorage } from '@angular/fire/storage';
+import { GlobalResourceService } from './global-resource/global-resource.service';
+import { AuthInterceptorInterceptor } from './helpers/auth-interceptor.interceptor';
 
 const customNotifierOptions: NotifierOptions = {
   position: {
@@ -67,17 +64,17 @@ const customNotifierOptions: NotifierOptions = {
     PagesModule,
     NgbModule,
     HttpClientModule,
+    LayoutModule,
     NotifierModule.withConfig(customNotifierOptions),
-    FlutterwaveModule,
-    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-    provideAnalytics(() => getAnalytics()),
-    provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
-    providePerformance(() => getPerformance()),
-    provideStorage(() => getStorage())
+    //FlutterwaveModule,
   ],
   providers: [
-    ScreenTrackingService,UserTrackingService
+    GlobalResourceService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

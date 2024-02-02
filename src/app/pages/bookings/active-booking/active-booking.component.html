@@ -1,23 +1,4 @@
-<app-top-nav></app-top-nav>
-
-<div class="border-y-2 border-gray-600 w-full">
-  <div class="flex flex-row justify-center items-center gap-5 p-4">
-    <a routerLink="/booking/active"
-      ><div class="flex flex-col items-center justify-center cursor-pointer">
-        <i class="material-icons text-[#FFF]" [ngClass]="{'text-[#008000]' : activeRoute === 'active'}">event</i>
-        <p class="text-[#FFF]" [ngClass]="{'text-[#008000]' : activeRoute === 'active'}">Active bookings</p>
-      </div></a
-    >
-    <a routerLink="/booking/history"
-      ><div class="flex flex-col items-center justify-center cursor-pointer">
-        <i class="material-icons text-[#FFF]">history</i>
-        <p class="text-[#FFF]">Booking history</p>
-      </div></a
-    >
-  </div>
-</div>
-
-<div *ngIf="!currentUser || bookings.length === 0" class="container">
+<div *ngIf="!currentUser || bookings.length === 0">
   <div class="flex flex-col justify-center items-center my-25">
     <div class="py-10">
       <img
@@ -26,21 +7,32 @@
       />
     </div>
     <p class="text-[#FFF] text-center text-sm">
-      No booking yet. Click the button below to book a service.
+      {{ !currentUser ? "No booking yet" : "" }}
+      {{
+        currentUser && bookings.length === 0
+          ? "You currently have no active booking"
+          : ""
+      }}. Click the button below to book a service.
     </p>
     <button (click)="gotoBooking()" class="ui-green-btn my-3">Book now</button>
   </div>
 </div>
 
-<div class="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-3 my-5">
+<div
+  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-3 my-5"
+>
   <div
     *ngFor="let booking of bookings"
     class="block w-full p-6 bg-[#121214] rounded-lg shadow"
   >
     <div class="flex items-center justify-between">
       <p class="text-[#FFF] text-lg font-semibold">{{ booking.service }}</p>
-      <div class="p-3 flex flex-row justify-between items-center gap-3 border-b-gray-700">
-        <p class="text-[#FFF] text-md">₦ {{ booking.servicePrice ? booking.servicePrice : booking.cost }}</p>
+      <div
+        class="p-3 flex flex-row justify-between items-center gap-3 border-b-gray-700"
+      >
+        <p class="text-[#FFF] text-md">
+          ₦ {{ booking.servicePrice ? booking.servicePrice : booking.cost }}
+        </p>
         <div class="flex flex-row gap-2 items-center">
           <div class="w-2 h-2 bg-[#008000] rounded-full"></div>
           <p class="text-[#FFF]">{{ booking.frequency }}</p>
@@ -52,5 +44,3 @@
     </div>
   </div>
 </div>
-
-<app-footer></app-footer>
