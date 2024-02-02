@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CareerService } from 'src/app/services/career.service';
+import { NewApplication } from '../models/new-application';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-application-page',
@@ -7,14 +9,41 @@ import { CareerService } from 'src/app/services/career.service';
   styleUrls: ['./application-page.component.css'],
 })
 export class ApplicationPageComponent implements OnInit {
-  file: any;
-
+  file!: File;
+  filename!: string;
+  formData!: FormData;
+  application: NewApplication = new NewApplication();
 
   constructor(private careerService: CareerService) {}
 
+  onFileSelected(event: any) {
+    this.file = event.target.files[0];
+
+    if (this.file) {
+      this.filename = this.file.name;
+
+      const formData = new FormData();
+
+      formData.append('file', this.file);
+
+      this.formData = formData;
+
+      console.log('document to be uploaded:', this.formData);
+    }
+    console.log('selected file: ', event);
+  }
+
   ngOnInit(): void {}
 
-  submitApplication(applicationForm: any) {
-    //this.careerService.apply()
+  submitApplication() {
+
+    this.careerService.apply(this.formData, this.application).subscribe(
+      (value) => {
+        console.log(value);
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    );
   }
 }

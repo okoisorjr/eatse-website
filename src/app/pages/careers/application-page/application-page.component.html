@@ -2,11 +2,7 @@
   <p class="text-white text-center text-xl lg:text-3xl">
     Submit your application
   </p>
-  <form
-    #applicationForm="ngForm"
-    class=""
-    (ngSubmit)="submitApplication(applicationForm)"
-  >
+  <form #applicationForm="ngForm" enctype="multipart/form-data" (ngSubmit)="submitApplication()">
     <div class="mb-3">
       <label for="fullname" class="text-white text-sm"
         >Full name <span class="text-red-700">*</span></label
@@ -15,6 +11,7 @@
         type="text"
         name="fullname"
         placeholder="Type name here..."
+        [(ngModel)]="application.fullname"
         class="mt-1 p-2 focus:border-[#008000] block w-full shadow-sm sm:text-sm rounded-md bg-[#111014] border-none"
         ngModel
       />
@@ -28,6 +25,7 @@
         type="email"
         name="email"
         placeholder="example@email.com"
+        [(ngModel)]="application.email"
         class="mt-1 p-2 focus:border-[#008000] block w-full shadow-sm sm:text-sm rounded-md bg-[#111014] border-none"
         ngModel
       />
@@ -40,6 +38,7 @@
       <input
         type="tel"
         name="phone"
+        [(ngModel)]="application.phone"
         placeholder="+234 8000000000"
         class="mt-1 p-2 focus:border-[#008000] block w-full shadow-sm sm:text-sm rounded-md bg-[#111014] border-none"
         ngModel
@@ -50,14 +49,28 @@
       <label for="resume" class="text-white text-sm"
         >Resume/CV <span class="text-red-700">*</span></label
       >
-      <input #resume_input type="file" hidden name="resume" ngModel />
+      <input
+        #resume
+        type="file"
+        hidden
+        name="resume"
+        (change)="onFileSelected($event)"
+        ngModel
+      />
       <button
+        *ngIf="!filename"
         type="button"
-        (click)="resume_input.click()"
+        (click)="resume.click()"
         class="mt-1 p-2 font-semibold block w-full shadow-sm text-[#008000] sm:text-sm rounded-md bg-[#111014] border-none"
       >
         Upload file<i class="ri-attachment-2"></i>
       </button>
+      <div
+        *ngIf="filename"
+        class="mt-1 p-2 font-semibold block w-full shadow-sm text-center text-[#008000] sm:text-sm rounded-md bg-[#111014] border-none"
+      >
+        {{ filename }} uploaded
+      </div>
     </div>
 
     <div class="mb-3">
