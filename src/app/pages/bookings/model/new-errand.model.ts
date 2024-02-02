@@ -8,5 +8,5 @@ export class NewErrand {
   shoppingItems!: string;
   cost!: number;
   dates!: number[];
-  days!: string[];
+  days!: number[];
 }

@@ -10,7 +10,7 @@ export class NewLaundry {
   frequency?: string;
   pickupTime!: string;
   dates!: number[];
-  days!: string[];
+  days!: number[];
   client!: string;
   paymentStatus?: string; 
 }

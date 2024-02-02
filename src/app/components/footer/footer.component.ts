@@ -14,7 +14,7 @@ export class FooterComponent implements OnInit {
 
   ngOnInit(): void {
     this.eatseServices.fetchServices().subscribe((value) => {
-      value.forEach((service) => {
+      value.forEach((service: any) => {
         if (service.category === 'cleaning') {
           this.services.push(service);
         }

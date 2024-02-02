@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { FormsModule } from '@angular/forms';
 
 import { CareersRoutingModule } from './careers-routing.module';
 import { ApplicationPageComponent } from './application-page/application-page.component';
@@ -17,7 +18,8 @@ import { JobDetailsComponent } from './job-details/job-details.component';
   imports: [
     CommonModule,
     CareersRoutingModule,
-    ComponentsModule
+    ComponentsModule,
+    FormsModule
   ]
 })
 export class CareersModule { }
