@@ -5,12 +5,12 @@
     <div
       *ngFor="let service of services"
       (click)="routeToService(service.name)"
-      class="p-3 w-72 bg-[#111014] lg:w-full md:w-full sm:w-fit mx-auto lg:bg-[#111014] rounded-xl flex items-center justify-center cursor-pointer"
+      class="p-3 h-64 w-72 bg-[#111014] lg:w-full md:w-full sm:w-fit mx-auto lg:bg-[#111014] rounded-xl flex items-center justify-center cursor-pointer"
     >
       <div class="flex flex-col items-center justify-center cursor-pointer">
         <img
           src="{{ service.photoURL }}"
-          class="w-18 lg:w-20 my-3"
+          class="w-16 lg:w-20 my-3"
         />
         <h5
           class="text-[#FFF] text-lg font-bold text-center md:text-[#FFF]"

@@ -7,6 +7,7 @@ import { signInWithEmailAndPassword } from '@angular/fire/auth';
 import { HttpErrorResponse } from '@angular/common/http';
 import { GlobalResourceService } from 'src/app/global-resource/global-resource.service';
 import { mergeMap } from 'rxjs/operators';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private globalService: GlobalResourceService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {}
 
   ngOnInit(): void {}
@@ -38,7 +40,8 @@ export class LoginComponent implements OnInit {
           //localStorage.setItem('access_token', value.access_token);
           //localStorage.setItem('refresh_token', value.refresh_token);
         }
-        this.router.navigate(['/']);
+        //this.router.navigate(['/']);
+        this.location.back();
       },
       (error: HttpErrorResponse) => {
         this.submitted = false;

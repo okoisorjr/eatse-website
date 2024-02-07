@@ -1,0 +1,82 @@
+<div class="col-span-1 w-full p-10 bg-[#090909] rounded-md bg-opacity-100">
+  <div class="flex justify-between mb-5">
+    <h3 class="text-gray-400 text-2xl font-bold">New Address Info</h3>
+    <span (click)="dismissModal()" class="cursor-pointer"
+      ><i class="ri-close-line text-gray-400 text-2xl font-semibold"></i
+    ></span>
+  </div>
+  <form #addressForm="ngForm" (ngSubmit)="saveAddress(addressForm)">
+    <div class="grid grid-cols-2 gap-4">
+      <div class="col-span-1">
+        <label class="my-2 text-gray-500" for=""
+          >Country <span class="text-red-700">*</span></label
+        >
+        <input
+          type="text"
+          name="country"
+          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          placeholder="Enter country of residence"
+          [(ngModel)]="newAddress.country"
+          ngModel
+        />
+      </div>
+      <div class="col-span-1">
+        <label class="my-2 text-gray-500" for=""
+          >State <span class="text-red-700">*</span></label
+        >
+        <input
+          type="text"
+          name="state"
+          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          placeholder="Enter state of residence"
+          [(ngModel)]="newAddress.state"
+          ngModel
+        />
+      </div>
+      <div class="col-span-1">
+        <label class="my-2 text-gray-500" for=""
+          >City <span class="text-red-700">*</span></label
+        >
+        <input
+          type="text"
+          name="city"
+          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          placeholder="Enter city of residence"
+          [(ngModel)]="newAddress.city"
+          ngModel
+        />
+      </div>
+      <div class="col-span-1">
+        <label class="my-2 text-gray-500" for="">Zipcode</label>
+        <input
+          type="text"
+          name="zip_code"
+          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          placeholder="Enter zip code"
+          [(ngModel)]="newAddress.zip_code"
+          ngModel
+        />
+      </div>
+      <div class="col-span-2">
+        <label class="my-2 text-gray-500" for=""
+          >Street and building number <span class="text-red-700">*</span></label
+        >
+        <input
+          type="text"
+          name="street"
+          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          placeholder="Enter street name and building no"
+          [(ngModel)]="newAddress.street"
+          ngModel
+        />
+      </div>
+      <div class="col-span-2 flex justify-center">
+        <button
+          class="btn w-50 bg-[#008000] text-white text-lg font-bold hover:bg-[#008000]"
+        >
+          Save Address
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

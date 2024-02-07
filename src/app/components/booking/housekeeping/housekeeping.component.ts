@@ -70,6 +70,20 @@ export class HousekeepingComponent implements OnInit {
     this.resetButton.resetSelectedDates();
   }
 
+  dismissModal(event?: any) {
+    if (event) {
+      this.addresses.push(event);
+      this.selectedAddress = this.addresses[this.addresses.length - 1];
+      this.newBooking.address = this.selectedAddress._id;
+    }
+    this.modalService.dismissAll();
+  }
+
+  openNewAddressModal(addressModal: any) {
+    this.modalService.dismissAll();
+    this.modalService.open(addressModal, { centered: true, size: 'lg' });
+  }
+
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
     this.newBooking.service = this.ar.snapshot.params['id'];
@@ -136,12 +150,13 @@ export class HousekeepingComponent implements OnInit {
 
   resetAddress() {
     this.newBooking.address = '';
+    this.selectedAddress = '';
   }
 
   openSelectAddressModal(addressSelectionModal: any) {
     this.modalService.open(addressSelectionModal, {
       centered: true,
-      size: 'md',
+      size: 'lg',
     });
   }
 

@@ -45,6 +45,10 @@ export class ProfileComponent implements OnInit {
     this.currentUser = this.authService.getCurrentUser();
   }
 
+  dismissModal() {
+    this.modalService.dismissAll();
+  }
+
   ngOnInit(): void {
     this.profileService.fetchClientAddresses(this.currentUser.id).subscribe(
       (value) => {
@@ -67,7 +71,7 @@ export class ProfileComponent implements OnInit {
   }
 
   openAddressModal(addressModal: any) {
-    this.modalService.open(addressModal, { centered: true, size: 'md' });
+    this.modalService.open(addressModal, { centered: true, size: 'lg' });
   }
 
   openEditAddressModal(selectedAddress: AddressData, editAddressModal: any) {
@@ -133,22 +137,6 @@ export class ProfileComponent implements OnInit {
           }
         );
     }
-  }
-
-  saveAddress(addressForm: any) {
-    this.newAddress.user = this.currentUser.id;
-    this.profileService.createAddress(this.newAddress).subscribe(
-      (value) => {
-        console.log(value._id);
-        this.modalService.dismissAll();
-        this.ngOnInit();
-        this.notifier.notify('success', `${value}`);
-      },
-      (error: HttpErrorResponse) => {
-        this.notifier.notify('error', `${error.error.message}`);
-        console.log(error.error.message);
-      }
-    );
   }
 
   updateAddress(editAddressForm: any) {

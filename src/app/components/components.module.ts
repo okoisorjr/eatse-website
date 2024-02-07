@@ -29,6 +29,7 @@ import { PostConstructionComponent } from './booking/post-construction/post-cons
 import { MoveInOutComponent } from './booking/move-in-out/move-in-out.component';
 import { EatseCaresComponent } from './eatse-cares/eatse-cares.component';
 import { BuildingTypeComponent } from './building-type/building-type.component';
+import { NewAddressComponent } from './new-address/new-address.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { BuildingTypeComponent } from './building-type/building-type.component';
     PostConstructionComponent,
     MoveInOutComponent,
     EatseCaresComponent,
-    BuildingTypeComponent
+    BuildingTypeComponent,
+    NewAddressComponent
   ],
   imports: [CommonModule, ComponentsRoutingModule, NgbModule, FormsModule, FlutterwaveModule, NgSelectModule],
   exports: [
@@ -76,7 +78,8 @@ import { BuildingTypeComponent } from './building-type/building-type.component';
     FumigationComponent,
     PostConstructionComponent,
     OfficeCleaningComponent,
-    MoveInOutComponent
+    MoveInOutComponent,
+    NewAddressComponent
   ],
 })
 export class ComponentsModule {}

@@ -13,6 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GlobalResourceService } from './global-resource/global-resource.service';
 import { AuthInterceptorInterceptor } from './helpers/auth-interceptor.interceptor';
+import { NewAddressComponent } from './components/new-address/new-address.component';
 
 const customNotifierOptions: NotifierOptions = {
   position: {
