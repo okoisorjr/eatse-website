@@ -276,6 +276,16 @@ export class DeepCleaningComponent implements OnInit {
         this.newBooking.house_setting.push(room);
       }
     });
+    this.newBooking.startingDate = new Date();
+    this.newBooking.expiryDate =
+      this.newBooking.frequency === 'one-time'
+        ? new Date().setDate(new Date().getDate() + 1)
+        : new Date().setMonth(new Date().getMonth() + 1);
+    this.rooms.forEach((room) => {
+      if (room.count > 0) {
+        this.newBooking.house_setting.push(room);
+      }
+    });
     console.log(this.newBooking);
     this.bookingService.saveBooking(this.newBooking).subscribe(
       (value) => {

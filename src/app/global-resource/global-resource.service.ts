@@ -3,6 +3,7 @@ import { UserAccount } from '../auth/models/user-account.model';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { NavigationEnd, Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 export interface Services {
   title: string;
@@ -26,7 +27,7 @@ export class GlobalResourceService {
   footerServices: any[] = [];
   service: any;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private http: HttpClient) {
     this.currentUrl = this.router.url;
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -75,5 +76,9 @@ export class GlobalResourceService {
     /* const serviceRef = doc(this.fs, `services`, serviceName);
     this.service = await getDoc(serviceRef);*/
     return this.service.data();
+  }
+
+  refreshToken(): Observable<any> {
+    return this.http.get<any>(`${environment.developmentIP}/auth`);
   }
 }

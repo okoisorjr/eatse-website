@@ -14,6 +14,7 @@ import { AppComponent } from './app.component';
 import { GlobalResourceService } from './global-resource/global-resource.service';
 import { AuthInterceptorInterceptor } from './helpers/auth-interceptor.interceptor';
 import { NewAddressComponent } from './components/new-address/new-address.component';
+import { TokenInterceptor } from './interceptors/token.interceptor';
 
 const customNotifierOptions: NotifierOptions = {
   position: {
@@ -73,7 +74,7 @@ const customNotifierOptions: NotifierOptions = {
     GlobalResourceService,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptorInterceptor,
+      useClass: TokenInterceptor,
       multi: true,
     },
   ],
