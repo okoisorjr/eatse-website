@@ -119,20 +119,20 @@
 
 <div class="pb-10 container">
   <p class="text-center text-3xl text-[#FFF] py-4">Open Roles</p>
-  <ng-container *ngFor="let role of roles">
-    <a routerLink="/careers/role/{{ role.link }}">
+  <ng-container *ngFor="let role of all_openings">
+    <a routerLink="/careers/role/{{ role._id }}">
       <div
         class="flex flex-row my-2 justify-between text-[#FFF] font-semibold text-xl w-full p-3 bg-[#111014] rounded-md"
       >
-        {{ role.role }}
+        {{ role.position | titlecase }}
         <a
-          routerLink="/careers/role/{{ role.link }}"
+          routerLink="/careers/role/{{ role._id }}"
           class="hidden md:block lg:block text-sm lg:text-lg font-normal hover:text-[#008000]"
           ><span>More details</span
           ><i class="ri-arrow-right-s-line items-center mx-2"></i
         ></a>
         <a
-          routerLink="/careers/role/{{ role.link }}"
+          routerLink="/careers/role/{{ role._id }}"
           class="block md:hidden lg:hidden text-sm lg:text-lg font-normal hover:text-[#008000]"
           ><i class="ri-arrow-right-s-line items-center mx-2"></i
         ></a>

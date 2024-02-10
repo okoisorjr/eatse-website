@@ -3,6 +3,7 @@ export class NewApplication {
   email!: string;
   phone!: string;
   file!: string;
+  position!: string;
   portfolioURL!: string;
   linkedInURL!: string;
   others!: string;

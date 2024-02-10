@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription, timer } from 'rxjs';
+import { CareerService } from 'src/app/services/career.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   responsiveOptions: any[] = [];
   images: any[] = [
     { img: 'assets/eatse/img_0.png', index: 0 },
@@ -16,8 +19,10 @@ export class DashboardComponent implements OnInit {
   ];
   benefits: any[] = [];
   roles: any[] = [];
+  repeater!: Subscription;
+  all_openings: any[] = [];
 
-  constructor() {
+  constructor(private careerService: CareerService) {
     this.responsiveOptions = [
       {
         breakpoint: '1024px',
@@ -40,6 +45,17 @@ export class DashboardComponent implements OnInit {
         numScroll: 1,
       },
     ];
+  }
+
+  fetchAllOpenings() {
+    this.careerService.fetchAllOpenings().subscribe(
+      (value) => {
+        this.all_openings = value;
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -76,12 +92,13 @@ export class DashboardComponent implements OnInit {
         desc: `Eatse has a referral scheme. Earn juicy bonuses when you refer clients to us.`,
       },
     ];
-    this.roles = [
-      { role: 'Easer', link: 'easer' },
-      { role: 'Business Developer', link: 'business-developer' },
-      { role: 'Frontend Developer', link: 'frontend-developer' },
-      { role: 'Backend Developer', link: 'backend-developer' },
-      { role: 'Product Designer', link: 'product-designer' },
-    ];
+
+    this.repeater = timer(0, 30000).subscribe(() => {
+      this.fetchAllOpenings();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.repeater.unsubscribe();
   }
 }

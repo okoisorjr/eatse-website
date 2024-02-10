@@ -16,6 +16,18 @@ export class CareerService {
     );
   }
 
+  fetchAllOpenings(): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${environment.developmentIP}/apply/positions/all`
+    );
+  }
+
+  fetchSingleOpenPosition(role_id: string): Observable<any> {
+    return this.http.get<any>(
+      `${environment.developmentIP}/apply/positions/${role_id}`
+    );
+  }
+
   uploadResume(file: FormData): Observable<any> {
     return this.http.post<any>(
       `${environment.developmentIP}/apply/upload-cv`,
