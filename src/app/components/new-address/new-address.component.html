@@ -24,27 +24,54 @@
         <label class="my-2 text-gray-500" for=""
           >State <span class="text-red-700">*</span></label
         >
-        <input
+        <select
+          name="state"
+          [(ngModel)]="newAddress.state"
+          class="w-full border-none text-[#FFF] rounded-lg bg-[#111014] p-2"
+          ngModel
+        >
+          <option
+            *ngFor="let state of states"
+            [value]="state"
+          >
+            {{ state }}
+          </option>
+        </select>
+        <!-- <input
           type="text"
           name="state"
           class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
           placeholder="Enter state of residence"
-          [(ngModel)]="newAddress.state"
+          
           ngModel
-        />
+        /> -->
       </div>
       <div class="col-span-1">
         <label class="my-2 text-gray-500" for=""
           >City <span class="text-red-700">*</span></label
         >
-        <input
+        <select
+          *ngIf="cities.length > 0"
+          name="city"
+          [(ngModel)]="newAddress.city"
+          class="w-full border-none text-[#FFF] rounded-lg bg-[#111014] p-2"
+          ngModel
+        >
+          <option
+            *ngFor="let city of cities"
+            [value]="city"
+          >
+            {{ city }}
+          </option>
+        </select>
+        <!-- <input
           type="text"
           name="city"
           class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
           placeholder="Enter city of residence"
           [(ngModel)]="newAddress.city"
           ngModel
-        />
+        /> -->
       </div>
       <div class="col-span-1">
         <label class="my-2 text-gray-500" for="">Zipcode</label>

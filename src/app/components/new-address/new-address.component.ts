@@ -4,6 +4,8 @@ import { NotifierService } from 'angular-notifier';
 import { UserAccount } from 'src/app/auth/models/user-account.model';
 import { AddressData } from 'src/app/pages/profile/address-data';
 import { ProfileService } from 'src/app/services/profile.service';
+import { Cities } from 'src/app/shared/cities';
+import { States } from 'src/app/shared/states';
 
 @Component({
   selector: 'app-new-address',
@@ -11,6 +13,8 @@ import { ProfileService } from 'src/app/services/profile.service';
   styleUrls: ['./new-address.component.css'],
 })
 export class NewAddressComponent implements OnInit {
+  cities: string[] = Object.values(Cities);
+  states: string[] = Object.values(States);
   newAddress: AddressData = new AddressData();
   @Input() currentUser!: UserAccount;
   @Output() closeModal = new EventEmitter();
@@ -20,7 +24,10 @@ export class NewAddressComponent implements OnInit {
     private notifier: NotifierService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.states);
+    console.log(this.cities);
+  }
 
   saveAddress(addressForm: any) {
     this.newAddress.user = this.currentUser.id;
