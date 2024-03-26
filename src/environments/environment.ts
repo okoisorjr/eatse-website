@@ -14,7 +14,7 @@ export const environment = {
   },*/
   production: false,
   //developmentIP: 'http://localhost:5000',
-  developmentIP: 'http://192.168.0.180:5000',
+  developmentIP: 'http://172.20.10.5:5000',
   //developmentIP: 'http://23.21.3.245:5000',
   flutterwavePublicKey: 'FLWPUBK-ec9db7d42d78c3e5587c8a1f6801cb4c-X',
 };
