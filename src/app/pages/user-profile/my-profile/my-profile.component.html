@@ -1,0 +1,140 @@
+<div class="grid grid-cols-3 gap-5 py-16">
+  <!-- web view & tablet view-->
+  <div class="hidden md:block lg:block">
+    <div class="md:col-span-1 lg:col-span-1 xl:col-span-1">
+      <ul
+        class="w-full text-sm font-medium text-gray-500 bg-[#090909] rounded-md"
+      >
+        <li
+          *ngFor="let link of links; let i = index"
+          class="w-full px-4 py-3 border-gray-200 rounded-t-lg cursor-pointer"
+          [ngClass]="{
+            'border-t': link.name === 'Logout',
+            'rounded-t-none': link.name === 'logout' || link.name !== 'profile',
+            'bg-[#585858]': link.name === currentView,
+            'text-white': link.name === currentView,
+            'rounded-b': link.name === 'Logout'
+          }"
+          (click)="updateView(link.link)"
+        >
+          <i
+            class="material-icons mr-2 fs-12 me-2 align-middle text-[#FFFFFF]"
+            >{{ link.icon }}</i
+          >{{ link.name }}
+        </li>
+        <li
+          class="w-full px-4 py-3 border-gray-200 rounded-t-lg cursor-pointer rounded-b"
+          (click)="signOut()"
+        >
+          <i class="material-icons mr-2 fs-12 me-2 align-middle text-[#FFFFFF]">
+            logout</i
+          >Logout
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="lg:col-span-2 md:col-span-2 col-span-3">
+    <!-- Profile Settings-->
+    <app-edit-profile *ngIf="currentView === 'profile'"></app-edit-profile>
+
+    <!-- Change Password Settings-->
+    <app-update-password *ngIf="currentView === 'change-password'"></app-update-password>
+
+    <!-- Booking History view-->
+    <app-booking-history *ngIf="currentView === 'booking-history'"></app-booking-history>
+
+    <!-- Active Booking View-->
+    <app-active-bookings *ngIf="currentView === 'active-bookings'"></app-active-bookings>
+
+    <!-- Notifications View -->
+    <app-notifications *ngIf="currentView === 'notifications'"></app-notifications>
+  </div>
+</div>
+
+<!-- <ng-template #addressModal let-modal>
+  <app-new-address
+    [currentUser]="currentUser"
+    (closeModal)="dismissModal()"
+  ></app-new-address>
+</ng-template>
+
+<ng-template #editAddressModal let-modal>
+  <div class="col-span-1 w-full p-12 bg-[#090909] rounded-md">
+    <form #editAddressForm="ngForm" (ngSubmit)="updateAddress(editAddressForm)">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-1">
+          <label class="my-2 text-gray-500" for=""
+            >Country <span class="text-red-700">*</span></label
+          >
+          <input
+            type="text"
+            name="country"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter country of residence"
+            [(ngModel)]="editAddress.country"
+            ngModel
+          />
+        </div>
+        <div class="col-span-1">
+          <label class="my-2 text-gray-500" for=""
+            >State <span class="text-red-700">*</span></label
+          >
+          <input
+            type="text"
+            name="state"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter state of residence"
+            [(ngModel)]="editAddress.state"
+            ngModel
+          />
+        </div>
+        <div class="col-span-1">
+          <label class="my-2 text-gray-500" for=""
+            >City <span class="text-red-700">*</span></label
+          >
+          <input
+            type="text"
+            name="city"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter city of residence"
+            [(ngModel)]="editAddress.city"
+            ngModel
+          />
+        </div>
+        <div class="col-span-1">
+          <label class="my-2 text-gray-500" for="">Zipcode</label>
+          <input
+            type="text"
+            name="zip_code"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter zip code"
+            [(ngModel)]="editAddress.zip_code"
+            ngModel
+          />
+        </div>
+        <div class="col-span-2">
+          <label class="my-2 text-gray-500" for=""
+            >Street and building number
+            <span class="text-red-700">*</span></label
+          >
+          <input
+            type="text"
+            name="street"
+            class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+            placeholder="Enter street name and building no"
+            [(ngModel)]="editAddress.street"
+            ngModel
+          />
+        </div>
+        <div class="col-span-2 flex justify-center">
+          <button class="btn w-50 bg-[#008000] text-white hover:bg-[#008000]">
+            Update
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template> -->
+
+<!-- <ng-template #cancelBookingConfirmationModal let-modal></ng-template> -->

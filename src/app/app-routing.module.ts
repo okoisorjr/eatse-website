@@ -6,15 +6,15 @@ import { PageLayoutComponent } from './layout/page-layout/page-layout.component'
 
 const routes: Routes = [
   {
-    path: 'auth',
-    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
-    canActivate: [AppGuard],
-  },
-  {
     path: '',
     component: PageLayoutComponent,
     loadChildren: () =>
       import('./pages/pages.module').then((m) => m.PagesModule),
+  },
+  {
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
+    /* canActivate: [AppGuard], */
   },
   {
     path: '**',

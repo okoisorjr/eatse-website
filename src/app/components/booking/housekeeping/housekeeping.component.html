@@ -358,7 +358,7 @@
         <div
           class="col-span-2 md:col-span-1 lg:col-span-1 w-full p-6 bg-[#111014] rounded-md cursor-pointer"
           [ngClass]="{
-            'border-[#008000]': newBooking.address === address._id,
+            'border-2 border-[#008000]': newBooking.address === address._id || address.default === true,
             'border-0': newBooking.address !== address._id
           }"
           (click)="selectAddress(address)"

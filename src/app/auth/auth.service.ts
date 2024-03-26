@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { NewUser } from './models/new-user.model';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -57,11 +56,10 @@ export class AuthService {
   }
 
   refreshToken(): Observable<any> {
-    return this.http.post<any>(
+    return this.http.get<any>(
       `${
         environment.developmentIP
-      }/auth/refresh-token/${this.getRefreshToken()}`,
-      {}
+      }/auth/refresh-token/${this.getRefreshToken()}`
     );
   }
 
@@ -77,5 +75,15 @@ export class AuthService {
       `${environment.developmentIP}/auth/reset-password`,
       data
     );
+  }
+
+  clearTokens() {
+    //localStorage.removeItem('access_token');
+    //localStorage.removeItem('refresh_token');
+    localStorage.clear();
+  }
+
+  signOut(): Observable<any> {
+    return this.http.get<string>(`${environment.developmentIP}/auth/signout-client/${this.getAccessToken()}`);
   }
 }

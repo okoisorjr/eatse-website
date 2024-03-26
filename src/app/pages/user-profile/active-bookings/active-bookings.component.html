@@ -1,0 +1,240 @@
+<div class="max-w-full p-7 bg-[#090909] rounded-md shadow dark:bg-[#090909]">
+  <h6 class="mb-2 text-xl font-bold tracking-tight text-white">
+    Active bookings
+  </h6>
+
+  <div *ngIf="activeBookings && activeBookings.length === 0">
+    <div class="flex flex-col justify-center items-center my-25">
+      <div class="py-10">
+        <img
+          src="assets/booking-calendar.png"
+          style="width: 100px; height: 100px"
+        />
+      </div>
+      <p
+        *ngIf="activeBookings.length === 0"
+        class="text-[#FFF] text-center text-sm"
+      >
+        You currently have no active booking. Click the button below to book a
+        service.
+      </p>
+      <button (click)="gotoBooking()" class="ui-green-btn my-3">
+        Book now
+      </button>
+    </div>
+  </div>
+
+  <div
+    *ngIf="activeBookings && activeBookings.length > 0 && easer"
+    class="grid grid-cols-1 gap-3 my-5"
+  >
+    <ng-container *ngFor="let activeBooking of activeBookings">
+      <div class="flex flex-col md:flex-row lg:flex-row xl:flex-row">
+        <div
+          class="block w-full p-6 bg-[#121214] rounded-lg rounded-b-none md:rounded-r-none lg:rounded-r-none shadow"
+        >
+          <div class="flex items-center justify-between">
+            <p class="text-[#FFF] text-sm md:text-sm lg:text-lg font-semibold">
+              {{ activeBooking.service | titlecase }}
+            </p>
+            <div
+              class="p-3 flex flex-row justify-between items-center gap-3 border-b-gray-700"
+            >
+              <p
+                class="hidden md:block lg:block text-[#FFF] text-sm md:text-sm lg:text-lg"
+              >
+                ₦
+                {{
+                  activeBooking.servicePrice
+                    ? activeBooking.servicePrice.toLocaleString()
+                    : activeBooking.cost.toLocaleString()
+                }}
+              </p>
+              <div class="flex flex-row gap-2 items-center">
+                <div class="w-2 h-2 bg-[#008000] rounded-full"></div>
+                <p class="text-[#FFF] text-sm md:text-sm lg:text-lg">
+                  {{ activeBooking.frequency }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            *ngIf="activeBooking.service !== 'errand'"
+            class="border-bottom mb-2 border-[#1C1B1F]"
+          >
+            <p class="text-[#FFF] text-sm md:text-sm lg:text-lg">
+              {{ activeBooking.address.street }},
+              {{ activeBooking.address.city }}
+              <span> {{ activeBooking.address.state }}</span>
+            </p>
+          </div>
+          <div
+            *ngIf="activeBooking.service === 'errand'"
+            class="border-bottom mb-2 border-[#1C1B1F]"
+          >
+            <p class="text-[#FFF] text-md">
+              {{ activeBooking.deliveryAddress.street }},
+              {{ activeBooking.deliveryAddress.city }}
+              <span> {{ activeBooking.deliveryAddress.state }}</span>
+            </p>
+          </div>
+          <div class="flex justify-between">
+            <p class="text-[#FFF] text-sm font-semibold">
+              <i class="ri-calendar-event-line"></i> Booking Date:
+              {{ activeBooking.startingDate | date }}
+            </p>
+            <p class="text-[#FFF] text-sm font-semibold">
+              <i class="ri-time-line"></i>
+              {{
+                activeBooking.service !== "laundry"
+                  ? "Arrival Time:"
+                  : "Pickup/Delivery Time:"
+              }}
+              <span>
+                {{
+                  activeBooking.arrivalTime
+                    ? activeBooking.arrivalTime
+                    : activeBooking.pickupTime
+                }}</span
+              >
+            </p>
+          </div>
+        </div>
+        <div
+          class="hidden md:block lg:block flex-shrink-0 bg-[#212123] rounded-r-lg shadow"
+        >
+          <div class="flex flex-col gap-2 px-3 items-center justify-center">
+            <i
+              *ngIf="easer"
+              id="dropdownMenuButton2"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              class="ri-user-line fs-2 text-white cursor-pointer self-center"
+            ></i>
+            <ul
+              *ngIf="easer"
+              class="dropdown-menu dropdown-menu-dark"
+              aria-labelledby="dropdownMenuButton2"
+            >
+              <li>
+                <span class="text-sm text-[#FFF] font-semibold px-2"
+                  >Name: {{ easer.firstname + " " + easer.lastname }}</span
+                >
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <span class="text-sm text-[#FFF] font-semibold px-2"
+                  >Easer ID: {{ easer.id }}</span
+                >
+              </li>
+            </ul>
+
+            <i
+              id="dropdownMenuButton3"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              class="ri-edit-box-line fs-2 text-white cursor-pointer self-center"
+            ></i>
+            <ul
+              class="dropdown-menu dropdown-menu-dark"
+              aria-labelledby="dropdownMenuButton3"
+            >
+              <li>
+                <span class="text-sm text-[#FFF] font-semibold px-2"
+                  >Request Easer Change</span
+                >
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <span class="text-sm text-[#FFF] font-semibold px-2"
+                  >Request DateTime Adjustment</span
+                >
+              </li>
+            </ul>
+
+            <i
+              (click)="
+                openCancelBookingConfirmationModal(
+                  cancelBookingConfirmationModal,
+                  activeBooking
+                )
+              "
+              class="ri-close-line fs-2 text-[#ff0000] self-center rounded cursor-pointer"
+            ></i>
+          </div>
+        </div>
+        <div
+          class="block md:hidden lg:hidden xl:hidden bg-[#212123] rounded-b-lg shadow"
+        >
+          <div class="flex flex-row gap-2 px-3 items-center justify-between">
+            <i
+              id="dropdownMenuButton2"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              class="ri-user-line fs-2 text-white cursor-pointer self-center"
+            ></i>
+            <ul
+              class="dropdown-menu dropdown-menu-dark"
+              aria-labelledby="dropdownMenuButton2"
+            >
+              <li>
+                <span class="text-sm text-[#FFF] font-semibold px-2"
+                  >Name: {{ easer.firstname + " " + easer.lastname }}</span
+                >
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <span class="text-sm text-[#FFF] font-semibold px-2"
+                  >Easer ID: {{ easer.id }}</span
+                >
+              </li>
+            </ul>
+
+            <i
+              id="dropdownMenuButton3"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              class="ri-edit-box-line fs-2 text-white cursor-pointer self-center"
+            ></i>
+            <ul
+              class="dropdown-menu dropdown-menu-dark"
+              aria-labelledby="dropdownMenuButton3"
+            >
+              <li>
+                <span class="text-sm text-[#FFF] font-semibold px-2"
+                  >Request Easer Change</span
+                >
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <span class="text-sm text-[#FFF] font-semibold px-2"
+                  >Request DateTime Adjustment</span
+                >
+              </li>
+            </ul>
+
+            <i
+              (click)="
+                openCancelBookingConfirmationModal(
+                  cancelBookingConfirmationModal,
+                  activeBooking
+                )
+              "
+              class="ri-close-line fs-2 text-[#ff0000] self-center rounded cursor-pointer"
+            ></i>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #cancelBookingConfirmationModal let-modal></ng-template>

@@ -17,6 +17,7 @@ import {
   throwError,
 } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -26,7 +27,7 @@ export class TokenInterceptor implements HttpInterceptor {
     null
   );
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   intercept(
     request: HttpRequest<any>,
@@ -62,15 +63,22 @@ export class TokenInterceptor implements HttpInterceptor {
     //);
 
     if (this.authService.getAccessToken()) {
-      request = this.addToken(request, this.authService.getAccessToken() ?? '');
+      request = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${this.authService.getAccessToken()}`,
+        },
+      });
+      //this.addToken(request, this.authService.getAccessToken() ?? '');
     }
 
     return next.handle(request).pipe(
       catchError((error) => {
         if (error instanceof HttpErrorResponse && error.status === 401) {
+          //console.log('auth failed!...time out!')
           return this.handle401Error(request, next);
         } else {
-          console.log(error)
+          //console.log(error)
+          //this.router.navigateByUrl('/auth/sign-in');
           return throwError(error);
         }
       })
@@ -86,14 +94,17 @@ export class TokenInterceptor implements HttpInterceptor {
   }
 
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
+    //console.log('refreshing token, please wait...')
     if (!this.isRefreshing) {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
 
       return this.authService.refreshToken().pipe(
         switchMap((token: any) => {
+          //console.log('token=>', token);
           this.isRefreshing = false;
-          this.refreshTokenSubject.next(token['result'].accessToken);
+          this.refreshTokenSubject.next(token.accessToken);
+          this.authService.saveTokens(token.access_token, token.refresh_token);
           return next.handle(
             (request = request.clone({
               setHeaders: {

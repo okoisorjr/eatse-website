@@ -14,32 +14,47 @@
         Hey there, welcome back
       </p>
 
-      <div class="py-2">
+      <div class="flex py-2">
         <input
           type="email"
           name="email"
-          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          class="p-3 w-100 bg-[#111014] rounded-md text-[#FFF] outline-none"
           placeholder="Email address"
           [(ngModel)]="loginDetails.username"
           ngModel
         />
       </div>
-
-      <div class="py-2">
+      <a
+        routerLink="/auth/reset-password"
+        class="text-[#008000] hover:text-[#008000] text-right text-sm float-right mb-1"
+        >Forgot password?</a
+      >
+      <div
+        class="py-2"
+      >
         <input
-          type="password"
+          type="{{ !showPassword ? 'password' : 'text' }}"
           name="password"
-          class="p-2 w-100 bg-[#111014] rounded-md text-[#FFF]"
+          class="p-3 bg-[#111014] rounded-md w-100 bg-transparent border-none text-[#FFF] outline-none"
           placeholder="Password"
           [(ngModel)]="loginDetails.password"
           ngModel
         />
+        <!-- <span
+          ><i
+            (click)="viewPassword()"
+            class="text-[#FFF] text-sm font-bold float-right"
+            [ngClass]="{
+              'ri-eye-off-line': !showPassword,
+              'ri-eye-line': showPassword
+            }"
+          ></i
+        ></span> -->
       </div>
-      <a
-        routerLink="/auth/reset-password"
-        class="text-[#008000] hover:text-[#008000] text-right text-sm"
-        >Forgot password?</a
-      >
+      <div class="flex items-center gap-2 my-1">
+        <input type="checkbox" class="accent-[#008000]" (change)="viewPassword()"/>
+        <span class="text-[#008000] text-xs">Show password</span>
+      </div>
 
       <div
         *ngIf="error"

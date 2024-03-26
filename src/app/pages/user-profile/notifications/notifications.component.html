@@ -1,0 +1,14 @@
+<h6 class="mb-2 text-xl font-bold tracking-tight text-white">
+  Notifications ({{ notifications && notifications.length }})
+</h6>
+
+<div
+  *ngFor="let notification of notifications; let i = index"
+  class="col-span-1 w-full p-8 flex flex-col my-3 bg-[#111014] cursor-pointer rounded-md"
+>
+  <h6 class="mb-4 text-lg font-semibold tracking-tight text-white">
+    {{ notification.title }}
+  </h6>
+
+  <p class="text-[#FFF] text-lg">{{ notification.notice }}</p>
+</div>

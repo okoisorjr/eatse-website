@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -20,7 +21,7 @@ export class TopNavComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.router.url.includes('active')
+    this.router.url.includes('active');
     window.addEventListener('resize', () => {
       let screenSize = window.innerWidth;
 
@@ -33,13 +34,23 @@ export class TopNavComponent implements OnInit {
     });
   }
 
-  logout() {
+  /* logout() {
     console.log('signed out!');
     this.router.navigateByUrl('/auth/sign-in', { skipLocationChange: true });
-  }
+  } */
 
   signOut() {
-    this.router.navigate(['auth', 'sign-in']);
+    this.authService.signOut().subscribe(
+      (value: string) => {
+        this.authService.clearTokens();
+        console.log(value);
+
+        this.router.navigate(['auth', 'sign-in']);
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    );
   }
 
   gotoLogin() {

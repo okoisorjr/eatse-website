@@ -41,6 +41,16 @@ export class MobileMenuComponent implements OnInit {
     this.hideMenu();
   }
 
+  gotoProfile(view?: string) {
+    if(view) {
+      this.hideMenu();
+      this.router.navigate(['profile', view]);
+    } else {
+      this.hideMenu();
+      this.router.navigate(['/profile']);
+    }
+  }
+
   logOut() {
     this.hideMenu();
     this.signOut.emit();

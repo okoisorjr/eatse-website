@@ -19,7 +19,7 @@ const routes: Routes = [
     path: 'booking',
     loadChildren: () =>
       import('./bookings/bookings.module').then((m) => m.BookingsModule),
-    /* canActivate: [AuthGuard] */
+    canActivate: [AuthGuard],
   },
   {
     path: 'about',
@@ -70,8 +70,17 @@ const routes: Routes = [
   },
   {
     path: 'profile',
-    component: ProfileComponent,
+    loadChildren: () =>
+      import('./user-profile/user-profile.module').then(
+        (m) => m.UserProfileModule
+      ),
+    canActivate: [AuthGuard],
   },
+  /* {
+    path: 'profile',
+    component: ProfileComponent,
+    canActivate: [AuthGuard]
+  }, */
 ];
 
 @NgModule({

@@ -74,11 +74,6 @@ export class ProfileComponent implements OnInit {
     this.modalService.open(addressModal, { centered: true, size: 'lg' });
   }
 
-  openEditAddressModal(selectedAddress: AddressData, editAddressModal: any) {
-    this.editAddress = selectedAddress;
-    this.modalService.open(editAddressModal, { centered: true, size: 'md' });
-  }
-
   openCancelBookingConfirmationModal(
     cancelBookingConfirmationModal: any,
     booking: any
@@ -139,6 +134,8 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  updatePassword(changePasswordForm?: any) {}
+
   updateAddress(editAddressForm: any) {
     this.profileService
       .updateAddress(this.editAddress._id, this.editAddress)
@@ -155,13 +152,24 @@ export class ProfileComponent implements OnInit {
       );
   }
 
-  updatePassword(changePasswordForm?: any) {}
-
   gotoBooking() {
     this.router.navigate(['/booking']);
   }
 
   deactivateBooking() {}
 
-  logout() {}
+  
+    signOut() {
+      this.authService.signOut().subscribe(
+        (value: string) => {
+          this.authService.clearTokens();
+          console.log(value);
+  
+          this.router.navigate(['auth', 'sign-in'], { skipLocationChange: true });
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error);
+        }
+      );
+  }
 }

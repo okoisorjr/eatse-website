@@ -1,0 +1,80 @@
+<div class="max-w-full p-7 bg-[#090909] rounded-md shadow dark:bg-[#090909]">
+  <h6 class="mb-2 text-xl font-bold tracking-tight text-white">
+    Booking history
+  </h6>
+
+  <div *ngIf="bookings.length === 0">
+    <div class="flex flex-col justify-center items-center my-25">
+      <div class="py-10">
+        <img
+          src="assets/booking-calendar.png"
+          style="width: 100px; height: 100px"
+        />
+      </div>
+      <p class="text-[#FFF] text-center text-sm">
+        No booking yet. Click the button below to book a service.
+      </p>
+      <button (click)="gotoBooking()" class="ui-green-btn my-3">
+        Book now
+      </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 gap-3 my-3">
+    <div
+      *ngFor="let booking of bookings"
+      class="block w-full bg-[#121214] rounded-lg shadow"
+    >
+      <div class="p-2">
+        <div class="flex items-center justify-between">
+          <p class="text-[#FFF] text-xs md:text-sm lg:text-lg font-semibold">
+            {{ booking.service | titlecase }}
+          </p>
+          <div
+            class="p-2 flex flex-row justify-between items-center gap-3 border-b-gray-700"
+          >
+            <p class="text-[#FFF] text-xs md:text-sm lg:text-lg">
+              ₦
+              {{ booking.cost }}
+            </p>
+            <div class="flex flex-row gap-2 items-center">
+              <div class="w-2 h-2 bg-[#008000] rounded-full"></div>
+              <p class="text-[#FFF] text-xs md:text-sm lg:text-lg">{{ booking.frequency }}</p>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="booking.service !== 'errand'">
+          <p class="text-[#FFF] text-xs md:text-sm lg:text-lg">
+            {{ booking.address.street + " " + booking.address.city }}
+            <span> {{ booking.address.state }}</span>
+          </p>
+        </div>
+        <div *ngIf="booking.service === 'errand'">
+          <p class="text-[#FFF] text-xs md:text-sm lg:text-lg">
+            {{
+              booking.deliveryAddress.street +
+                " " +
+                booking.deliveryAddress.city +
+                " " +
+                booking.deliveryAddress.country
+            }}
+            <span> {{ booking.deliveryAddress.state }}</span>
+          </p>
+        </div>
+      </div>
+      <div class="flex justify-between border-t-2 border-[#1C1B1F]">
+        <p class="text-[#FFF] text-xs md:text-sm lg:text-lg font-semibold p-3 gap-3">
+          Date: {{ booking.startingDate | date }}
+        </p>
+        <p class="text-[#FFF] text-xs md:text-sm lg:text-lg font-semibold p-3">
+          Arrival Time:
+          <span>
+            {{
+              booking.arrivalTime ? booking.arrivalTime : booking.pickupTime
+            }}</span
+          >
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

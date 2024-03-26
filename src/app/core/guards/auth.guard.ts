@@ -14,7 +14,7 @@ import { User } from 'src/app/auth/model/user';
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  currentUser!: User;
+  //access_token!: string | null;
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -26,11 +26,17 @@ export class AuthGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    this.currentUser = this.authService.getCurrentUser();
-    if (this.currentUser === undefined) {
-      this.router.navigateByUrl('/auth/sign-in');
-      return false;
+    //this.access_token = this.authService.getAccessToken();
+    //console.log(this.access_token);
+    if (
+      this.authService.getAccessToken() !== undefined &&
+      this.authService.getAccessToken() !== null &&
+      this.authService.getAccessToken() !== ''
+    ) {
+      console.log(this.authService.getAccessToken(), true);
+      return true;
     }
-    return true;
+    this.router.navigateByUrl('/auth/sign-in');
+    return false;
   }
 }

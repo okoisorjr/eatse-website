@@ -8,17 +8,34 @@ import { EaserRegistrationComponent } from './easer-registration/easer-registrat
 import { EaserSuccessComponent } from './easer-success/easer-success.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { EmailVerificationComponent } from './email-verification/email-verification.component';
+import { AppGuard } from '../core/guards/app.guard';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/sign-in' },
-  { path: 'sign-in', component: LoginComponent },
-  { path: 'sign-up', component: RegisterComponent },
+  { path: 'sign-in', component: LoginComponent, /* canActivate: [AppGuard] */ },
+  { path: 'sign-up', component: RegisterComponent, /* canActivate: [AppGuard] */ },
   { path: 'easer-registration', component: EaserRegistrationComponent },
   { path: 'easer-success', component: EaserSuccessComponent },
-  { path: 'registration-success', component: RegisterSuccessComponent },
-  { path: 'reset-password', component: ForgotPasswordComponent },
-  { path: 'new-password', component: ChangePasswordComponent },
-  { path: 'verify-account', component: EmailVerificationComponent },
+  {
+    path: 'registration-success',
+    component: RegisterSuccessComponent,
+    /* canActivate: [AppGuard], */
+  },
+  {
+    path: 'reset-password',
+    component: ForgotPasswordComponent,
+    /* canActivate: [AppGuard], */
+  },
+  {
+    path: 'new-password',
+    component: ChangePasswordComponent,
+    /* canActivate: [AppGuard], */
+  },
+  {
+    path: 'verify-account',
+    component: EmailVerificationComponent,
+    /* canActivate: [AppGuard], */
+  },
 ];
 
 @NgModule({

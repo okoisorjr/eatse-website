@@ -60,7 +60,8 @@
 
     <div
       *ngIf="currentUser"
-      class="p-2 flex items-center justify-between bg-[#111014] w-100 rounded-md"
+      
+      (click)="gotoProfile()"
     >
       <div class="flex items-center gap-3">
         <div
@@ -73,9 +74,71 @@
           currentUser.firstname + " " + currentUser.lastname
         }}</span>
       </div>
-      <i (click)="logOut()" class="material-icons text-[#FFF] cursor-pointer"
-        >logout</i
-      >
     </div>
+    <ul *ngIf="currentUser" class="p-2">
+      <li>
+        <a
+          class="text-[#FFF] text-sm cursor-pointer p-2"
+          (click)="gotoProfile()"
+          ><i class="material-icons mr-2 fs-12 me-2 align-middle text-[#FFFFFF]"
+            >person</i
+          >Profile</a
+        >
+      </li>
+      
+        <hr />
+      
+      <li>
+        <a
+          (click)="gotoProfile('change-password')"
+          class="text-[#FFF] text-sm cursor-pointer p-2"
+          ><i class="material-icons mr-2 fs-12 me-2 align-middle">lock</i>Change
+          password</a
+        >
+      </li>
+      
+        <hr class="dropdown-divider" />
+      
+      <li>
+        <a
+          (click)="gotoProfile('active-bookings')"
+          class="text-[#FFF] text-sm cursor-pointer p-2"
+          ><i class="material-icons mr-2 fs-12 me-2 align-middle">event_note</i
+          >Active booking</a
+        >
+      </li>
+      
+        <hr class="dropdown-divider" />
+      
+      <li>
+        <a
+          (click)="gotoProfile('booking-history')"
+          class="text-[#FFF] text-sm cursor-pointer p-3"
+          ><i class="material-icons mr-2 fs-12 me-2 align-middle">history</i
+          >Booking history</a
+        >
+      </li>
+      
+        <hr />
+      
+      <li>
+        <a
+          (click)="gotoProfile('notifications')"
+          class="text-[#FFF] text-sm cursor-pointer p-3"
+          ><i class="material-icons mr-2 fs-12 me-2 align-middle"
+            >notifications</i
+          >Notifications</a
+        >
+      </li>
+      
+        <hr />
+      
+      <li>
+        <a (click)="logOut()" class="text-[#FFF] text-sm cursor-pointer p-3">
+          <i class="material-icons text-[#FFF] cursor-pointer">logout</i
+          >Logout</a
+        >
+      </li>
+    </ul>
   </div>
 </div>

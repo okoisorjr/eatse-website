@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
   currentUser: any;
   error!: string;
   submitted: boolean = false;
+  showPassword: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -48,5 +49,9 @@ export class LoginComponent implements OnInit {
         this.error = error.error.message;
       }
     );
+  }
+
+  viewPassword(value?: any) {
+    this.showPassword = !this.showPassword;
   }
 }
