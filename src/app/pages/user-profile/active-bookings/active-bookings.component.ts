@@ -17,6 +17,7 @@ export class ActiveBookingsComponent implements OnInit {
   selectedBooking!: any;
   easers: ClientEaser[] = [];
   easer: ClientEaser = new ClientEaser();
+  loading: boolean = true;
 
   constructor(
     private bookingService: BookingsService,
@@ -31,10 +32,12 @@ export class ActiveBookingsComponent implements OnInit {
     // Fetch all users active bookings
     this.bookingService.getAllActiveBookings(this.currentUser.id).subscribe(
       (value) => {
+        this.loading = false;
         this.activeBookings = value;
       },
       (error: HttpErrorResponse) => {
         console.log(error);
+        this.loading = false;
       }
     );
   }

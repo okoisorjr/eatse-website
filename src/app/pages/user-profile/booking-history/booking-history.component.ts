@@ -14,6 +14,7 @@ export class BookingHistoryComponent implements OnInit {
   
   currentUser!: UserAccount;
   bookings!: any[];
+  loading: boolean = true;
 
   constructor(
     private authService: AuthService,
@@ -28,11 +29,13 @@ export class BookingHistoryComponent implements OnInit {
     this.bookingService.getAllBookings(this.currentUser.id).subscribe(
       (value) => {
         if (value) {
+          this.loading = false;
           this.bookings = value;
         }
       },
       (error: HttpErrorResponse) => {
         console.log(error);
+        this.loading = false;
       }
     );
   }

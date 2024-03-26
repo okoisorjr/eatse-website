@@ -12,6 +12,7 @@ import { ProfileService } from 'src/app/services/profile.service';
 export class NotificationsComponent implements OnInit {
   notifications!: any[];
   currentUser!: UserAccount;
+  loading: boolean = true;
 
   constructor(
     private profileService: ProfileService,
@@ -26,10 +27,12 @@ export class NotificationsComponent implements OnInit {
       .fetchClientNotifications(this.currentUser.role)
       .subscribe(
         (value) => {
+          this.loading = false;
           this.notifications = value;
         },
         (error: HttpErrorResponse) => {
           console.log(error.error.message);
+          this.loading = false;
         }
       );
   }
