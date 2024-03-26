@@ -18,6 +18,7 @@ export class EditProfileComponent implements OnInit {
   addresses: AddressData[] = [];
   newAddress: AddressData = new AddressData();
   editAddress: AddressData = new AddressData();
+  filename!: string;
 
   constructor(
     private profileService: ProfileService,
@@ -42,6 +43,30 @@ export class EditProfileComponent implements OnInit {
         console.log(error.error.message);
       }
     );
+  }
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+
+    if (file) {
+      this.filename = file.name;
+
+      const formData = new FormData();
+
+      formData.append('file', file);
+
+      this.profileService
+        .uploadProfileImg(formData, this.currentUser.id)
+        .subscribe(
+          (value) => {
+            console.log(value);
+          },
+          (error: HttpErrorResponse) => {
+            console.log(error);
+          }
+        );
+    }
+    console.log(event);
   }
 
   openAddressModal(addressModal: any) {

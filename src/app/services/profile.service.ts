@@ -19,11 +19,15 @@ export class ProfileService {
   }
 
   fetchClientEaser(client_id: string): Observable<ClientEaser[]> {
-    return this.http.get<ClientEaser[]>(`${environment.developmentIP}/clients/${client_id}/assigned_easer`);
+    return this.http.get<ClientEaser[]>(
+      `${environment.developmentIP}/clients/${client_id}/assigned_easer`
+    );
   }
 
   fetchClientNotifications(role: string): Observable<any> {
-    return this.http.get<any>(`${environment.developmentIP}/notifications/${role}`);
+    return this.http.get<any>(
+      `${environment.developmentIP}/notifications/${role}`
+    );
   }
 
   createAddress(newAddress: AddressData): Observable<AddressData> {
@@ -33,10 +37,20 @@ export class ProfileService {
     );
   }
 
-  updateAddress(address_id: string, address: AddressData): Observable<AddressData> {
+  updateAddress(
+    address_id: string,
+    address: AddressData
+  ): Observable<AddressData> {
     return this.http.patch<AddressData>(
       `${environment.developmentIP}/address/${address_id}`,
       address
+    );
+  }
+
+  uploadProfileImg(data: FormData, client_id: string): Observable<any> {
+    return this.http.post<any>(
+      `${environment.developmentIP}/client/${client_id}/save/profile_pic`,
+      data
     );
   }
 }

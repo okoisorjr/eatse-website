@@ -14,7 +14,13 @@
       ></span>
     </div>
 
-    <input type="file" hidden name="photo" #profile_pic />
+    <input
+      type="file"
+      hidden
+      name="photo"
+      #profile_pic
+      (change)="onFileSelected($event)"
+    />
   </div>
   <div class="grid grid-cols-2 gap-4">
     <div class="col-span-2 md:col-span-1 lg:col-span-1">

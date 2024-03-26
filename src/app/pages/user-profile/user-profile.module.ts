@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
 
 import { UserProfileRoutingModule } from './user-profile-routing.module';
 import { MyProfileComponent } from './my-profile/my-profile.component';
@@ -27,7 +29,9 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     UserProfileRoutingModule,
     ComponentsModule,
-    NgbPopoverModule
-  ]
+    NgbPopoverModule,
+    DialogModule
+  ],
+  providers: [ConfirmationService, MessageService],
 })
 export class UserProfileModule { }

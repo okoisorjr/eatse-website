@@ -1,0 +1,25 @@
+:host ::ng-deep {
+  .p-dialog {
+    background-color: #111014 !important;
+    box-shadow: 0 0 0 0.1rem #111014 !important;
+  }
+
+  .p-dialog .p-dialog-header {
+    background-color: #111014 !important;
+    color: #FFF !important;
+  }
+
+  .p-confirmdialog .p-dialog-header {
+    background-color: #111014 !important;
+    color: #FFF !important;
+  }
+
+  .p-dialog-draggable .p-dialog-header {
+    background-color: #111014 !important;
+  }
+
+  .p-dialog .p-dialog-content {
+    background-color: #111014 !important;
+    color: #FFFFFF !important;
+  }
+}

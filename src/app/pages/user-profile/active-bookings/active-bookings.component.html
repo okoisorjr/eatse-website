@@ -179,12 +179,7 @@
             </ul>
 
             <i
-              (click)="
-                openCancelBookingConfirmationModal(
-                  cancelBookingConfirmationModal,
-                  activeBooking
-                )
-              "
+              (click)="openConfirmationDialog(activeBooking)"
               class="ri-close-line fs-2 text-[#ff0000] self-center rounded cursor-pointer"
             ></i>
           </div>
@@ -244,12 +239,7 @@
             </ul>
 
             <i
-              (click)="
-                openCancelBookingConfirmationModal(
-                  cancelBookingConfirmationModal,
-                  activeBooking
-                )
-              "
+              (click)="openConfirmationDialog(activeBooking)"
               class="ri-close-line fs-2 text-[#ff0000] self-center rounded cursor-pointer"
             ></i>
           </div>
@@ -259,4 +249,35 @@
   </div>
 </div>
 
-<ng-template #cancelBookingConfirmationModal let-modal></ng-template>
+<p-dialog
+  header="Cancel Booking"
+  [(visible)]="showConfirmationDialog"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  styleClass="custom-dialog"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div>
+    <p class="text-lg text-[#FFF]">
+      Kindly, confirm this action and note that this action cannot be reverted
+      once carried out!
+    </p>
+  </div>
+  <div class="flex justify-end gap-3">
+    <button
+      class="w-fit bg-red-500 text-lg p-2 rounded-md shadow-md cursor-pointer text-[#fff] font-semibold"
+      (click)="dismissConfirmationModal()"
+    >
+      <span>Cancel</span>
+    </button>
+    <button
+      [disabled]="processing"
+      class="w-fit bg-[#008000] text-lg p-2 bg-opacity-50 rounded-md shadow-md cursor-pointer text-[#fff] font-semibold"
+      [ngClass]="{ 'bg-opacity-50': processing }"
+      (click)="deactivateBooking()"
+    >
+      <span>{{ processing ? "Processing..." : "Proceed" }}</span>
+    </button>
+  </div>
+</p-dialog>
