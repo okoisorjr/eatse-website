@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { NewUser } from './models/new-user.model';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -13,12 +13,20 @@ import { PasswordChange } from './models/password-change';
   providedIn: 'root',
 })
 export class AuthService {
-  currentUser: any;
+  currentUser!: User;
+
+  user: Subject<User> = new Subject();
 
   constructor(private router: Router, private http: HttpClient) {}
 
   getCurrentUser(): User {
     return this.currentUser;
+  }
+
+  fetchUpdatedAccountInfo(): Observable<any> {
+    return this.http.get<any>(
+      `${environment.developmentIP}/clients/my-account/${this.getUserId()}`
+    );
   }
 
   createNewClientAccount(newUser: NewUser): Observable<ResourceCreated> {
@@ -36,16 +44,23 @@ export class AuthService {
     return localStorage.getItem('refresh_token');
   }
 
+  getUserId() {
+    return localStorage.getItem('user_id');
+  }
+
   saveTokens(access_token: string, refresh_token: string) {
     localStorage.setItem('access_token', access_token);
     localStorage.setItem('refresh_token', refresh_token);
   }
 
+  save_user_id(user_id: string) {
+    localStorage.setItem('user_id', user_id);
+  }
+
   loginClient(newUser: any): Observable<any> {
-    return this.http.post<any>(
-      `${environment.developmentIP}/auth/client`,
-      newUser
-    ).pipe();
+    return this.http
+      .post<any>(`${environment.developmentIP}/auth/client`, newUser)
+      .pipe();
   }
 
   verifyClientEmail(token: ResourceCreated): Observable<any> {
@@ -84,6 +99,10 @@ export class AuthService {
   }
 
   signOut(): Observable<any> {
-    return this.http.get<string>(`${environment.developmentIP}/auth/signout-client/${this.getAccessToken()}`);
+    return this.http.get<string>(
+      `${
+        environment.developmentIP
+      }/auth/signout-client/${this.getAccessToken()}`
+    );
   }
 }

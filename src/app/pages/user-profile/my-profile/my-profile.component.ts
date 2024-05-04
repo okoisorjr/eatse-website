@@ -20,6 +20,7 @@ export class MyProfileComponent implements OnInit {
   bookings: any[] = [];
   easers: ClientEaser[] = [];
   easer: ClientEaser = new ClientEaser();
+  loading: boolean = true;
 
   constructor(
     private ar: ActivatedRoute,
@@ -28,11 +29,11 @@ export class MyProfileComponent implements OnInit {
     private router: Router
   ) {
     this.currentView = this.ar.snapshot.params['view'];
-    this.currentUser = this.authService.getCurrentUser();
-    console.log(this.currentUser);
-    if(!this.currentUser) {
+    //this.currentUser = this.authService.getCurrentUser();
+    //console.log(this.currentUser);
+    /* if (!this.currentUser) {
       this.router.navigate(['auth', 'sign-in']);
-    }
+    } */
     if (this.currentView === undefined) {
       // set the first view to the profile
       this.currentView = 'profile';
@@ -40,6 +41,17 @@ export class MyProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authService.fetchUpdatedAccountInfo().subscribe(
+      (value) => {
+        this.currentUser = value;
+        this.loading = false;
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error);
+        this.loading = false;
+      }
+    );
+
     // Side menu links
     this.links = [
       { link: 'profile', name: 'Profile', icon: 'person' },
@@ -67,5 +79,9 @@ export class MyProfileComponent implements OnInit {
         console.log(error);
       }
     );
+  }
+
+  refresh() {
+    this.ngOnInit();
   }
 }

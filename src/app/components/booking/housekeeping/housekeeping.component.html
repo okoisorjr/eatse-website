@@ -337,7 +337,8 @@
 </ng-container>
 
 <ng-template #addressSelectionModal let-modal>
-  <div
+  <div class="card" style="width: 300px; height: 300px"></div>
+  <!-- <div
     class="w-full p-10 bg-[#090909] bg-opacity-100 rounded-md"
     *ngIf="addresses.length > 0"
   >
@@ -358,7 +359,8 @@
         <div
           class="col-span-2 md:col-span-1 lg:col-span-1 w-full p-6 bg-[#111014] rounded-md cursor-pointer"
           [ngClass]="{
-            'border-2 border-[#008000]': newBooking.address === address._id || address.default === true,
+            'border-2 border-[#008000]':
+              newBooking.address === address._id || address.default === true,
             'border-0': newBooking.address !== address._id
           }"
           (click)="selectAddress(address)"
@@ -474,7 +476,7 @@
         <i class="ri-add-line text-[#fff]"></i>New Address
       </button>
     </div>
-  </div>
+  </div> -->
 </ng-template>
 
 <ng-template #addressModal let-modal>

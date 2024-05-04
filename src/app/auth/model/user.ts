@@ -7,4 +7,5 @@ export class User {
   referral_code!: string;
   verified!: boolean;
   role!: string; 
+  profile_pic!: string;
 }

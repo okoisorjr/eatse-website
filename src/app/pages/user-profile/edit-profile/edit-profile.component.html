@@ -3,6 +3,7 @@
 
   <div class="flex justify-center items-center my-3">
     <div
+      *ngIf="!currentUser.profile_pic"
       class="w-24 h-24 flex items-center align-middle self-center justify-center bg-[#008000] rounded-full py-10"
     >
       <span class="font-bold text-6xl text-white relative"
@@ -12,6 +13,22 @@
           (click)="profile_pic.click()"
         ></i
       ></span>
+    </div>
+
+    <div
+      *ngIf="currentUser.profile_pic"
+      class="flex items-center align-middle self-center justify-center py-2"
+    >
+      <span class="font-bold text-6xl text-white relative">
+        <img
+          src="{{ currentUser.profile_pic }}"
+          alt="profile_picture"
+          class="w-24 h-24 rounded-full relative"
+        /><i
+          class="ri-camera-line text-lg bg-[#111014] px-2 rounded-lg text-[#FFF] absolute top-20 right-0 cursor-pointer"
+          (click)="profile_pic.click()"
+        ></i>
+      </span>
     </div>
 
     <input

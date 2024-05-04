@@ -37,6 +37,8 @@ export class LoginComponent implements OnInit {
       (value) => {
         if (value) {
           this.authService.currentUser = value.user;
+          this.authService.user.next(value);
+          this.authService.save_user_id(value.user.id);
           this.authService.saveTokens(value.access_token, value.refresh_token);
           //localStorage.setItem('access_token', value.access_token);
           //localStorage.setItem('refresh_token', value.refresh_token);

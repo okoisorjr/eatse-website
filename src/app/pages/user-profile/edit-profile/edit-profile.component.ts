@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { UserAccount } from 'src/app/auth/models/user-account.model';
 import { ProfileService } from 'src/app/services/profile.service';
 import { AddressData } from '../../profile/address-data';
@@ -7,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/auth/auth.service';
 import { NotifierService } from 'angular-notifier';
+import { User } from 'src/app/auth/model/user';
 
 @Component({
   selector: 'app-edit-profile',
@@ -14,11 +14,16 @@ import { NotifierService } from 'angular-notifier';
   styleUrls: ['./edit-profile.component.css'],
 })
 export class EditProfileComponent implements OnInit {
-  currentUser!: UserAccount;
+  @Input() currentUser!: User;
+  @Output() refreshProfile = new EventEmitter();
+
+  //currentUser!: UserAccount;
   addresses: AddressData[] = [];
   newAddress: AddressData = new AddressData();
   editAddress: AddressData = new AddressData();
   filename!: string;
+  showNewAdressDialog: boolean = false;
+  showEditAdressDialog: boolean = false;
 
   constructor(
     private profileService: ProfileService,
@@ -26,7 +31,7 @@ export class EditProfileComponent implements OnInit {
     private authService: AuthService,
     private notifier: NotifierService
   ) {
-    this.currentUser = this.authService.getCurrentUser();
+    //this.currentUser = this.authService.getCurrentUser();
   }
 
   dismissModal() {
@@ -34,15 +39,18 @@ export class EditProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.profileService.fetchClientAddresses(this.currentUser.id).subscribe(
-      (value) => {
-        this.addresses = value;
-        console.log(value);
-      },
-      (error: HttpErrorResponse) => {
-        console.log(error.error.message);
-      }
-    );
+    console.log(this.authService.currentUser);
+    this.profileService
+      .fetchClientAddresses(this.authService.currentUser.id)
+      .subscribe(
+        (value) => {
+          this.addresses = value;
+          console.log(value);
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error.error.message);
+        }
+      );
   }
 
   onFileSelected(event: any) {
@@ -56,10 +64,15 @@ export class EditProfileComponent implements OnInit {
       formData.append('file', file);
 
       this.profileService
-        .uploadProfileImg(formData, this.currentUser.id)
+        .uploadProfileImg(formData, this.authService.currentUser.id)
         .subscribe(
           (value) => {
             console.log(value);
+            this.authService.fetchUpdatedAccountInfo().subscribe((value) => {
+              this.authService.user.next(value);
+              this.authService.currentUser = value;
+              this.refreshProfile.emit();
+            });
           },
           (error: HttpErrorResponse) => {
             console.log(error);
@@ -67,6 +80,14 @@ export class EditProfileComponent implements OnInit {
         );
     }
     console.log(event);
+  }
+
+  displayNewAddressDialog() {
+    this.showNewAdressDialog = true;
+  }
+
+  displayEditAddressDialog() {
+    this.showEditAdressDialog = true;
   }
 
   openAddressModal(addressModal: any) {

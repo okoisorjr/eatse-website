@@ -36,19 +36,31 @@
 
   <div class="lg:col-span-2 md:col-span-2 col-span-3">
     <!-- Profile Settings-->
-    <app-edit-profile *ngIf="currentView === 'profile'"></app-edit-profile>
+    <app-edit-profile
+      *ngIf="currentView === 'profile' && !loading"
+      (refreshProfile)="refresh()"
+      [currentUser]="currentUser"
+    ></app-edit-profile>
 
     <!-- Change Password Settings-->
-    <app-update-password *ngIf="currentView === 'change-password'"></app-update-password>
+    <app-update-password
+      *ngIf="currentView === 'change-password'"
+    ></app-update-password>
 
     <!-- Booking History view-->
-    <app-booking-history *ngIf="currentView === 'booking-history'"></app-booking-history>
+    <app-booking-history
+      *ngIf="currentView === 'booking-history'"
+    ></app-booking-history>
 
     <!-- Active Booking View-->
-    <app-active-bookings *ngIf="currentView === 'active-bookings'"></app-active-bookings>
+    <app-active-bookings
+      *ngIf="currentView === 'active-bookings'"
+    ></app-active-bookings>
 
     <!-- Notifications View -->
-    <app-notifications *ngIf="currentView === 'notifications'"></app-notifications>
+    <app-notifications
+      *ngIf="currentView === 'notifications'"
+    ></app-notifications>
   </div>
 </div>
 

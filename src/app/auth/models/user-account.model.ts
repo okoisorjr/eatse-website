@@ -12,4 +12,7 @@ export class UserAccount {
   email!: string;
   phone!: string;
   role!: string;
+  profile_pic!: string;
+  referral_code!: string;
+  verified!: boolean;
 }

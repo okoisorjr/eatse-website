@@ -35,9 +35,14 @@
       </div>
     </div>
 
-    <!-- View for Signed in user -->
-    <div *ngIf="currentUser" class="hidden md:block lg:block xl:block dropdown">
+    <!-- View for Signed in user without dp -->
+    <div
+      *ngIf="currentUser"
+      class="hidden md:block lg:block xl:block dropdown"
+    >
+      <!-- Signed in user without dp-->
       <button
+        *ngIf="!currentUser.profile_pic"
         class="w-8 h-8 lg:w-10 lg:h-10 rounded-full font-semibold"
         type="button"
         id="dropdownMenuButton2"
@@ -47,16 +52,37 @@
       >
         {{ currentUser.firstname[0].toUpperCase() }}
       </button>
+
+      <!-- Signed in user with dp-->
+      <button
+        *ngIf="currentUser.profile_pic"
+        class="w-8 h-8 lg:w-10 lg:h-10 rounded-full"
+        type="button"
+        id="dropdownMenuButton2"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <img
+          src="{{ currentUser.profile_pic }}"
+          alt="profile_picture"
+          class="w-8 h-8 rounded-full"
+        />
+      </button>
       <ul
         class="dropdown-menu dropdown-menu-dark"
         aria-labelledby="dropdownMenuButton2"
       >
         <li>
-          <a class="dropdown-item cursor-pointer" routerLink="/profile">{{
-            currentUser && currentUser.firstname + " " + currentUser.lastname
-          }} <i *ngIf="currentUser.verified" class="material-icons mr-2 fs-12 me-2 align-middle text-[#008000]"
-          >verified</i
-        ></a>
+          <a class="dropdown-item cursor-pointer" routerLink="/profile"
+            >{{
+              currentUser && currentUser.firstname + " " + currentUser.lastname
+            }}
+            <i
+              *ngIf="currentUser.verified"
+              class="material-icons mr-2 fs-12 me-2 align-middle text-[#008000]"
+              >verified</i
+            ></a
+          >
         </li>
         <li>
           <hr class="dropdown-divider" />

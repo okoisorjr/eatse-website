@@ -49,7 +49,7 @@ export class ProfileService {
 
   uploadProfileImg(data: FormData, client_id: string): Observable<any> {
     return this.http.post<any>(
-      `${environment.developmentIP}/client/${client_id}/save/profile_pic`,
+      `${environment.developmentIP}/clients/upload-profile/${client_id}`,
       data
     );
   }
