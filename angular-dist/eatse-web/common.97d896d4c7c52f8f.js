@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkeatse_web=self.webpackChunkeatse_web||[]).push([[592],{8763:(u,e,s)=>{s.d(e,{y:()=>a});class a{}}}]);

@@ -5,9 +5,11 @@ import { NewBookingComponent } from './new-booking/new-booking.component';
 import { BookingHistoryComponent } from './booking-history/booking-history.component';
 import { ActiveBookingComponent } from './active-booking/active-booking.component';
 import { ServiceBookingPageComponent } from './service-booking-page/service-booking-page.component';
+import { BookingSuccessComponent } from 'src/app/components/booking-success/booking-success.component';
 
 const routes: Routes = [
   { path: '', component: ListBookingsComponent },
+  { path: 'booking-completed', component: BookingSuccessComponent},
   { path: 'book-service', component: NewBookingComponent },
   { path: 'history', component: BookingHistoryComponent},
   { path: 'active', component: ActiveBookingComponent},

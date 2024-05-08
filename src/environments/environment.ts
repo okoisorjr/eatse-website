@@ -2,6 +2,8 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { hostname } from "os";
+
 export const environment = {
   /* firebaseConfig: {
     apiKey: "AIzaSyDC6MsRZ9MSigRSCi17lPvnfsx9-_ueAsc",
@@ -13,7 +15,8 @@ export const environment = {
     measurementId: "G-24592D18H2"
   },*/
   production: false,
-  developmentIP: 'http://localhost:5000',
+  //developmentIP: 'http://localhost:5000',
+  developmentIP: 'http://' + location.hostname + ':5000',
   //developmentIP: 'http://192.168.0.180:5000',
   //developmentIP: 'http://23.21.3.245:5000',
   flutterwavePublicKey: 'FLWPUBK-ec9db7d42d78c3e5587c8a1f6801cb4c-X',

@@ -22,8 +22,8 @@ export class EditProfileComponent implements OnInit {
   newAddress: AddressData = new AddressData();
   editAddress: AddressData = new AddressData();
   filename!: string;
-  showNewAdressDialog: boolean = false;
-  showEditAdressDialog: boolean = false;
+  showNewAddressDialog: boolean = false;
+  showEditAddressDialog: boolean = false;
 
   constructor(
     private profileService: ProfileService,
@@ -83,15 +83,16 @@ export class EditProfileComponent implements OnInit {
   }
 
   displayNewAddressDialog() {
-    this.showNewAdressDialog = true;
+    this.showNewAddressDialog = true;
   }
 
-  displayEditAddressDialog() {
-    this.showEditAdressDialog = true;
+  displayEditAddressDialog(address: AddressData) {
+    this.editAddress = address;
+    this.showEditAddressDialog = true;
   }
 
   openAddressModal(addressModal: any) {
-    this.modalService.open(addressModal, { centered: true, size: 'lg' });
+    //this.modalService.open(addressModal, { centered: true, size: 'lg' });
   }
 
   openEditAddressModal(selectedAddress: AddressData, editAddressModal: any) {
@@ -106,7 +107,7 @@ export class EditProfileComponent implements OnInit {
         (value) => {
           this.notifier.notify('success', `${value._id}`);
           this.ngOnInit();
-          this.modalService.dismissAll();
+          this.showEditAddressDialog = !this.showEditAddressDialog;
         },
         (error: HttpErrorResponse) => {
           this.notifier.notify('error', `${error.error.message}`);

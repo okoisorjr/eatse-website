@@ -42,6 +42,8 @@ export class HousekeepingComponent implements OnInit {
   frequencies: string[] = [];
   dates: string[] = [];
   nextButtonEnabled: boolean = true;
+  showNewAddressModal: boolean = false;
+  showSelectAddressModal: boolean = false;
 
   rooms!: any[];
   totalCost!: string;
@@ -80,9 +82,13 @@ export class HousekeepingComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
-  openNewAddressModal(addressModal: any) {
-    this.modalService.dismissAll();
-    this.modalService.open(addressModal, { centered: true, size: 'lg' });
+  openNewAddressModal() {
+    /* this.modalService.dismissAll();
+    this.modalService.open(addressModal, { centered: true, size: 'lg' }); */
+    if (this.showSelectAddressModal) {
+      this.showSelectAddressModal = !this.showSelectAddressModal;
+    }
+    this.showNewAddressModal = !this.showNewAddressModal;
   }
 
   ngOnInit(): void {
@@ -146,7 +152,10 @@ export class HousekeepingComponent implements OnInit {
   selectAddress(address: any) {
     this.selectedAddress = address;
     this.newBooking.address = address._id;
-    this.modalService.dismissAll();
+    //this.modalService.dismissAll();
+
+    this.showNewAddressModal = false;
+    this.showSelectAddressModal = false;
   }
 
   resetAddress() {
@@ -155,10 +164,14 @@ export class HousekeepingComponent implements OnInit {
   }
 
   openSelectAddressModal(addressSelectionModal: any) {
-    this.modalService.open(addressSelectionModal, {
+    /* this.modalService.open(addressSelectionModal, {
       centered: true,
       size: 'lg',
-    });
+    }); */
+    if (this.showNewAddressModal) {
+      this.showNewAddressModal = !this.showNewAddressModal;
+    }
+    this.showSelectAddressModal = !this.showSelectAddressModal;
   }
 
   selectFrequency(frequency: any) {
@@ -323,6 +336,7 @@ export class HousekeepingComponent implements OnInit {
     this.newBooking.paymentStatus = 'successful';
 
     console.log('Payment callback', response);
+    this.router.navigate(['booking-complete']);
   }
   closedPaymentModal(): void {
     this.newBooking.paymentStatus = 'cancelled';

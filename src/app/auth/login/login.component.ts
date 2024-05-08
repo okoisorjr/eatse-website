@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
   login(form: any) {
     this.error = '';
     this.submitted = true;
+    localStorage.clear();
     this.authService.loginClient(this.loginDetails).subscribe(
       (value) => {
         if (value) {

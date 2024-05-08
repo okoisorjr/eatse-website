@@ -120,7 +120,7 @@
             </p>
             <div class="flex justify-between">
               <a
-                (click)="openEditAddressModal(address, editAddressModal)"
+                (click)="displayEditAddressDialog(address)"
                 class="inline-flex items-center text-[#008000] cursor-pointer hover:text-[#008000] hover:underline"
                 [ngbPopover]="address.street"
                 popoverTitle="Address"
@@ -155,7 +155,7 @@
           </div>
         </ng-container>
         <div
-          (click)="openAddressModal(addressModal)"
+          (click)="displayNewAddressDialog()"
           class="col-span-2 md:col-span-1 lg:col-span-1 w-full p-6 flex flex-col justify-center items-center bg-[#111014] cursor-pointer rounded-md"
         >
           <svg
@@ -190,15 +190,29 @@
   </div>
 </div>
 
-<ng-template #addressModal let-modal>
+<p-dialog
+  header="New Address Info"
+  [(visible)]="showNewAddressDialog"
+  [style]="{ width: '50vw' }"
+>
+  <!-- <ng-template pTemplate="header">
+    <span class="text-xl font-bold">Header Content</span>
+  </ng-template> -->
   <app-new-address
     [currentUser]="currentUser"
-    (closeModal)="dismissModal()"
-  ></app-new-address>
-</ng-template>
 
-<ng-template #editAddressModal let-modal>
-  <div class="col-span-1 w-full p-12 bg-[#090909] rounded-md">
+  ></app-new-address>
+  <!-- <ng-template pTemplate="footer">
+      <p-button icon="pi pi-check" (click)="visible = false" label="Ok" styleClass="p-button-text"></p-button>
+  </ng-template> -->
+</p-dialog>
+
+<p-dialog
+  header="Edit Address Info"
+  [(visible)]="showEditAddressDialog"
+  [style]="{ width: '50vw' }"
+>
+  <!-- <div class="col-span-1 w-full p-12 bg-[#090909] rounded-md"> -->
     <form #editAddressForm="ngForm" (ngSubmit)="updateAddress(editAddressForm)">
       <div class="grid grid-cols-2 gap-4">
         <div class="col-span-1">
@@ -272,5 +286,5 @@
         </div>
       </div>
     </form>
-  </div>
-</ng-template>
+  <!-- </div> -->
+</p-dialog>

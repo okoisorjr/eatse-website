@@ -1,0 +1,12 @@
+#firstaccordion .ui-accordion-content{
+  background-color: #000 !important; 
+}
+
+.ui-accordion{
+  background-color: #000 !important;
+}
+
+.image-slider{
+  height: 200px; 
+  width: 280px;
+}

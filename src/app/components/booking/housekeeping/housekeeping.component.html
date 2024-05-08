@@ -479,9 +479,167 @@
   </div> -->
 </ng-template>
 
-<ng-template #addressModal let-modal>
+<p-dialog
+  header="Pick Address"
+  [(visible)]="showSelectAddressModal"
+  [style]="{ width: '50vw' }"
+>
+  <!-- <ng-template pTemplate="header">
+    <span class="text-xl font-bold">Header Content</span>
+  </ng-template> -->
+  <!-- <div
+    class="w-full p-10 bg-[#090909] bg-opacity-100 rounded-md"
+    *ngIf="addresses.length > 0"
+  > -->
+  <!-- <div class="flex justify-between mb-5">
+      <h3 class="text-gray-400 text-2xl font-bold">Pick Address</h3>
+      <span (click)="dismissModal()" class="cursor-pointer"
+        ><i class="ri-close-line text-gray-400 text-2xl font-semibold"></i
+      ></span>
+    </div> -->
+  <div class="flex justify-center items-center my-3">
+    <p class="text-[#008000] text-sm">
+      Kindly, click on any of the address boxes to select an address for this
+      booking.
+    </p>
+  </div>
+  <div class="grid grid-cols-2 gap-4">
+    <ng-container *ngFor="let address of addresses; let i = index">
+      <div
+        class="col-span-2 md:col-span-1 lg:col-span-1 w-full p-6 bg-[#111014] rounded-md cursor-pointer"
+        [ngClass]="{
+          'border-2 border-[#008000]':
+            newBooking.address === address._id || address.default === true,
+          'border-0': newBooking.address !== address._id
+        }"
+        (click)="selectAddress(address)"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25px"
+          height="25px"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M5 9.77746V16.2C5 17.8802 5 18.7203 5.32698 19.362C5.6146 19.9265 6.07354 20.3854 6.63803 20.673C7.27976 21 8.11984 21 9.8 21H14.2C15.8802 21 16.7202 21 17.362 20.673C17.9265 20.3854 18.3854 19.9265 18.673 19.362C19 18.7203 19 17.8802 19 16.2V5.00002M21 12L15.5668 5.96399C14.3311 4.59122 13.7133 3.90484 12.9856 3.65144C12.3466 3.42888 11.651 3.42893 11.0119 3.65159C10.2843 3.90509 9.66661 4.59157 8.43114 5.96452L3 12M14 21V15H10V21"
+            stroke="#FFF"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <h5
+          class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white"
+        >
+          {{ address.country }}
+        </h5>
+        <p class="mb-3 font-normal text-gray-500 dark:text-gray-400">
+          {{ address.state + ", " + address.city }}
+        </p>
+        <div class="flex justify-between">
+          <a
+            class="inline-flex items-center text-[#008000] cursor-pointer hover:text-[#008000] hover:underline"
+            [ngbPopover]="address.street"
+            popoverTitle="Address"
+            triggers="mouseenter:mouseleave"
+          >
+            {{
+              address.street.length > 20
+                ? address.street.substring(0, 20) + "..."
+                : address.street
+            }}
+            <svg
+              class="w-3 h-3 ml-2.5 feather feather-edit"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 18 18"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+              />
+              <path
+                d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </ng-container>
+    <div
+      (click)="openNewAddressModal()"
+      class="col-span-2 md:col-span-1 lg:col-span-1 w-full p-6 flex flex-col justify-center items-center bg-[#111014] cursor-pointer rounded-md"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="svg-icon"
+        style="
+          width: 100px;
+          height: 100px;
+          vertical-align: middle;
+          fill: #008000;
+          overflow: hidden;
+        "
+        viewBox="0 0 1024 1024"
+        version="1.1"
+      >
+        <path
+          d="M366.9 675.3c0.5 0 1.1 0 1.6-0.1l166.8-21.7c6.8-0.9 11.7-7.2 10.8-14s-7.1-11.7-14-10.8l-166.8 21.7c-6.8 0.9-11.7 7.2-10.8 14 0.8 6.3 6.2 10.9 12.4 10.9zM484.9 739.8l-159.2 18.1c-6.9 0.8-11.8 7-11 13.8 0.7 6.4 6.1 11.1 12.4 11.1 0.5 0 0.9 0 1.4-0.1l159.2-18.1c6.9-0.8 11.8-7 11-13.8s-7-11.8-13.8-11zM321.9 567c-0.9-6.8-7.2-11.6-14.1-10.7l-48.4 6.7c-6.8 0.9-11.6 7.2-10.7 14.1 0.9 6.3 6.2 10.8 12.4 10.8 0.6 0 1.1 0 1.7-0.1l48.4-6.7c6.9-0.9 11.6-7.2 10.7-14.1zM374.9 572.2c0.6 0 1.1 0 1.7-0.1L479.4 558c6.8-0.9 11.6-7.2 10.7-14.1-0.9-6.8-7.2-11.6-14.1-10.7l-102.8 14.1c-6.8 0.9-11.6 7.2-10.7 14.1 0.9 6.3 6.2 10.8 12.4 10.8z"
+        />
+        <path
+          d="M951.9 465.1c10.2-3.8 18-13 19.4-24.5s-3.9-22.3-12.9-28.4L651 202.2l-10.9-57.5c-1.3-6.7-5.2-12.6-11-16.4-5.7-3.7-12.8-4.9-19.4-3.3L496 152.4c-6.6 1.6-12.2 5.8-15.7 11.6-3.4 5.8-4.4 12.8-2.6 19.3l5.8 21L346.8 225c-7.7 1.2-15.4 3.9-22.5 8.2-7.1 4.4-12.9 10-17.5 16.4L87.9 558l-29.1 41c-8 11.3-6 27.9 5.9 34.9 20.7 12.2 50.2-15.8 68.8 24.1l100.3 219.6c3.4 7.4 9 13.8 16.5 18.1 7.5 4.3 15.9 5.9 24 5.1l360.9-36.9 238.1-129.2c5.5-3 10.3-7.2 14-12.7s5.9-11.6 6.6-17.8l26.8-227.4 31.2-11.7z m-356-285.3L617 291.3l-70.1-45.1-14.1-51.2 63.1-15.2z m-99 73.1l4.3 15.8c1.6 5.9 5.4 11.1 10.6 14.4l127 81.7c4.1 2.6 8.8 4 13.5 4 4.9 0 9.8-1.4 14-4.3 8.3-5.6 12.4-15.6 10.6-25.4l-12.8-67.5L867 408.9c6 4.1 9.6 11.3 8.7 18.9-0.9 7.7-6.1 13.8-12.9 16.4l-111.7 41.6c-7.4 2.7-15.5 3.8-23.8 2.7-8.3-1.1-15.9-4.1-22.3-8.6L401.4 267.4l95.5-14.5z m-183.8 74.3c7.4-10.4 18.7-18 32.2-20.3s26.8 1 37.2 8.3l26.1 18.3-112.9 18.2 17.4-24.5z m-63.5 464.5l19.8-2.2c6.9-0.8 11.8-7 11-13.8s-7-11.8-13.8-11l-27.9 3.2-32.7-71.6 86.5-11.3c6.8-0.9 11.7-7.2 10.8-14-0.9-6.8-7.1-11.7-14-10.8l-94.1 12.2-32.4-71 22.8-3.1c6.8-0.9 11.6-7.2 10.7-14.1-0.9-6.8-7.2-11.6-14.1-10.7l-30.2 4.1-6.5-14.3 48.1-67.7 80.3-12c6.8-1 11.5-7.4 10.5-14.2-1-6.8-7.4-11.5-14.2-10.5l-56.5 8.4 61.9-87.2 162.6-26.2 94.1 65.9-194 29c-6.8 1-11.5 7.4-10.5 14.2 0.9 6.2 6.3 10.7 12.3 10.7 0.6 0 1.2 0 1.9-0.1l220.1-32.9 76.5 53.6-1.8 16.8-80.5 11.1c-6.8 0.9-11.6 7.2-10.7 14.1 0.9 6.3 6.2 10.8 12.4 10.8 0.6 0 1.1 0 1.7-0.1l74.3-10.2-8.6 79.8-30.6 4c-6.8 0.9-11.7 7.2-10.8 14 0.8 6.3 6.2 10.9 12.4 10.9 0.5 0 1.1 0 1.6-0.1l24.6-3.2-8.9 83-68.1 7.7c-6.9 0.8-11.8 7-11 13.8 0.7 6.4 6.1 11.1 12.4 11.1 0.5 0 0.9 0 1.4-0.1l62.5-7.1-7.1 66.1-327.5 33.5-26.7-58.5zM864.9 523l-70.1 29.2c-6.4 2.7-9.4 10-6.7 16.3 2 4.8 8.2 9.1 16.3 6.7l57.1-23.8-7.5 63.9-106.2 50.9c-6.2 3-8.8 10.5-5.9 16.7 2.1 4.5 6.6 7.1 11.3 7.1 1.8 0 3.7-0.4 5.4-1.2l91.9-44.1-5.7 48.3-188.4 102.4 17.8-165.9 51.6-21.5c6.4-2.7 9.4-10 6.7-16.3-2.7-6.4-10-9.4-16.3-6.7l-38.9 16.2c1.9-25.9 11.2-39.1 42-50.2L868 496.1l-3.1 26.9z"
+        />
+      </svg>
+      <button
+        class="btn btn-ghost btn-sm text-[#008000] bg-transparent hover:bg-[#111014] hover:text-[#008000]"
+      >
+        <i class="ri-add-line me-2 align-middle text-[#008000]"></i>New Address
+      </button>
+    </div>
+  </div>
+  <!-- </div> -->
+  <div
+    *ngIf="addresses.length == 0"
+    class="w-full p-10 bg-[#090909] bg-opacity-100 rounded-md"
+  >
+    <div class="flex justify-end">
+      <span (click)="dismissModal()" class="cursor-pointer"
+        ><i class="ri-close-line text-gray-400 text-2xl font-semibold"></i
+      ></span>
+    </div>
+    <div class="flex flex-col justify-center items-center my-3">
+      <p class="text-[#008000] text-center text-2xl font-semibold">
+        Oops...You currently have no saved addresses!
+      </p>
+      <button
+        (click)="openNewAddressModal()"
+        class="bg-[#008000] text-[#FFF] text-lg font-semibold p-2 my-5 rounded-md"
+      >
+        <i class="ri-add-line text-[#fff]"></i>New Address
+      </button>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog
+  header="New Address Info"
+  [(visible)]="showNewAddressModal"
+  [style]="{ width: '50vw' }"
+>
+  <!-- <ng-template pTemplate="header">
+    <span class="text-xl font-bold">Header Content</span>
+  </ng-template> -->
   <app-new-address
     [currentUser]="currentUser"
     (closeModal)="dismissModal($event)"
   ></app-new-address>
-</ng-template>
+  <!-- <ng-template pTemplate="footer">
+      <p-button icon="pi pi-check" (click)="visible = false" label="Ok" styleClass="p-button-text"></p-button>
+  </ng-template> -->
+</p-dialog>

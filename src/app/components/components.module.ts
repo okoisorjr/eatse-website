@@ -10,6 +10,7 @@ import { FooterComponent } from './footer/footer.component';
 import { TestimonialsComponent } from './testimonials/testimonials.component';
 import { FlutterwaveModule } from 'flutterwave-angular-v3';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { DialogModule } from 'primeng/dialog';
 
 import { ComponentsRoutingModule } from './components-routing.module';
 import { MobileMenuComponent } from './mobile-menu/mobile-menu.component';
@@ -30,6 +31,7 @@ import { MoveInOutComponent } from './booking/move-in-out/move-in-out.component'
 import { EatseCaresComponent } from './eatse-cares/eatse-cares.component';
 import { BuildingTypeComponent } from './building-type/building-type.component';
 import { NewAddressComponent } from './new-address/new-address.component';
+import { BookingSuccessComponent } from './booking-success/booking-success.component';
 
 @NgModule({
   declarations: [
@@ -56,9 +58,18 @@ import { NewAddressComponent } from './new-address/new-address.component';
     MoveInOutComponent,
     EatseCaresComponent,
     BuildingTypeComponent,
-    NewAddressComponent
+    NewAddressComponent,
+    BookingSuccessComponent,
   ],
-  imports: [CommonModule, ComponentsRoutingModule, NgbModule, FormsModule, FlutterwaveModule, NgSelectModule],
+  imports: [
+    CommonModule,
+    ComponentsRoutingModule,
+    NgbModule,
+    FormsModule,
+    FlutterwaveModule,
+    NgSelectModule,
+    DialogModule,
+  ],
   exports: [
     TopNavComponent,
     HeroComponent,
@@ -79,7 +90,8 @@ import { NewAddressComponent } from './new-address/new-address.component';
     PostConstructionComponent,
     OfficeCleaningComponent,
     MoveInOutComponent,
-    NewAddressComponent
+    NewAddressComponent,
+    BookingSuccessComponent
   ],
 })
 export class ComponentsModule {}
