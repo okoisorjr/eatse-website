@@ -299,16 +299,6 @@ export class HousekeepingComponent implements OnInit {
       }
     });
     console.log(this.newBooking);
-    this.bookingService.saveBooking(this.newBooking).subscribe(
-      (value) => {
-        if (value) {
-          console.log('booking saved: ', value);
-        }
-      },
-      (error: HttpErrorResponse) => {
-        console.log(error);
-      }
-    );
     this.makePayment();
   }
 
@@ -332,15 +322,41 @@ export class HousekeepingComponent implements OnInit {
 
     this.flutterwave.inlinePay(paymentData);
   }
+
   makePaymentCallback(response: PaymentSuccessResponse): void {
     this.newBooking.paymentStatus = 'successful';
+    //this.validateTransactionStatus();
+    this.bookingService.saveBooking(this.newBooking).subscribe(
+      (value) => {
+        if (value) {
+          console.log('booking saved: ', value);
+        }
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    );
 
     console.log('Payment callback', response);
     this.router.navigate(['booking-complete']);
   }
+
+  validateTransactionStatus() {
+
+  }
+
   closedPaymentModal(): void {
     this.newBooking.paymentStatus = 'cancelled';
-
+    this.bookingService.saveBooking(this.newBooking).subscribe(
+      (value) => {
+        if (value) {
+          console.log('booking saved: ', value);
+        }
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    );
     console.log('payment is closed');
   }
 
